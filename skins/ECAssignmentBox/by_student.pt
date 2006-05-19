@@ -108,7 +108,7 @@
 		</td>
 	      <tal:if condition="grades">
 		<td tal:condition="python: grades.get(student[0], [])"
-		  tal:content="python: ecab_utils.localizeNumber('%.2f',
+		  tal:content="python: ecab_utils.localizeNumber('%d',
 		  ecab_utils.calculateMean(grades.get(student[0], [])))"/>
 		<td tal:condition="python: not grades.get(student[0], [])"
 		  >&mdash;</td>
@@ -117,15 +117,15 @@
 		<tal:block tal:define="c python: completed[student[0]]">
 		  <td tal:content="c"/>
 		  <td><span tal:replace="python:
-		      ecab_utils.localizeNumber('%.2f', round(float(c)/n_boxes * 100, 2))"/></td>
+		      ecab_utils.localizeNumber('%.1f', round(float(c)/n_boxes * 100, 2))"/></td>
 		  <td tal:condition="here/projectedAssignments">
 		    <span tal:replace="python:
-		      ecab_utils.localizeNumber('%.2f', round(float(c)/here.projectedAssignments * 100, 2))"/></td>
+		      ecab_utils.localizeNumber('%.1f', round(float(c)/here.projectedAssignments * 100, 2))"/></td>
 		</tal:block>
 	      </tal:block>
               <tal:block tal:repeat="state python: student[2]">
                 <td><span tal:replace="state"/> (<span tal:replace="python:
-		    ecab_utils.localizeNumber('%.2f', round(float(state)/n_boxes * 100, 2))"/>)</td>
+		    ecab_utils.localizeNumber('%d', round(float(state)/n_boxes * 100, 2))"/>)</td>
               </tal:block>
             </tr>
 	    </tal:block>

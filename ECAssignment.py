@@ -160,7 +160,6 @@ class ECAssignment(ATCTContent, HistoryAwareMixin):
         'name':        'Grade',
         'permissions': (permissions.ModifyPortalContent,),
         'condition':   'python:1'
-        #'condition':   "python: portal.portal_workflow.getInfoFor(here, 'review_state', '') == 'graded'"
         },
 
         {
@@ -211,9 +210,11 @@ class ECAssignment(ATCTContent, HistoryAwareMixin):
 
         portal_url = getToolByName(self, 'portal_url')
         portal = portal_url.getPortalObject()
-        portal_language = portal.getProperty('default_language', None)
+        site_properties = self.portal_properties.site_properties
+        # 'en' is used as fallback language if default_language is not
+        # set; this shouldn't normally happen
+        portal_language = getattr(site_properties, 'default_language', 'en')
         portal_qi = getToolByName(self, 'portal_quickinstaller')
-
         productVersion = portal_qi.getProductVersion(PROJECTNAME)
         
         submitterId   = self.Creator()
@@ -468,7 +469,7 @@ class ECAssignment(ATCTContent, HistoryAwareMixin):
         return ['remarks', 'feedback', 'mark']
 
 
-    security.declarePublic('getFooIndicators')
+    security.declarePublic('getIndicators')
     def getIndicators(self):
         """
         Returns a list of dictionaries which contain information necessary
@@ -520,5 +521,22 @@ class ECAssignment(ATCTContent, HistoryAwareMixin):
 
         return result
         
+
+    security.declarePublic('diff')
+    def diff(self, other):
+        """
+        Compare this assignment to another one.
+        """
+        import difflib
+
+        result = difflib.context_diff(
+            unicode((str(self.getFile()) +
+                     '\n').decode('utf8')).splitlines(True),
+            unicode((str(other.getFile()) +
+                     '\n').decode('utf8')).splitlines(True),
+            self.pretty_title_or_id().decode('utf8'),
+            other.pretty_title_or_id().decode('utf8'))
+
+        return "".join(result)
 
 registerATCT(ECAssignment, PROJECTNAME)
