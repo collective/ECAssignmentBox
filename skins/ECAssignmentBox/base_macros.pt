@@ -188,7 +188,9 @@
     <metal:define define-macro="all_assignments_tbody">
       <tbody>
         <tal:block tal:repeat="item items">
-      	  <tr tal:condition="python: ecab_utils.isAssignmentBoxType(item) and ((not userName) or (item.Creator() == userName))"
+      	  <tr tal:condition="python: ecab_utils.isAssignmentType(item)
+	                             and ((not userName)
+	                             or (item.Creator() == userName))"
       	    tal:define="oddrow      repeat/item/odd;
       	                item_type           item/portal_type;
       	                item_wf_state       item/review_state | python: wtool.getInfoFor(item, 'review_state', '');
@@ -243,8 +245,7 @@
             </td>
 
             <td style="text-align: right">
-    			    <span tal:define="field python: item.getField('mark')"
-     			          tal:content="python: field.getAccessor(item)()"/>
+    		<span tal:content="python: item.getGradeIfAllowed()"/>
             </td>
 
             <td class="visualNoPrint" style="text-align: center">
