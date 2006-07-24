@@ -198,8 +198,11 @@ class ECFolder(ATFolder):
                     if assignment.Creator() not in students:
                         students[assignment.Creator()] = [0 for i
                                                           in range(n_states)]
-                    students[assignment.Creator()][wf_states.index(
-                        wtool.getInfoFor(assignment, 'review_state', ''))] += 1
+                    state = wtool.getInfoFor(assignment, 'review_state')
+                    if state in wf_states:
+                        students[assignment.Creator()][wf_states.index(
+                            state)] += 1
+
 
         return students
 
