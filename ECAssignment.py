@@ -43,6 +43,8 @@ from Products.PortalTransforms.utils import TransformException
 # local imports
 from Products.ECAssignmentBox.config import *
 from Products.ECAssignmentBox import permissions
+from Products.ECAssignmentBox.interfaces.IECSubmission \
+     import IECSubmission
 
 # alter default fields -> hide title and description
 ECAssignmentSchema = ATContentTypeSchema.copy()
@@ -132,7 +134,7 @@ class ECAssignment(ATCTContent, HistoryAwareMixin):
     __implements__ = (ATCTContent.__implements__,
                       IATDocument,
                       HistoryAwareMixin.__implements__,
-                     )
+                     ) + (IECSubmission,)
 
     security = ClassSecurityInfo()
 

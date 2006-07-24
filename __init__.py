@@ -39,6 +39,7 @@ registerDirectory(SKINS_DIR, GLOBALS)
 
 def initialize(context):
     # Import Types here to register them
+    import interfaces
     import ECFolder, ECAssignmentBox
 
     from AccessControl import ModuleSecurityInfo

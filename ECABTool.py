@@ -36,6 +36,10 @@ from email.MIMEText import MIMEText
 from email.Header import Header
 
 # local imports
+from Products.ECAssignmentBox.interfaces.IECSubmissionsContainer \
+     import IECSubmissionsContainer
+from Products.ECAssignmentBox.interfaces.IECSubmission \
+     import IECSubmission
 from Products.ECAssignmentBox.Statistics import Statistics
 from Products.ECAssignmentBox.config import I18N_DOMAIN, ECA_WORKFLOW_ID
 
@@ -138,7 +142,21 @@ class ECABTool(UniqueObject, Folder):
     def isAssignmentBoxType(self, obj):
         """
         """
-        return hasattr(obj, 'getAssignmentsSummary')
+        #return hasattr(obj, 'getAssignmentsSummary')
+        if IECSubmissionsContainer.isImplementedBy(obj):
+            return True
+        else:
+            return False
+
+
+    security.declarePublic('isAssignmentType')
+    def isAssignmentType(self, obj):
+        """
+        """
+        if IECSubmission.isImplementedBy(obj):
+            return True
+        else:
+            return False
 
 
     #security.declarePublic('findAssignments')

@@ -37,6 +37,8 @@ from Products.ATContentTypes.content.folder import ATFolder
 from Products.ECAssignmentBox.config import *
 from Products.ECAssignmentBox import permissions
 from Products.ECAssignmentBox.ECAssignment import ECAssignment
+from Products.ECAssignmentBox.interfaces.IECSubmissionsContainer \
+     import IECSubmissionsContainer
 from Statistics import Statistics
 
 from Products.ECAssignmentBox.PlainTextField import PlainTextField
@@ -130,7 +132,7 @@ finalizeATCTSchema(ECAssignmentBoxSchema, folderish=True, moveDiscussion=False)
 class ECAssignmentBox(ATFolder):
     """Allows the creation, submission and grading of online assignments"""
 
-    __implements__ = (ATFolder.__implements__)
+    __implements__ = (ATFolder.__implements__) + (IECSubmissionsContainer,)
 
     security = ClassSecurityInfo()
 
