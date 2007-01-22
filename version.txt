@@ -1,1 +1,1 @@
-1.2pre cvs/devel 2007-01-19
+1.2pre cvs/devel 2007-01-22 (with extended analysis)

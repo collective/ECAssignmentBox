@@ -142,6 +142,13 @@ class ECFolder(ATFolder):
         },
         
         {
+        'action':      "string:$object_url/analysis",
+        'id':          'analysis',
+        'name':        'Analysis',
+        'permissions': (permissions.ManageProperties,),
+        },
+        
+        {
         'action':      'string:ecf_modify_boxes:method',
         'id':          'ecf_modify_boxes',
         'name':        'Set Assignment Box Options',

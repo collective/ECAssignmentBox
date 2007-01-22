@@ -1,0 +1,73 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
+                      "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" 
+      xml:lang="en" lang="en"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+      metal:use-macro="here/main_template/macros/master"
+      i18n:domain="eduComponents">
+
+  <body>
+    <metal:block fill-slot="css_slot">
+      <style type="text/css" media="screen" tal:content="string: @import url($portal_url/ecabstyles.css);" />
+    </metal:block>
+
+    <metal:main fill-slot="main">
+      <tal:main-macro metal:define-macro="main"
+          define="global ecab_utils nocall: portal/ecab_utils;
+                  permission        python: modules['AccessControl'].getSecurityManager().checkPermission;
+                  isOwner           python: user.has_role(['Owner', 'Reviewer', 'Manager'], context);
+                  isGrader          python: here.portal_membership.checkPermission('eduComponents: Grade Assignments', context);
+                  finalStateValues  here/getFinalStateValues;
+                  "
+      >
+      
+        <!--  debug -->
+        <!-- 
+        <div tal:content="python: 'showSuperseded:%s' % resFlt['show_superseded']" />
+        <div tal:content="python: 'mkUrl:%s' % mkUrl({})" />
+        <div tal:content="string: resFlt2:$resFlt2" />
+        -->
+      
+        <div metal:use-macro="here/document_actions/macros/document_actions" />
+    
+        <div tal:define="global has_items python: 0;">
+       
+          <a class="link-parent visualNoPrint"
+              tal:define="parent     python: here.aq_parent;
+                          template   python: parent.getTypeInfo().getActionById(template_id, '');
+                          parent_url python: here.navigationParent(here, fallThroughDefaultPage=False)"
+              tal:condition="parent_url"
+              tal:attributes="href python: '%s/%s' % (parent_url, template)"
+              i18n:domain="plone"
+              i18n:translate="go_to_parent_url">
+            Up one level
+          </a>
+
+
+          <h4 i18n:translate="label_final_states"> Final states for all assignments: total (%)</h4>
+          <div tal:omit-tag="">
+              <span tal:omit-tag="" i18n:translate="Accepted"> Accepted</span>:
+              <span tal:replace="python: finalStateValues[1]" />
+              (<span tal:replace="python: ecab_utils.localizeNumber('%.1f', round((100*finalStateValues[1]) / finalStateValues[0]))" />)
+          </div>
+              
+
+        </div>
+      </tal:main-macro>
+    </metal:main>
+
+  </body>
+</html>
+<!-- Keep this comment at the end of the file
+Local variables:
+mode:xml
+sgml-local-catalogs:("/usr/local/lib/sgml/XHTML11.cat")
+sgml-validate-command:"xmllint \\-\\-valid \\-\\-noout %s %s"
+sgml-indent-step:2
+sgml-indent-data:t
+fill-column:79
+End:
+-->
