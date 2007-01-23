@@ -52,7 +52,19 @@
 
           <h4 i18n:translate="label_final_states"> Final states for all assignments: total (%)</h4>
           <p tal:condition="python: finalStateValues[0] > 0">
-              <span tal:omit-tag="" i18n:translate="Accepted">Accepted</span>:
+              <span tal:omit-tag="" i18n:translate="label_completed_states">Completed States:</span>
+              <tal:nothing define="statesDL here/getWfStatesDisplayList;"
+                  repeat="state python: here.completedStates">
+                      <span
+                          tal:content="python: statesDL.getValue(state, default=state)"
+                          tal:attributes="class python: 'state-' + putils.normalizeString(state)"
+                          i18n:domain="plone"
+                          i18n:translate=""
+                      /><span tal:condition="not:repeat/state/end"
+                      tal:replace="string:,"/>
+              </tal:nothing>
+              <br />
+              <span tal:omit-tag="" i18n:translate="Completed">Completed</span>:
               <span tal:replace="python: finalStateValues[1]" />
               (<span tal:replace="python: ecab_utils.localizeNumber('%.1f', float(100*finalStateValues[1]) / finalStateValues[0])" />)
               <br />
