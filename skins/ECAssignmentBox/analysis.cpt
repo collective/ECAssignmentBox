@@ -21,7 +21,11 @@
                   isOwner           python: user.has_role(['Owner', 'Reviewer', 'Manager'], context);
                   isGrader          python: here.portal_membership.checkPermission('eduComponents: Grade Assignments', context);
                   finalStateValues  here/getFinalStateValues;
+                  superseededStats  here/getSuperseededStats;
+                  dateStats         here/getSubmissionDateStats;
                   "
+                  
+                  
       >
       
         <!--  debug -->
@@ -46,15 +50,35 @@
             Up one level
           </a>
 
-
           <h4 i18n:translate="label_final_states"> Final states for all assignments: total (%)</h4>
-          <div tal:omit-tag="">
-              <span tal:omit-tag="" i18n:translate="Accepted"> Accepted</span>:
+          <p>
+              <span tal:omit-tag="" i18n:translate="Accepted">Accepted</span>:
               <span tal:replace="python: finalStateValues[1]" />
-              (<span tal:replace="python: ecab_utils.localizeNumber('%.1f', round((100*finalStateValues[1]) / finalStateValues[0]))" />)
-          </div>
-              
+              (<span tal:replace="python: ecab_utils.localizeNumber('%.1f', float(100*finalStateValues[1]) / finalStateValues[0])" />)
+              <br />
+              <span tal:omit-tag="" i18n:translate="Rejected">Rejected</span>:
+              <span tal:replace="python: finalStateValues[2]" />
+              (<span tal:replace="python: ecab_utils.localizeNumber('%.1f', float(100*finalStateValues[2]) / finalStateValues[0])" />)
+          </p>
 
+          <h4 i18n:translate="label_superseeded_stats"> Total submissions per user (average submissions per assignment)</h4>
+          <p>
+              <span tal:omit-tag="" tal:repeat="elem python: superseededStats[2:]">
+                  <span tal:replace="python: elem[0]"> 1 </span> <span tal:omit-tag="" i18n:translate="Tries">Tries</span>:
+                  <span tal:replace="python: elem[1]"> 1 </span> <span tal:omit-tag="" i18n:translate="Users">Users</span>
+                  (<span tal:replace="python: ecab_utils.localizeNumber('%.1f', float(elem[0]) / superseededStats[1])" />)
+                  <br />
+              </span>
+          </p>
+
+          <h4 i18n:translate="label_date_stats"> All submission dates: amount of submissions</h4>
+          <p>
+              <span tal:omit-tag="" tal:repeat="elem python: dateStats">
+                  <span tal:replace="python: elem[0]"> 2007/01/23 </span> :
+                  <span tal:replace="python: elem[1]"> 1 </span>
+                  <br />
+              </span>
+          </p>
         </div>
       </tal:main-macro>
     </metal:main>

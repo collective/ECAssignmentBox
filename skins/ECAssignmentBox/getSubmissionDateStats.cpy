@@ -15,34 +15,33 @@ I18N_DOMAIN = 'eduComponents'
 REQUEST  = container.REQUEST
 RESPONSE = REQUEST.RESPONSE
 
-# [total, accepted, rejected]
-result = [0,0,0]
+# [total superseeded, total ECAssignmentBoxes, (1, #), (2, #), ..., (n, #)]
+result = []
 
-if hasattr(context, 'completedStates'):
-    acc_states = context.getCompletedStates()
-else:
-    acc_states = ('accepted', 'graded', )
-
-review_states = acc_states[:] + ('rejected', )
-    
 # get the portal's catalog
 catalog = getToolByName(context, 'portal_catalog')
 
-# get all items inside this ecfolder
+# get all ECAssignments inside this ECFolder
 brains = catalog.searchResults(path = {'query':'/'.join(context.getPhysicalPath()),  'depth':100,  }, 
-                               #sort_on = 'getObjPositionInParent', 
-                               review_state = review_states,
+                               sort_on = 'created', 
                                meta_type = ('ECAssignment', 'ECAutoAssignment', ),
                                )
 
-result[0] = len(brains)
-
-for brain in brains:
-    if brain.review_state in acc_states:
-        result[1] = result[1] + 1
-    # Only elements not in acc_states will match here (rejected)
-    elif brain.review_state in review_states:
-        result[2] = result[2] + 1
+if len(brains) > 0:
+    lastDate = ""
+    currAmount = 0
+  
+    for brain in brains:
+        if not lastDate:
+            lastDate = str(brain.created)[:10]
+        if str(brain.created)[:10] == lastDate:
+            currAmount = currAmount + 1
+        else:
+            result.append((lastDate, currAmount))
+            lastDate = str(brain.created)[:10]
+            currAmount = 1
+    result.append((lastDate, currAmount))
+    result.sort()
 
 return result
 
