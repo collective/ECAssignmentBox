@@ -94,7 +94,7 @@
           <h4 i18n:translate="label_date_stats"> All submission dates: amount of submissions</h4>
           <p tal:condition="python: dateStats">
               <span tal:omit-tag="" tal:repeat="elem python: dateStats">
-                  <span tal:replace="python: elem[0]"> 2007/01/23 </span> :
+                  <span tal:replace="python: here.toLocalizedTime(elem[0], True)"> 2007/01/23 </span> :
                   <span tal:replace="python: elem[1]"> 1 </span>
                   <br />
               </span>
