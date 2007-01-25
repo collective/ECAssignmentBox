@@ -8,6 +8,7 @@
 ##title=
 ##
 
+#from datetime import date
 from Products.CMFCore.utils import getToolByName
 
 I18N_DOMAIN = 'eduComponents'
@@ -28,18 +29,22 @@ brains = catalog.searchResults(path = {'query':'/'.join(context.getPhysicalPath(
                                )
 
 if len(brains) > 0:
-    lastDate = ""
+    lastDate = None
     currAmount = 0
   
     for brain in brains:
         if not lastDate:
-            lastDate = str(brain.created)[:10]
-        if str(brain.created)[:10] == lastDate:
+            lastDate = brain.created.earliestTime()
+            #str(brain.created)[:10]
+
+        if brain.created.earliestTime() == lastDate:
             currAmount = currAmount + 1
         else:
             result.append((lastDate, currAmount))
-            lastDate = str(brain.created)[:10]
+            lastDate = brain.created.earliestTime()
+            #str(brain.created)[:10]
             currAmount = 1
+            
     result.append((lastDate, currAmount))
     result.sort()
 
