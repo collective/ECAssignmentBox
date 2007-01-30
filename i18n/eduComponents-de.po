@@ -787,3 +787,59 @@ msgstr "Ersetzte Einreichungen anzeigen"
 # Original: "Hide superseded"
 msgid "Hide superseded"
 msgstr "Ersetzte Einreichungen ausblenden"
+
+#: ./skins/ECAssignmentBox/analysis.cpt
+# Original: "Submissions"
+msgid "Submissions"
+msgstr "Einreichungen"
+
+#: ./skins/ECAssignmentBox/analysis.cpt
+# Original: "Rejected"
+msgid "Rejected"
+msgstr "Abgewiesen"
+
+#: ./skins/ECAssignmentBox/analysis.cpt
+# Original: "Submitters"
+msgid "Submitters"
+msgstr "Einreichende"
+
+#: ./skins/ECAssignmentBox/analysis.cpt
+# Original: "Submitters (%)"
+msgid "Submitters per 100"
+msgstr "Einreichende (%)"
+
+#: ./skins/ECAssignmentBox/analysis.cpt
+# Original: "Average submissions per assignment"
+msgid "Average submissions"
+msgstr "Durschnittl. Einreichungen pro Aufgabe"
+
+#: ./skins/ECAssignmentBox/analysis.cpt
+# Original: "Submissions per date"
+msgid "label_date_stats"
+msgstr "Einreichungen je Datum"
+
+#: ./skins/ECAssignmentBox/analysis.cpt
+# Original: "No Submissions found at all"
+msgid "No Submissions"
+msgstr "Keine Einreichungen gefunden"
+
+#: ./skins/ECAssignmentBox/analysis.cpt
+# Original: "Total submissions per user"
+msgid "label_superseeded_stats"
+msgstr "Benötigte Einreichungen je Nutzer"
+
+#: ./skins/ECAssignmentBox/analysis.cpt
+# Original: "This ECFolder contains no Submissions in final states"
+msgid "No final Submissions"
+msgstr "Dieser 'ECFolder' enthält keine Einreichungen in Finalzuständen"
+
+#: ./skins/ECAssignmentBox/analysis.cpt
+# Original: "Final states for all assignments"
+msgid "label_final_states"
+msgstr "Einreichungen in Finalzuständen"
+
+#: ./skins/ECAssignmentBox/analysis.cpt
+# Original: "This ECFolder contains no Submissions in final states"
+msgid "No final Submissions"
+msgstr "Dieser 'ECFolder' enthält keine Einreichungen in Finalzuständen"
+

@@ -15,9 +15,10 @@ I18N_DOMAIN = 'eduComponents'
 REQUEST  = container.REQUEST
 RESPONSE = REQUEST.RESPONSE
 
-# [total superseeded, total ECAssignmentBoxes, (1, #), (2, #), ..., (n, #)]
-result = [0,0,]
-resultWithDuplicates = []
+# [index of first tuple in list, total superseeded, total ECAssignmentBoxes, total users,
+#    (1, #), (2, #), ..., (n, #)]
+result = [4,0,0,0,]
+submissionsWithDuplicates = []
 
 # get the portal's catalog
 catalog = getToolByName(context, 'portal_catalog')
@@ -26,7 +27,7 @@ catalog = getToolByName(context, 'portal_catalog')
 brains = catalog.searchResults(path = {'query':'/'.join(context.getPhysicalPath()),  'depth':100,  }, 
                                meta_type = ('ECAssignmentBox', 'ECAutoAssignmentBox', ),
                                )
-result[1] = len(brains)
+result[2] = len(brains)
 
 # get all ECAssignments inside this ECFolder
 brains = catalog.searchResults(path = {'query':'/'.join(context.getPhysicalPath()),  'depth':100,  }, 
@@ -34,29 +35,33 @@ brains = catalog.searchResults(path = {'query':'/'.join(context.getPhysicalPath(
                                meta_type = ('ECAssignment', 'ECAutoAssignment', ),
                                )
 
-result[0] = len(brains)
+result[1] = len(brains)
 
 if len(brains) > 0:
-    lastCreator = ""
+    lastCreator = None
     currAmount = 0
+    creators = 0
     
     for brain in brains:
         if not lastCreator:
             lastCreator = brain.Creator
+            creators = creators + 1
         if brain.Creator == lastCreator:
             currAmount = currAmount + 1
         else:
-            resultWithDuplicates.append(currAmount)
+            submissionsWithDuplicates.append(currAmount)
             lastCreator = brain.Creator
+            creators = creators + 1
             currAmount = 1
-    resultWithDuplicates.append(currAmount)
-    resultWithDuplicates.sort()
+    submissionsWithDuplicates.append(currAmount)
+    submissionsWithDuplicates.sort()
+    result[3] = creators
     
-    while len(resultWithDuplicates) > 0:
-        last = resultWithDuplicates[0]
-        result.append((last, resultWithDuplicates.count(last)))
-        while resultWithDuplicates.count(last) > 0:
-            resultWithDuplicates.remove(last)
+    while len(submissionsWithDuplicates) > 0:
+        last = submissionsWithDuplicates[0]
+        result.append((last, submissionsWithDuplicates.count(last)))
+        while submissionsWithDuplicates.count(last) > 0:
+            submissionsWithDuplicates.remove(last)
 
 return result
 

@@ -50,9 +50,8 @@
             Up one level
           </a>
 
-          <h4 i18n:translate="label_final_states"> Final states for all assignments: total (%)</h4>
+          <h4 i18n:translate="label_final_states"> Final states for all assignments</h4>
           <p tal:condition="python: finalStateValues[0] > 0">
-              <span tal:omit-tag="" i18n:translate="label_completed_states">Completed States:</span>
               <tal:nothing define="statesDL here/getWfStatesDisplayList;"
                   repeat="state python: here.completedStates">
                       <span
@@ -62,46 +61,66 @@
                           i18n:translate=""
                       /><span tal:condition="not:repeat/state/end"
                       tal:replace="string:,"/>
-              </tal:nothing>
-              <br />
-              <span tal:omit-tag="" i18n:translate="Completed">Completed</span>:
+              </tal:nothing>: 
               <span tal:replace="python: finalStateValues[1]" />
-              (<span tal:replace="python: ecab_utils.localizeNumber('%.1f', float(100*finalStateValues[1]) / finalStateValues[0])" />)
+              (<span tal:replace="python: ecab_utils.localizeNumber('%.1f', float(100*finalStateValues[1]) / finalStateValues[0])" />%)
               <br />
               <span tal:omit-tag="" i18n:translate="Rejected">Rejected</span>:
               <span tal:replace="python: finalStateValues[2]" />
-              (<span tal:replace="python: ecab_utils.localizeNumber('%.1f', float(100*finalStateValues[2]) / finalStateValues[0])" />)
+              (<span tal:replace="python: ecab_utils.localizeNumber('%.1f', float(100*finalStateValues[2]) / finalStateValues[0])" />%)
           </p>
           <p tal:condition="python: finalStateValues[0] <= 0">
               <span tal:omit-tag="" i18n:translate="No final Submissions">This ECFolder contains no Submissions in final states</span>
           </p><br />
 
 
-          <h4 i18n:translate="label_superseeded_stats"> Total submissions per user (average submissions per assignment)</h4>
-          <p tal:condition="python: superseededStats[2:]">
-              <span tal:omit-tag="" tal:repeat="elem python: superseededStats[2:]">
-                  <span tal:replace="python: elem[0]"> 1 </span> <span tal:omit-tag="" i18n:translate="Tries">Tries</span>:
-                  <span tal:replace="python: elem[1]"> 1 </span> <span tal:omit-tag="" i18n:translate="Users">Users</span>
-                  (<span tal:replace="python: ecab_utils.localizeNumber('%.1f', float(elem[0]) / superseededStats[1])" />)
-                  <br />
-              </span>
-          </p>
+          <h4 i18n:translate="label_superseeded_stats"> Total submissions per user</h4>
 
-          <p tal:condition="python: not superseededStats[2:]">
-              <span tal:omit-tag="" i18n:translate="No Submissions">No Submisions found at all</span>
+          <table class="listing" tal:condition="python: superseededStats[superseededStats[0]:]">
+            <thead>
+              <tr>
+                <th i18n:translate="Submissions">Submissions</th>
+                <th i18n:translate="Average submissions">Average submissions per assignment</th>
+                <th i18n:translate="Submitters">Submitters</th>
+                <th i18n:translate="Submitters per 100">Submitters (%)</th>
+              </tr>
+            </thead>
+
+            <tbody style="text-align: right" tal:repeat="elem python: superseededStats[superseededStats[0]:]">
+              <tr>
+                <td tal:content="python: elem[0]"> 1 </td>
+                <td tal:content="python: ecab_utils.localizeNumber('%.1f', float(elem[0]) / superseededStats[2])"> 1 </td>
+                <td tal:content="python: elem[1]"> 1 </td>
+                <td tal:content="python: ecab_utils.localizeNumber('%.1f', float(100 * elem[1]) / superseededStats[3])"> 1 </td>
+              </tr>
+            </tbody>
+          </table>
+
+          <p tal:condition="python: not superseededStats[superseededStats[0]:]">
+              <span tal:omit-tag="" i18n:translate="No Submissions">No Submissions found at all</span>
           </p><br />
 
-          <h4 i18n:translate="label_date_stats"> All submission dates: amount of submissions</h4>
-          <p tal:condition="python: dateStats">
-              <span tal:omit-tag="" tal:repeat="elem python: dateStats">
-                  <span tal:replace="python: here.toLocalizedTime(elem[0], True)"> 2007/01/23 </span> :
-                  <span tal:replace="python: elem[1]"> 1 </span>
-                  <br />
-              </span>
-          </p>
+
+          <h4 i18n:translate="label_date_stats"> Submissions per date</h4>
+          <table class="listing" tal:condition="python: dateStats">
+            <thead>
+              <tr>
+                <th i18n:translate="label_date">Date</th>
+                <th i18n:translate="Submissions">Submissions</th>
+              </tr>
+            </thead>
+            <tbody style="text-align: right" tal:repeat="elem python: dateStats">
+              <tr>
+                  <td tal:content="python: here.toLocalizedTime(elem[0], False)"> 2007/01/23 </td>
+                  <td tal:content="python: elem[1]"> 1 </td>
+              </tr>
+            </tbody>
+          </table>
           <p tal:condition="python: not dateStats">
               <span tal:omit-tag="" i18n:translate="No Submissions">No Submissions found at all</span>
           </p><br />
+
+
         </div>
       </tal:main-macro>
     </metal:main>
