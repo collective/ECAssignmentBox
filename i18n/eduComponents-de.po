@@ -829,17 +829,11 @@ msgid "label_superseeded_stats"
 msgstr "Benötigte Einreichungen je Nutzer"
 
 #: ./skins/ECAssignmentBox/analysis.cpt
-# Original: "This ECFolder contains no Submissions in final states"
-msgid "No final Submissions"
-msgstr "Dieser 'ECFolder' enthält keine Einreichungen in Finalzuständen"
+# Original: "There are no assignments in final states"
+msgid "warn_no_final_submissions"
+msgstr "Keine Einreichungen in als endgültig angesehenen Zuständen"
 
 #: ./skins/ECAssignmentBox/analysis.cpt
 # Original: "Final states for all assignments"
 msgid "label_final_states"
 msgstr "Einreichungen in Finalzuständen"
-
-#: ./skins/ECAssignmentBox/analysis.cpt
-# Original: "This ECFolder contains no Submissions in final states"
-msgid "No final Submissions"
-msgstr "Dieser 'ECFolder' enthält keine Einreichungen in Finalzuständen"
-

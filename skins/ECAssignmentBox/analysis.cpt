@@ -20,23 +20,29 @@
                   permission        python: modules['AccessControl'].getSecurityManager().checkPermission;
                   isOwner           python: user.has_role(['Owner', 'Reviewer', 'Manager'], context);
                   isGrader          python: here.portal_membership.checkPermission('eduComponents: Grade Assignments', context);
-                  finalStateValues  here/getFinalStateValues;
                   superseededStats  here/getSuperseededStats;
                   dateStats         here/getSubmissionDateStats;
+                  totalBoxes        python: here.countContainedBoxes(True);
+                  assignmentStates  here/countContainedAssignments;
+                  totalAssignments  python: assignmentStates[0];
                   "
-                  
-                  
       >
-      
-        <!--  debug -->
+        <!-- unused -->
         <!-- 
-        <div tal:content="python: 'showSuperseded:%s' % resFlt['show_superseded']" />
-        <div tal:content="python: 'mkUrl:%s' % mkUrl({})" />
-        <div tal:content="string: resFlt2:$resFlt2" />
+        finalStateValues  here/getFinalStateValues;
+        -->
+
+        <!-- debug -->
+        <!-- 
+        <div tal:content="assignmentStates" />
         -->
       
         <div metal:use-macro="here/document_actions/macros/document_actions" />
     
+        <h1 class="documentFirstHeading">
+          <span tal:omit-tag="" tal:content="here/pretty_title_or_id" />
+        </h1>
+
         <div tal:define="global has_items python: 0;">
        
           <a class="link-parent visualNoPrint"
@@ -50,8 +56,27 @@
             Up one level
           </a>
 
-          <h4 i18n:translate="label_final_states"> Final states for all assignments</h4>
-          <p tal:condition="python: finalStateValues[0] > 0">
+          <h4 i18n:translate="label_total_number_of">Total number of</h4>
+          <ul>
+            <!-- 
+            <b i18n:translate="label_n_boxes">Published assignment boxes inside this folder:</b>
+            <span tal:omit-tag="" tal:content="n_boxes"/>
+            <br />
+            -->
+            <li i18n:translate="label_total_assignments_with">Submissions (incl. superseded):
+            <span tal:omit-tag="" tal:content="python: totalAssignments"/>
+            </li>
+            <li i18n:translate="label_total_assignments_without">Submissions (excl. superseded):
+            <span tal:omit-tag="" tal:content="python: assignmentStates[1]"/>
+            </li>
+            <li i18n:translate="label_total_superseeded">Superseded submissions:
+            <span tal:omit-tag="" tal:content="python: totalAssignments - assignmentStates[1]"/>
+            </li>
+          </ul>
+          <br />
+  
+          <h4 i18n:translate="label_final_states">Submissions in final states</h4>
+          <p tal:condition="python: assignmentStates[2] > 0">
               <tal:nothing define="statesDL here/getWfStatesDisplayList;"
                   repeat="state python: here.completedStates">
                       <span
@@ -59,19 +84,21 @@
                           tal:attributes="class python: 'state-' + putils.normalizeString(state)"
                           i18n:domain="plone"
                           i18n:translate=""
-                      /><span tal:condition="not:repeat/state/end"
-                      tal:replace="string:,"/>
-              </tal:nothing>: 
-              <span tal:replace="python: finalStateValues[1]" />
-              (<span tal:replace="python: ecab_utils.localizeNumber('%.1f', float(100*finalStateValues[1]) / finalStateValues[0])" />%)
+                      /><span tal:condition="not:repeat/state/end" tal:replace="string:,"/></tal:nothing>:
+
+              <span tal:replace="python: assignmentStates[2]" />
+              <span class="documentByLine" tal:content="python: '(%s%%)' % ecab_utils.localizeNumber('%.1f', float(100*assignmentStates[2]) / assignmentStates[1])" />
               <br />
-              <span tal:omit-tag="" i18n:translate="Rejected">Rejected</span>:
-              <span tal:replace="python: finalStateValues[2]" />
-              (<span tal:replace="python: ecab_utils.localizeNumber('%.1f', float(100*finalStateValues[2]) / finalStateValues[0])" />%)
+              <span class="state-rejected" i18n:translate="Rejected">Rejected</span>:
+
+              <span tal:replace="python: assignmentStates[3]" />
+              <span class="documentByLine" tal:content="python: '(%s%%)' % ecab_utils.localizeNumber('%.1f', float(100*assignmentStates[3]) / assignmentStates[1])" />
           </p>
-          <p tal:condition="python: finalStateValues[0] <= 0">
-              <span tal:omit-tag="" i18n:translate="No final Submissions">This ECFolder contains no Submissions in final states</span>
-          </p><br />
+          <!-- alternative view if there are no assignments -->
+          <p tal:condition="python: assignmentStates[2] == 0">
+              <span tal:omit-tag="" i18n:translate="warn_no_final_submissions">There are no assignments in final states</span>
+          </p>
+          <br />
 
 
           <h4 i18n:translate="label_superseeded_stats"> Total submissions per user</h4>
@@ -87,7 +114,8 @@
             </thead>
 
             <tbody style="text-align: right" tal:repeat="elem python: superseededStats[superseededStats[0]:]">
-              <tr>
+              <tr tal:define="oddrow repeat/elem/odd;"
+                  tal:attributes="class python: test(oddrow, 'odd', 'even')">
                 <td tal:content="python: elem[0]"> 1 </td>
                 <td tal:content="python: ecab_utils.localizeNumber('%.1f', float(elem[0]) / superseededStats[2])"> 1 </td>
                 <td tal:content="python: elem[1]"> 1 </td>
@@ -110,9 +138,10 @@
               </tr>
             </thead>
             <tbody style="text-align: right" tal:repeat="elem python: dateStats">
-              <tr>
-                  <td tal:content="python: here.toLocalizedTime(elem[0], False)"> 2007/01/23 </td>
-                  <td tal:content="python: elem[1]"> 1 </td>
+              <tr tal:define="oddrow repeat/elem/odd;"
+                  tal:attributes="class python: test(oddrow, 'odd', 'even')">
+                <td tal:content="python: here.toLocalizedTime(elem[0], False)"> 2007/01/23 </td>
+                <td tal:content="python: elem[1]"> 1 </td>
               </tr>
             </tbody>
           </table>
