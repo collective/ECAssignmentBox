@@ -113,14 +113,16 @@
               </tr>
             </thead>
 
-            <tbody style="text-align: right" tal:repeat="elem python: superseededStats[superseededStats[0]:]">
-              <tr tal:define="oddrow repeat/elem/odd;"
-                  tal:attributes="class python: test(oddrow, 'odd', 'even')">
-                <td tal:content="python: elem[0]"> 1 </td>
-                <td tal:content="python: ecab_utils.localizeNumber('%.1f', float(elem[0]) / superseededStats[2])"> 1 </td>
-                <td tal:content="python: elem[1]"> 1 </td>
-                <td tal:content="python: ecab_utils.localizeNumber('%.1f', float(100 * elem[1]) / superseededStats[3])"> 1 </td>
-              </tr>
+            <tbody style="text-align: right">
+              <tal:block repeat="elem python: superseededStats[superseededStats[0]:]">
+                <tr tal:define="oddrow repeat/elem/odd;"
+                    tal:attributes="class python: test(oddrow, 'odd', 'even')">
+                  <td tal:content="python: elem[0]"> 1 </td>
+                  <td tal:content="python: ecab_utils.localizeNumber('%.1f', float(elem[0]) / superseededStats[2])"> 1 </td>
+                  <td tal:content="python: elem[1]"> 1 </td>
+                  <td tal:content="python: ecab_utils.localizeNumber('%.1f', float(100 * elem[1]) / superseededStats[3])"> 1 </td>
+                </tr>
+              </tal:block>
             </tbody>
           </table>
 
@@ -137,12 +139,14 @@
                 <th i18n:translate="Submissions">Submissions</th>
               </tr>
             </thead>
-            <tbody style="text-align: right" tal:repeat="elem python: dateStats">
-              <tr tal:define="oddrow repeat/elem/odd;"
-                  tal:attributes="class python: test(oddrow, 'odd', 'even')">
-                <td tal:content="python: here.toLocalizedTime(elem[0], False)"> 2007/01/23 </td>
-                <td tal:content="python: elem[1]"> 1 </td>
-              </tr>
+            <tbody style="text-align: right">
+              <tal:block tal:repeat="elem python: dateStats">
+                <tr tal:define="oddrow repeat/elem/odd;"
+                    tal:attributes="class python: test(oddrow, 'odd', 'even')">
+                  <td tal:content="python: here.toLocalizedTime(elem[0], False)"> 2007/01/23 </td>
+                  <td tal:content="python: elem[1]"> 1 </td>
+                </tr>
+              </tal:block>
             </tbody>
           </table>
           <p tal:condition="python: not dateStats">
