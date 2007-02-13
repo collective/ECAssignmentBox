@@ -805,13 +805,13 @@ msgstr "Einreichende"
 
 #: ./skins/ECAssignmentBox/analysis.cpt
 # Original: "Submitters (%)"
-msgid "Submitters per 100"
+msgid "label_submitters_%"
 msgstr "Einreichende (%)"
 
 #: ./skins/ECAssignmentBox/analysis.cpt
-# Original: "Average submissions per assignment"
-msgid "Average submissions"
-msgstr "Durschnittl. Einreichungen pro Aufgabe"
+# Original: "Submissions (average per assignment)"
+msgid "label_submissions_average"
+msgstr "Einreichungen (durchschnittlich pro Aufgabe)"
 
 #: ./skins/ECAssignmentBox/analysis.cpt
 # Original: "Submissions per date"
@@ -837,3 +837,28 @@ msgstr "Keine Einreichungen in als endgültig angesehenen Zuständen"
 # Original: "Final states for all assignments"
 msgid "label_final_states"
 msgstr "Einreichungen in Finalzuständen"
+
+#: ./skins/ECAssignmentBox/analysis.cpt
+# Original: "Total number of"
+msgid "label_total_number_of"
+msgstr "Gesamtanzahl von"
+
+#: ./skins/ECAssignmentBox/analysis.cpt
+# Original: "Submissions (incl. superseded):"
+msgid "label_total_assignments_with"
+msgstr "Einreichungen (incl. ersetzten):"
+
+#: ./skins/ECAssignmentBox/analysis.cpt
+# Original: "Superseded submissions:"
+msgid "label_total_superseeded"
+msgstr "ersetzte Einreichungen:"
+
+#: ./skins/ECAssignmentBox/analysis.cpt
+# Original: "Submissions (excl. superseded):"
+msgid "label_total_assignments_without"
+msgstr "Einreichungen (excl. ersetzten):"
+
+#: ./skins/ECAssignmentBox/analysis.cpt
+# Original: "Submissions (excl. superseded) not in final states:"
+msgid "label_total_assignments_not_final"
+msgstr "Einreichungen (excl. ersetzten) in Nichtfinalzuständen:"
