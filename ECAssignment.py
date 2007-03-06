@@ -576,13 +576,13 @@ class ECAssignment(ATCTContent, HistoryAwareMixin):
         
         if viewers:
             if isOwner:
-                result.append({'src':'ec_shared.png', 
+                result.append({'icon':'ec_shared.png', 
                                'alt':'Released',
                                'alt_msgid':'label_released',
                                'title':'; '.join(viewers),
                                })
             elif user.has_role('ECAssignment Viewer', object=self):
-                result.append({'src':'ec_shared.png', 
+                result.append({'icon':'ec_shared.png', 
                                'alt':'Released',
                                'alt_msgid':'label_released',
                                'title':'This assignment has been released for viewing',
@@ -593,7 +593,7 @@ class ECAssignment(ATCTContent, HistoryAwareMixin):
             feedback = str(self.feedback)
             title = re.sub('[\r\n]+', ' ', feedback)
 
-            result.append({'src':'ec_comment.png', 
+            result.append({'icon':'ec_comment.png', 
                            'alt':'Feedback',
                            'alt_msgid':'label_feedback',
                            'title':title,
@@ -603,7 +603,7 @@ class ECAssignment(ATCTContent, HistoryAwareMixin):
             remarks = str(self.remarks)
             title = re.sub('[\r\n]+', ' ', remarks)
 
-            result.append({'src':'ecab_remarks.png', 
+            result.append({'icon':'ecab_remarks.png', 
                            'alt':'Remarks',
                            'alt_msgid':'label_remarks',
                            'title':title,
