@@ -576,13 +576,13 @@ class ECAssignment(ATCTContent, HistoryAwareMixin):
         
         if viewers:
             if isOwner:
-                result.append({'icon':'ec_shared.png', 
+                result.append({'src':'ec_shared.png', 
                                'alt':'Released',
                                'alt_msgid':'label_released',
                                'title':'; '.join(viewers),
                                })
             elif user.has_role('ECAssignment Viewer', object=self):
-                result.append({'icon':'ec_shared.png', 
+                result.append({'src':'ec_shared.png', 
                                'alt':'Released',
                                'alt_msgid':'label_released',
                                'title':'This assignment has been released for viewing',
@@ -591,9 +591,9 @@ class ECAssignment(ATCTContent, HistoryAwareMixin):
         
         if hasattr(self, 'feedback') and self.feedback:
             feedback = str(self.feedback)
-            title = re.sub('[\r\n]+', ' ', feedback)[0:76]
+            title = re.sub('[\r\n]+', ' ', feedback)
 
-            result.append({'icon':'ec_comment.png', 
+            result.append({'src':'ec_comment.png', 
                            'alt':'Feedback',
                            'alt_msgid':'label_feedback',
                            'title':title,
@@ -601,9 +601,9 @@ class ECAssignment(ATCTContent, HistoryAwareMixin):
 
         if isGrader and hasattr(self, 'remarks') and self.remarks:
             remarks = str(self.remarks)
-            title = re.sub('[\r\n]+', ' ', remarks)[0:76]
+            title = re.sub('[\r\n]+', ' ', remarks)
 
-            result.append({'icon':'ecab_remarks.png', 
+            result.append({'src':'ecab_remarks.png', 
                            'alt':'Remarks',
                            'alt_msgid':'label_remarks',
                            'title':title,
