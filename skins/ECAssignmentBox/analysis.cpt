@@ -22,9 +22,10 @@
                   isGrader          python: here.portal_membership.checkPermission('eduComponents: Grade Assignments', context);
                   superseededStats  here/getSuperseededStats;
                   dateStats         here/getSubmissionDateStats;
-                  totalBoxes        python: here.countContainedBoxes(True);
+                  n_boxes_published        python: here.countContainedBoxes(True);
                   assignmentStates  here/countContainedAssignments;
                   totalAssignments  python: assignmentStates[0];
+                  n_boxes    python: here.countContainedBoxes(False);
                   "
       >
         <div metal:use-macro="here/document_actions/macros/document_actions" />
@@ -48,31 +49,29 @@
 
           <h4 i18n:translate="label_total_number_of">Total number of</h4>
           <ul tal:condition="python: totalAssignments > 0">
-            <!-- 
-            <b i18n:translate="label_n_boxes">Published assignment boxes inside this folder:</b>
-            <span tal:omit-tag="" tal:content="n_boxes"/>
-            <br />
-            -->
+            
             <li>
-              <span tal:omit-tag="" i18n:translate="label_total_assignments_with">Submissions (incl. superseded):</span>
-              <span tal:replace="python: totalAssignments"/>
+              <span tal:omit-tag="" i18n:translate="label_n_boxes_not_pub">Assignment boxes inside this folder:</span>
+              <span tal:replace="n_boxes"/>
+              (<span tal:replace="n_boxes_published"/>
+              <span tal:omit-tag="" i18n:translate="published">published</span>)
             </li>
             <li>
               <span tal:omit-tag="" i18n:translate="label_total_superseeded">Superseded submissions:</span>
               <span tal:replace="python: totalAssignments - assignmentStates[1]"/>
             </li>
             <li>
-              <span tal:omit-tag="" i18n:translate="label_total_assignments_without">Submissions (excl. superseded):</span>
+              <span tal:omit-tag="" i18n:translate="label_total_assignments_without">Assessable submissions:</span>
               <span tal:replace="python: assignmentStates[1]"/>
             </li>
             <li tal:condition="python: assignmentStates[1] - (assignmentStates[2] + assignmentStates[3]) == 0"
             style="color:green">
-              <span i18n:translate="label_total_assignments_not_final">Submissions (excl. superseded) not in final states: </span>
+              <span i18n:translate="label_total_assignments_not_final">Assessable submissions not in final states: </span>
               <span tal:replace="python: assignmentStates[1] - (assignmentStates[2] + assignmentStates[3])"/>
             </li>
             <li tal:condition="python: not (assignmentStates[1] - (assignmentStates[2] + assignmentStates[3]) == 0)"
             style="color:rgb(255,  99,  71)">
-              <span tal:omit-tag="" i18n:translate="label_total_assignments_not_final">Submissions (excl. superseded) not in final states: </span>
+              <span tal:omit-tag="" i18n:translate="label_total_assignments_not_final">Assessable Submissions not in final states: </span>
               <span tal:replace="python: assignmentStates[1] - (assignmentStates[2] + assignmentStates[3])"/>
             </li>
           </ul>

@@ -794,6 +794,11 @@ msgid "Submissions"
 msgstr "Einreichungen"
 
 #: ./skins/ECAssignmentBox/analysis.cpt
+# Original: "published"
+msgid "published"
+msgstr "veröffentlicht"
+
+#: ./skins/ECAssignmentBox/analysis.cpt
 # Original: "Rejected"
 msgid "Rejected"
 msgstr "Abgewiesen"
@@ -844,9 +849,9 @@ msgid "label_total_number_of"
 msgstr "Gesamtanzahl von"
 
 #: ./skins/ECAssignmentBox/analysis.cpt
-# Original: "Submissions (incl. superseded):"
-msgid "label_total_assignments_with"
-msgstr "Einreichungen (incl. ersetzten):"
+# Original: "Assignment boxes inside this folder:"
+msgid "label_n_boxes_not_pub"
+msgstr "Aufgabencontainer innerhalb dieses Ordners:"
 
 #: ./skins/ECAssignmentBox/analysis.cpt
 # Original: "Superseded submissions:"
@@ -854,11 +859,11 @@ msgid "label_total_superseeded"
 msgstr "ersetzte Einreichungen:"
 
 #: ./skins/ECAssignmentBox/analysis.cpt
-# Original: "Submissions (excl. superseded):"
+# Original: "Assessable submissions:"
 msgid "label_total_assignments_without"
-msgstr "Einreichungen (excl. ersetzten):"
+msgstr "bewertbare Einreichungen:"
 
 #: ./skins/ECAssignmentBox/analysis.cpt
-# Original: "Submissions (excl. superseded) not in final states:"
+# Original: "Assessable submissions not in final states:"
 msgid "label_total_assignments_not_final"
-msgstr "Einreichungen (excl. ersetzten) in Nichtfinalzuständen:"
+msgstr "bewertbare, jedoch noch nicht bewertete Einreichungen:"
