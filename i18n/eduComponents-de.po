@@ -809,9 +809,9 @@ msgid "Submitters"
 msgstr "Einreichende"
 
 #: ./skins/ECAssignmentBox/analysis.cpt
-# Original: "Submitters (%)"
+# Original: "# Submitters (%)"
 msgid "label_submitters_%"
-msgstr "Einreichende (%)"
+msgstr "# Einreichende (%)"
 
 #: ./skins/ECAssignmentBox/analysis.cpt
 # Original: "Submissions (average per assignment)"

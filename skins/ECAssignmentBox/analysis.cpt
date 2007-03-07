@@ -111,8 +111,8 @@
           <table class="listing" tal:condition="python: superseededStats[superseededStats[0]:]">
             <thead>
               <tr>
+                <th i18n:translate="label_submitters_%"># Submitters (%)</th>
                 <th i18n:translate="label_submissions_average">Submissions (average per assignment)</th>
-                <th i18n:translate="label_submitters_%">Submitters (%)</th>
               </tr>
             </thead>
 
@@ -120,12 +120,12 @@
               <tal:block repeat="elem python: superseededStats[superseededStats[0]:]">
                 <tr tal:define="oddrow repeat/elem/odd;"
                     tal:attributes="class python: test(oddrow, 'odd', 'even')">
-                  <td tal:content="python: str(elem[0]) +
-                      ' (' + str(ecab_utils.localizeNumber('%.1f', float(elem[0]) / superseededStats[2])) + ')'"> 1 (1)
-                  </td>
                   <td tal:content="python: str(elem[1]) +
                       ' (' + str(ecab_utils.localizeNumber('%.1f', float(100 * elem[1]) / superseededStats[3])) + '%)'">
                       1 (3%)
+                  </td>
+                  <td tal:content="python: str(elem[0]) +
+                      ' (' + str(ecab_utils.localizeNumber('%.1f', float(elem[0]) / superseededStats[2])) + ')'"> 1 (1)
                   </td>
                 </tr>
               </tal:block>
