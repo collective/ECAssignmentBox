@@ -43,6 +43,7 @@ if REQUEST.has_key('orig_template'):
     orig_template = REQUEST['orig_template']
 
     
-target = context.getActionInfo('object/%s' % orig_template)['url']
+#target = context.getActionInfo('object/%s' % orig_template)['url']
+target = '%s/%s' % (context.absolute_url(), orig_template)
  
 return RESPONSE.redirect('%s?%s' % (target, ecab_utils.urlencode(query)))
