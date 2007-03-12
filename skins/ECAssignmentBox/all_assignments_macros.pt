@@ -134,8 +134,8 @@
                                        title indicator/title|nothing;
                                        alt   indicator/alt|nothing;" />
                   <!-- text only -->
-                  <span tal:condition="indicator/value|nothing"
-                       tal:replace="indicator/value" />
+                  <span tal:condition="indicator/text|nothing"
+                       tal:replace="indicator/text" />
               </tal:repeat>
             </td>
 
@@ -270,9 +270,14 @@
             <td>
               <!-- FIXME: indicators are only available by the real object (not by the brain) -->
               <tal:repeat repeat="indicator python: assignment.getIndicators()">
-                  <img tal:attributes="src   indicator/icon|nothing;
+                  <!-- image -->
+                  <img tal:condition="indicator/icon|nothing"
+                       tal:attributes="src indicator/icon|nothing;
                                        title indicator/title|nothing;
-                                       alt   indicator/alt|nothing;"/>
+                                       alt indicator/alt|nothing;"/>
+                  <!-- text only -->
+                  <span tal:condition="indicator/text|nothing"
+                       tal:replace="indicator/text" />
               </tal:repeat>
             </td>
 
