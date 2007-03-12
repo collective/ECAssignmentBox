@@ -77,11 +77,17 @@ msgstr "Einreichungen"
 msgid "Assignments (full)"
 msgstr "Einreichungen (vollständig)"
 
+
 #: ECFolder.py
-#. Statistics
 # Original: "Statistics"
 msgid "Statistics"
 msgstr "Statistiken"
+
+
+#: ECFolder.py, ECAssignmentBox
+# Original: "Analysis"
+msgid "Analysis"
+msgstr "Analyse"
 
 
 #: ECFolder.py

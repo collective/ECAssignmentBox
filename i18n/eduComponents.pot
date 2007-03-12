@@ -798,3 +798,100 @@ msgstr ""
 # Original: "Hide superseded"
 msgid "Hide superseded"
 msgstr ""
+
+#: ./skins/ECAssignmentBox/analysis.cpt
+# Original: "Totals"
+msgid "label_totals"
+msgstr ""
+
+#: ./skins/ECAssignmentBox/analysis.cpt
+# Original: "Shows totals for several values."
+msgid "help_totals"
+msgstr ""
+
+#: ./skins/ECAssignmentBox/analysis.cpt
+# Original: "Assignment boxes inside this folder:"
+msgid "label_n_boxes_not_pub"
+msgstr ""
+
+#: ./skins/ECAssignmentBox/analysis.cpt
+# Original: "Superseded submissions:"
+msgid "label_total_superseeded"
+msgstr ""
+
+#: ./skins/ECAssignmentBox/analysis.cpt
+# Original: "Submissions in all other states:"
+msgid "label_total_assignments_without"
+msgstr ""
+
+#: ./skins/ECAssignmentBox/analysis.cpt
+# Original: "Submissions not in final states:"
+msgid "label_total_assignments_not_final"
+msgstr ""
+
+#: ./skins/ECAssignmentBox/analysis.cpt
+# Original: "There are no submissions"
+msgid "warn_no_submissions"
+msgstr ""
+
+#: ./skins/ECAssignmentBox/analysis.cpt
+# Original: "Submissions in final states"
+msgid "label_final_states"
+msgstr ""
+
+#: ./skins/ECAssignmentBox/analysis.cpt
+# Original: "Shows the number of submissions in the states defined as 
+#            completed and the number of rejected submissions."
+msgid "help_final_states"
+msgstr ""
+
+#: ./skins/ECAssignmentBox/analysis.cpt
+# Original: "There are no assignments in final states"
+msgid "warn_no_final_submissions"
+msgstr ""
+
+#: ./skins/ECAssignmentBox/analysis.cpt
+# Original: "Number of attempts"
+msgid "label_superseded_stats"
+msgstr ""
+
+#: ./skins/ECAssignmentBox/analysis.cpt
+# Original: "This table shows the number of attempts users needed 
+#            for this assignment."
+msgid "help_superseded_stats"
+msgstr ""
+
+#: ./skins/ECAssignmentBox/analysis.cpt
+# Original: "Attempts"
+msgid "label_attempts"
+msgstr ""
+
+#: ./skins/ECAssignmentBox/analysis.cpt
+# Original: "Students (%)"
+msgid "label_students"
+msgstr ""
+
+#: ./skins/ECAssignmentBox/analysis.cpt
+# Original: "Submissions per day"
+msgid "label_date_stats"
+msgstr ""
+
+#: ./skins/ECAssignmentBox/analysis.cpt
+# Original: "This table shows the number of submissions per day."
+msgid "help_date_stats"
+msgstr ""
+
+#: ./skins/ECAssignmentBox/analysis.cpt
+# Original: "Submissions"
+msgid "label_submissions"
+msgstr ""
+
+#: ./skins/ECAssignmentBox/all_assignments.cpy
+# Original: "Show submission text"
+msgid "Show submission text"
+msgstr ""
+
+#: ./skins/ECAssignmentBox/all_assignments.cpy
+# Original: "Hide submission text"
+msgid "Hide submission text"
+msgstr ""

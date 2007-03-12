@@ -790,13 +790,8 @@ msgstr "Ersetzte Einreichungen ausblenden"
 
 #: ./skins/ECAssignmentBox/analysis.cpt
 # Original: "Submissions"
-msgid "Submissions"
+msgid "label_submissions"
 msgstr "Einreichungen"
-
-#: ./skins/ECAssignmentBox/analysis.cpt
-# Original: "published"
-msgid "published"
-msgstr "veröffentlicht"
 
 #: ./skins/ECAssignmentBox/analysis.cpt
 # Original: "Rejected"
@@ -809,29 +804,40 @@ msgid "Submitters"
 msgstr "Einreichende"
 
 #: ./skins/ECAssignmentBox/analysis.cpt
-# Original: "# Submitters (%)"
-msgid "label_submitters_%"
-msgstr "# Einreichende (%)"
+# Original: "Students (%)"
+msgid "label_students"
+msgstr "Studenten (%)"
 
 #: ./skins/ECAssignmentBox/analysis.cpt
-# Original: "Submissions (average per assignment)"
-msgid "label_submissions_average"
-msgstr "Einreichungen (durchschnittlich pro Aufgabe)"
+# Original: "Attempts"
+msgid "label_attempts"
+msgstr "Versuche"
 
 #: ./skins/ECAssignmentBox/analysis.cpt
-# Original: "Submissions per date"
+# Original: "Submissions per day"
 msgid "label_date_stats"
-msgstr "Einreichungen je Datum"
+msgstr "Einreichungen pro Tag"
 
 #: ./skins/ECAssignmentBox/analysis.cpt
-# Original: "No Submissions found at all"
-msgid "No Submissions"
-msgstr "Keine Einreichungen gefunden"
+# Original: "This table shows the number of submissions per day."
+msgid "help_date_stats"
+msgstr "Diese Tabelle zeigt die Verteilung der Einreichungen auf einzelne Tage."
 
 #: ./skins/ECAssignmentBox/analysis.cpt
-# Original: "Total submissions per user"
-msgid "label_superseeded_stats"
-msgstr "Benötigte Einreichungen je Nutzer"
+# Original: "There are no submissions"
+msgid "warn_no_submissions"
+msgstr "Keine Einreichungen"
+
+#: ./skins/ECAssignmentBox/analysis.cpt
+# Original: "Number of attempts"
+msgid "label_superseded_stats"
+msgstr "Anzahl Versuche"
+
+#: ./skins/ECAssignmentBox/analysis.cpt
+# Original: "This table shows the number of attempts users needed 
+#            for this assignment."
+msgid "help_superseded_stats"
+msgstr "Diese Tabelle zeigt die Verteilung der Anzahl der Versuche auf die Anzahl der Studenten."
 
 #: ./skins/ECAssignmentBox/analysis.cpt
 # Original: "There are no assignments in final states"
@@ -839,31 +845,52 @@ msgid "warn_no_final_submissions"
 msgstr "Keine Einreichungen in als endgültig angesehenen Zuständen"
 
 #: ./skins/ECAssignmentBox/analysis.cpt
-# Original: "Final states for all assignments"
+# Original: "Submissions in final states"
 msgid "label_final_states"
-msgstr "Einreichungen in Finalzuständen"
+msgstr "Bewertete Einreichungen"
 
 #: ./skins/ECAssignmentBox/analysis.cpt
-# Original: "Total number of"
-msgid "label_total_number_of"
-msgstr "Gesamtanzahl von"
+# Original: "Shows the number of submissions in the states defined as 
+#            completed and the number of rejected submissions."
+msgid "help_final_states"
+msgstr "Zeigt die Anzahl der Einreichungen, die sich in als endgültig definierten Zuständen befinden und die abgewiesenen Einreichungen."
+
+#: ./skins/ECAssignmentBox/analysis.cpt
+# Original: "Totals"
+msgid "label_totals"
+msgstr "Gesamtanzahl"
+
+#: ./skins/ECAssignmentBox/analysis.cpt
+# Original: "Shows totals for several values."
+msgid "help_totals"
+msgstr "Zeigt die Gesamtanzahl ausgewählter Werte."
 
 #: ./skins/ECAssignmentBox/analysis.cpt
 # Original: "Assignment boxes inside this folder:"
 msgid "label_n_boxes_not_pub"
-msgstr "Aufgabencontainer innerhalb dieses Ordners:"
+msgstr "Aufgaben in diesem Ordners:"
 
 #: ./skins/ECAssignmentBox/analysis.cpt
 # Original: "Superseded submissions:"
 msgid "label_total_superseeded"
-msgstr "ersetzte Einreichungen:"
+msgstr "Ersetzte Einreichungen:"
 
 #: ./skins/ECAssignmentBox/analysis.cpt
-# Original: "Assessable submissions:"
+# Original: "Submissions in all other states:"
 msgid "label_total_assignments_without"
-msgstr "bewertbare Einreichungen:"
+msgstr "Einreichungen in anderen Zuständen:"
 
 #: ./skins/ECAssignmentBox/analysis.cpt
-# Original: "Assessable submissions not in final states:"
+# Original: "Submissions not in final states:"
 msgid "label_total_assignments_not_final"
-msgstr "bewertbare, jedoch noch nicht bewertete Einreichungen:"
+msgstr "Einreichungen, die noch nicht bewertet wurden:"
+
+#: ./skins/ECAssignmentBox/all_assignments.cpy
+# Original: "Show submission text"
+msgid "Show submission text"
+msgstr "Einreichungstext anzeigen"
+
+#: ./skins/ECAssignmentBox/all_assignments.cpy
+# Original: "Hide submission text"
+msgid "Hide submission text"
+msgstr "Einreichungstext ausblenden"
