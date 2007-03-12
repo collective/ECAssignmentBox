@@ -192,13 +192,19 @@ class ECAssignmentBox(ATFolder):
         'condition':   "python: len(here.portal_catalog(path={'query':'/'.join(here.getPhysicalPath()), 'depth':1, },)) > 0",
         },
 
+#        {
+#        'action':      "string:$object_url/all_assignments_full",
+#        'id':          'all_assignments_full',
+#        'name':        'Assignments (full)',
+#        # Only display the assignments_full tab if there actually are assignments
+#        'condition':   "python: len(here.portal_catalog(path={'query':'/'.join(here.getPhysicalPath()), 'depth':1, },)) > 0",
+#        'permissions': (permissions.ManageProperties,),
+#        },
+
         {
-        'action':      "string:$object_url/all_assignments_full",
-        'id':          'all_assignments_full',
-        'name':        'Assignments (full)',
-        # Only display the assignments_full tab if there actually are assignments
-        #'condition':   'python: len(here.portal_catalog(path=here.absolute_url_path())) > 0',
-        'condition':   "python: len(here.portal_catalog(path={'query':'/'.join(here.getPhysicalPath()), 'depth':1, },)) > 0",
+        'action':      "string:$object_url/analysis",
+        'id':          'analysis',
+        'name':        'Analysis',
         'permissions': (permissions.ManageProperties,),
         },
 

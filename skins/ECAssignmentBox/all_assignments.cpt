@@ -22,11 +22,12 @@
                   isGrader          python: here.portal_membership.checkPermission('eduComponents: Grade Assignments', context);
                   resFlt            python: {'user_id':request.get('user_id', None), 
                                              'state':request.get('state', None), 
-                                             'show_superseded':request.get('show_superseded', None), };
+                                             'show_superseded':request.get('show_superseded', None),
+                                             'show_full_text':request.get('show_full_text', None), };
                   resFlt2           python: dict([(k,v) for k,v in resFlt.items() if v is not None]);
                   userName          python: resFlt['user_id'];
                   statesToShow      python: ecab_utils.getStatesToShow(resFlt['show_superseded'], resFlt['state']);
-                  mkUrl             python: lambda d : here.getActionInfo('object/%s' % template_id)['url'] + '?%s' % ecab_utils.urlencode(dict(resFlt2.items() + d.items()));"
+                  mkUrl             python: lambda d : '%s/%s?%s' % (here.absolute_url(), template.getId(), ecab_utils.urlencode(dict(resFlt2.items() + d.items())));"
       >
       
         <!--  debug -->
@@ -68,6 +69,27 @@
                 tal:attributes="action python: mkUrl({});">
     
             <div class="formControls visualNoPrint">
+
+              <input class="standalone"
+                     type="submit"
+                     name="form.button.ToggleFullText"
+                     value="Show submission text"
+                     tabindex=""
+                     i18n:attributes="value"
+                     tal:attributes="tabindex tabindex/next;"
+                     tal:condition="python: not resFlt['show_full_text']"
+              />
+
+              <input class="standalone"
+                     type="submit"
+                     name="form.button.ToggleFullText"
+                     value="Hide submission text"
+                     tabindex=""
+                     i18n:attributes="value"
+                     tal:attributes="tabindex tabindex/next;"
+                     tal:condition="python: resFlt['show_full_text']"
+              />
+
               <input class="standalone"
                      type="submit"
                      name="form.button.ToggleSuperseded"
@@ -143,7 +165,7 @@
                         i18n:translate="no_submissions">There are no submissions in this assignment box.
                     </p>
                     
-                    <table class="listing" tal:condition="brains">
+                    <table class="listing" tal:condition="python: brains and not resFlt['show_full_text']">
                       <!-- write table header -->
                       <metal:use use-macro="here/all_assignments_macros/macros/all_assignments_thead" />
                                             
@@ -156,6 +178,24 @@
 
                       <!-- write table footer -->
                       <metal:use use-macro="here/all_assignments_macros/macros/all_assignments_tfoot" />
+
+                    </table>
+
+                    <table class="listing" tal:condition="python: brains and resFlt['show_full_text']">
+                      <!-- write table header -->
+                      <metal:use use-macro="here/all_assignments_macros/macros/all_assignments_full_thead" />
+                      
+                      <!-- write table footer -->
+                      <!-- FIXME: 
+                      <metal:use use-macro="here/all_assignments_macros/macros/all_assignments_full_tfoot" />
+                      -->
+                      
+                      <!--  add table contents -->
+                      <tal:block define="wtool here/portal_workflow;
+                                         global has_items python: 1;"
+                      >
+                        <metal:use use-macro="here/all_assignments_macros/macros/all_assignments_full_tbody" />
+                      </tal:block>
 
                     </table>
 
