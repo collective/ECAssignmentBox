@@ -53,15 +53,23 @@ if len(brains) > 0:
             lastCreator = brain.Creator
             creators = creators + 1
             currAmount = 1
+    
     submissionsWithDuplicates.append(currAmount)
     submissionsWithDuplicates.sort()
     result[3] = creators
     
+    # FIXME: dirty hack; rename l
+    l = []
+    
     while len(submissionsWithDuplicates) > 0:
         last = submissionsWithDuplicates[0]
-        result.append((last, submissionsWithDuplicates.count(last)))
+        l.append((last, submissionsWithDuplicates.count(last)))
         while submissionsWithDuplicates.count(last) > 0:
             submissionsWithDuplicates.remove(last)
+            
+    #l.sort(lambda a, b: cmp(a[1], b[1]))
+    
+    result.extend(l)
 
 return result
 
