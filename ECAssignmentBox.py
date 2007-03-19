@@ -32,6 +32,8 @@ from Products.ATContentTypes.content.base import updateActions, updateAliases
 from Products.ATContentTypes.content.schemata import finalizeATCTSchema
 from Products.ATContentTypes.content.folder import ATFolderSchema
 from Products.ATContentTypes.content.folder import ATFolder
+from Products.ATReferenceBrowserWidget.ATReferenceBrowserWidget \
+     import ReferenceBrowserWidget
 
 # local imports
 from Products.ECAssignmentBox.config import *
@@ -42,9 +44,26 @@ from Statistics import Statistics
 from Products.ECAssignmentBox.PlainTextField import PlainTextField
 
 ECAssignmentBoxSchema = ATFolderSchema.copy() + Schema((
+    ReferenceField(
+        'assignment_reference',
+        allowed_types = ('ECAssignmentTask',),
+        required = False,
+        accessor = 'getReference',
+        multiValued = False,
+        relationship = 'alter_ego',
+        widget = ReferenceBrowserWidget(
+			description = 'Select an assignment task.  A reference to an assignment task supersedes the assignment text and answer template below.',
+            description_msgid = 'help_assignment_reference',
+            i18n_domain = I18N_DOMAIN,
+            label = 'Reference to assignment',
+            label_msgid = 'label_assignment_reference',
+            allow_search = True,
+            show_indexes = False,
+        ),
+    ),
     TextField(
         'assignment_text',
-        required=True,
+        required = False,
         searchable = True,
         default_output_type = 'text/html',
         default_content_type = 'text/structured',
@@ -193,15 +212,6 @@ class ECAssignmentBox(ATFolder):
         #'condition':   'python: len(here.contentValues()) > 0',
         'condition':   "python: len(here.portal_catalog(path={'query':'/'.join(here.getPhysicalPath()), 'depth':1, },)) > 0",
         },
-
-#        {
-#        'action':      "string:$object_url/all_assignments_full",
-#        'id':          'all_assignments_full',
-#        'name':        'Assignments (full)',
-#        # Only display the assignments_full tab if there actually are assignments
-#        'condition':   "python: len(here.portal_catalog(path={'query':'/'.join(here.getPhysicalPath()), 'depth':1, },)) > 0",
-#        'permissions': (permissions.ManageProperties,),
-#        },
 
         {
         'action':      "string:$object_url/analysis",

@@ -170,6 +170,19 @@ msgid "help_answer"
 msgstr ""
 
 
+#: ./ECAssignment.py
+msgid "help_assignment_reference"
+msgstr ""
+
+#: ./skins/ECAssignmentBox/ecat_view.pt
+msgid "label_folder_contents"
+msgstr ""
+
+#: ./ECAssignment.py
+msgid "label_assignment_reference"
+msgstr ""
+
+
 #: ./ECAssignmentBox.py
 msgid "help_assignment_text"
 msgstr ""

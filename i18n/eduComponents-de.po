@@ -157,6 +157,18 @@ msgstr "Durchschnittsnote und Median errechnen sich aus allen Einreichungen zu d
 msgid "help_answer"
 msgstr "Die studentische Einreichung zu dieser Aufgabe"
 
+#: ./ECAssignment.py
+msgid "help_assignment_reference"
+msgstr "Wählen sie eine vorhandene Aufgabe aus. Diese überschreibt die Angaben zum Aufgabentext, zur Antwortvorlage und zur Beschreibung."
+
+#: ./skins/ECAssignmentBox/ecat_view.pt
+msgid "label_folder_contents"
+msgstr "ECAssignmentTask kann andere Inhalte beinhalten."
+
+#: ./ECAssignment.py
+msgid "label_assignment_reference"
+msgstr "Referenz auf eine vorhandene Aufgabe"
+
 
 #: ./ECAssignmetBox.py
 msgid "help_assignment_text"

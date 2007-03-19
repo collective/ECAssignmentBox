@@ -27,7 +27,8 @@
                       isOwner       python: user.has_role(['Owner', 'Reviewer', 'Manager'], here);
                       canSupersed   python: here.canSupersed();
                       canRetry      python: here.canRetry();
-                      tries_left    python: here.getMaxTries() - here.getTries();">
+					  tries_left    python: here.getMaxTries() - here.getTries();
+					  reference		python: here.getReference();">
                       
         <!-- debug -->
         <!--
@@ -95,15 +96,16 @@
         <p/>
     
         <div class="documentDescription"
-             tal:content="structure here/Description"
-             tal:condition="here/Description"/>
-  
-        <div class="field" tal:content="structure here/getAssignment_text"/>
+             tal:content="structure reference/Description | here/Description"/>
+
+
+		<div class="field"
+			tal:content="structure reference/getAssignment_text | here/getAssignment_text"/>
       
         <a href="" 
           tal:attributes="href string:${here/absolute_url}/downloadAnswerTemplate"
           i18n:translate="label_download_answer_template"
-          tal:condition="here/getAnswerTemplate">
+		  tal:content="reference/getAnswerTemplate | here/getAnswerTemplate">
           Download answer template
         </a>
       
@@ -130,7 +132,7 @@
               name="answer"
               tabindex=""
               tal:attributes="tabindex tabindex/next; wrap python:('off', 'on')[here.getWrapAnswer()]"
-              tal:content="here/getAnswerTemplate | nothing"></textarea>
+              tal:content="reference/getAnswerTemplate | here/getAnswerTemplate | nothing"></textarea>
           </div>
   
          <!-- upload file button -->

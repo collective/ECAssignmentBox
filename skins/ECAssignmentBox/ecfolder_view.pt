@@ -66,7 +66,8 @@
 		item_description item/Description | nothing;
 		item_type item/portal_type;
 		item_type_class python: 'contenttype-' +
-		   normalizeString(item_type);">
+		normalizeString(item_type);
+		item_ref item/getReference">
                 <dt>
                   <span tal:attributes="class item_type_class"
                          tal:condition="python:item_type != 'Link'">
@@ -98,11 +99,11 @@
                   </tal:block>
 
                   <div tal:condition="item_description"
-                       class="ec-description" tal:content="structure item_description"/>
+                       class="ec-description" tal:content="structure item_ref/Description | item_description"/>
 
                   <tal:block tal:condition="python: ecab_utils.isAssignmentBoxType(item)">      
 
-                    <div class="field" tal:content="structure item/getAssignment_text"/>
+                    <div class="field" tal:content="structure item_ref/getAssignment_text | item/getAssignment_text"/>
 
                     <tal:block tal:condition="python: is_published and not item.hasExpired()">
                       <p class="visualNoPrint">&#x25B6;

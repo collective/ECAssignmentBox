@@ -35,6 +35,9 @@ ECAB_NAME = "Assignment Box"
 ECA_META = "ECAssignment"
 ECA_NAME = "Assignment"
 
+ECAT_META = "ECAssignmentTask"
+ECAT_NAME = "Assignment Task"
+
 ECA_WORKFLOW_ID = 'ec_assignment_workflow'
 ECA_WORKFLOW_TITLE = 'Assignment workflow [EC]'
 WORKFLOW_SCRIPTS = ['notify_students',]
@@ -55,10 +58,12 @@ setDefaultRoles(DEFAULT_ADD_CONTENT_PERMISSION, ('Manager', 'Owner',))
 ADD_CONTENT_PERMISSIONS = {
     'ECFolder':        'eduComponents: Add ECFolder',
     'ECAssignmentBox': 'eduComponents: Add Assignment Box',
+	'ECAssignmentTask':'eduComponents: Add Assignment Task',
 }
 
 setDefaultRoles('eduComponents: Add ECFolder',       ('Manager', 'Owner',))
 setDefaultRoles('eduComponents: Add Assignment Box', ('Manager', 'Owner',))
+setDefaultRoles('eduComponents: Add Assignment Task',('Manager', 'Owner',))
 
 # Supported formats in text areas
 TEXT_TYPES = (
