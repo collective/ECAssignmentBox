@@ -96,6 +96,22 @@ msgid "Set Assignment Box Options"
 msgstr "Einstellungen von Aufgaben ändern"
 
 
+#: ECAssignmentTask.py
+# Original: "Assignment Task"
+msgid "Assignment Task"
+msgstr "Aufgabenstellung"
+
+#: ECAssignmentTask.py
+# Original: Defines the task for an assignment box
+msgid "Defines the task for an assignment box"
+msgstr "Aufgabenstellung zur Verwendung in einer Aufgabe"
+
+#: ECAssignmentTask.py
+# Original: Defines the task for an assignment box.
+msgid "description_edit_ecat"
+msgstr "Aufgabenstellung zur Verwendung in einer Aufgabe."
+
+
 #: ECAssignmentWorkflow.py
 #. Submitted
 # Original: "Submitted"

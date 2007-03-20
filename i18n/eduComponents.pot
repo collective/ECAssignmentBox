@@ -175,7 +175,7 @@ msgid "help_assignment_reference"
 msgstr ""
 
 #: ./skins/ECAssignmentBox/ecat_view.pt
-msgid "label_folder_contents"
+msgid "label_ecat_folder_contents"
 msgstr ""
 
 #: ./ECAssignment.py
