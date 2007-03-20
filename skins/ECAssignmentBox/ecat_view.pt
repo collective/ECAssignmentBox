@@ -22,10 +22,14 @@
 				i18n:domain="plone"
 				i18n:translate="go_to_parent_url">Up one level</a>-->
 
-			<a class="link-parent" href="folder_contents" 
-				i18n:translate="label_folder_contents">ECAssignmentTask can contain other items.</a>
+			<a class="link-parent visualNoPrint" href=""
+				tal:define="parent_url python:here.navigationParent(here, template_id)"
+				tal:condition="parent_url"
+				tal:attributes="href parent_url"
+				i18n:domain="plone"	i18n:translate="go_to_parent_url">
+				Up one level</a>
 
-			<div class="documentDescription"
+			<div class="ec-description"
 				tal:content="structure here/Description"
 				tal:condition="here/Description"/>
 
@@ -38,6 +42,11 @@
             	<label for="answer" i18n:translate="label_answer_template">Answer template</label>
 				<div tal:content="structure here/getAnswerTemplate"/>
 			</div>
+
+			<p class="ec-listing visualNoPrint">
+				<a href="folder_contents" 
+					i18n:translate="label_folder_contents">ECAssignmentTask can contain other items.</a>
+			</p>
 
 			<hr/>
 			<div metal:use-macro="here/document_byline/macros/byline"/>

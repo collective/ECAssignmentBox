@@ -84,7 +84,7 @@ class ECAssignmentTask(ATFolder):
 
 	portal_type = meta_type = ECAT_META
 	archetype_name = ECAT_NAME
-	content_icon = 'ecab.png'
+	content_icon = 'ecat.png'
 	schema = ECAssignmentTaskSchema
 	typeDescription = 'Allows the creation of online assignments.'
 	typeDescMsgID = 'description_edit_ecat'

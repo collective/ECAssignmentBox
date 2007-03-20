@@ -20,14 +20,11 @@ except AttributeError: pass
 if output == None:
 	output = context.getField('answerTemplate').getAccessor(context)()
 
-print output
-
 filename = '%s_%s.%s' % (ecab_utils.pathQuote(context.getId()),
                          'template', 'txt')
 
-RESPONSE.setHeader('Content-Disposition', 'inline') # Useful for debugging
-#RESPONSE.setHeader('Content-Disposition', 'attachment; filename=' + filename)
+#RESPONSE.setHeader('Content-Disposition', 'inline') # Useful for debugging
+RESPONSE.setHeader('Content-Disposition', 'attachment; filename=' + filename)
 RESPONSE.setHeader('Content-Type', 'text/plain')
 
-return printed
-#return output
+return output
