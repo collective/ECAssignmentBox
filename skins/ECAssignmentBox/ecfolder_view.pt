@@ -67,7 +67,7 @@
 		item_type item/portal_type;
 		item_type_class python: 'contenttype-' +
 		normalizeString(item_type);
-		item_ref item/getReference">
+		item_ref item/getReference | nothing">
                 <dt>
                   <span tal:attributes="class item_type_class"
                          tal:condition="python:item_type != 'Link'">
