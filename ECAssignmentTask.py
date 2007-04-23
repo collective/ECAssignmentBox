@@ -1,5 +1,5 @@
-#
-# Copyright (c) 2006 Otto-von-Guericke-Universität Magdeburg
+# -*- coding: utf-8 -*-
+# Copyright (c) 2007 Otto-von-Guericke-Universität Magdeburg
 #
 # This file is part of ECAssignmentBox.
 #
@@ -25,8 +25,6 @@ from Products.ATContentTypes.content.folder import ATFolderSchema,ATFolder
 from Products.ECAssignmentBox import permissions
 from Products.ECAssignmentBox.config import *
 from Products.ECAssignmentBox.PlainTextField import PlainTextField
-
-
 
 ECAssignmentTaskSchema = ATFolderSchema.copy() + Schema((
 #	TextField(
@@ -76,17 +74,14 @@ ECAssignmentTaskSchema = ATFolderSchema.copy() + Schema((
 
 finalizeATCTSchema(ECAssignmentTaskSchema)
 
-
-
 class ECAssignmentTask(ATFolder):
-	"""A folderish document type, which can contain other types.
-	"""
+	"""Defines the task for an assignment box"""
 
 	portal_type = meta_type = ECAT_META
 	archetype_name = ECAT_NAME
 	content_icon = 'ecat.png'
 	schema = ECAssignmentTaskSchema
-	typeDescription = 'Allows the creation of online assignments.'
+	typeDescription = 'Defines the task for an assignment box.'
 	typeDescMsgID = 'description_edit_ecat'
 
 	_at_rename_after_creation = True
