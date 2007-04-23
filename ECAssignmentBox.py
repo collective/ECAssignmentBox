@@ -49,6 +49,8 @@ ECAssignmentBoxSchema = ATFolderSchema.copy() + Schema((
         allowed_types = ('ECAssignmentTask',),
         required = False,
         accessor = 'getReference',
+        index = "FieldIndex:schema", # Adds "getRawAssignment_reference"
+                                     # to catalog
         multiValued = False,
         relationship = 'alter_ego',
         widget = ReferenceBrowserWidget(

@@ -111,6 +111,11 @@ msgstr "Aufgabenstellung zur Verwendung in einer Aufgabe"
 msgid "description_edit_ecat"
 msgstr "Aufgabenstellung zur Verwendung in einer Aufgabe."
 
+#: ECAssignmentTask.py
+# Original: Backlinks
+msgid "Backlinks"
+msgstr "Rückverweise"
+
 
 #: ECAssignmentWorkflow.py
 #. Submitted

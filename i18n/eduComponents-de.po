@@ -165,6 +165,10 @@ msgstr "Wählen sie eine vorhandene Aufgabe aus. Diese überschreibt die Angaben
 msgid "label_ecat_folder_contents"
 msgstr "Hinweis: Dies ist ein Ordner, der andere Objekte enthält."
 
+#: ./skins/ECAssignmentBox/ecat_backlinks.pt
+msgid "label_ecat_backlinks"
+msgstr "Aufgaben, die auf diese Aufgabenstellung verweisen:"
+
 #: ./ECAssignment.py
 msgid "label_assignment_reference"
 msgstr "Referenz auf eine vorhandene Aufgabe"

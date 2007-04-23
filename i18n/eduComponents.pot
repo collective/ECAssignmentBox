@@ -174,9 +174,16 @@ msgstr ""
 msgid "help_assignment_reference"
 msgstr ""
 
+
 #: ./skins/ECAssignmentBox/ecat_view.pt
 msgid "label_ecat_folder_contents"
 msgstr ""
+
+
+#: ./skins/ECAssignmentBox/ecat_backlinks.pt
+msgid "label_ecat_backlinks"
+msgstr ""
+
 
 #: ./ECAssignment.py
 msgid "label_assignment_reference"

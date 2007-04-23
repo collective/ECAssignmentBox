@@ -18,7 +18,8 @@
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301  USA
 #
 from Products.Archetypes.atapi import *
-from Products.ATContentTypes.content.base import registerATCT,updateAliases
+from Products.ATContentTypes.content.base import registerATCT, updateActions, \
+     updateAliases
 from Products.ATContentTypes.content.schemata import finalizeATCTSchema
 from Products.ATContentTypes.content.folder import ATFolderSchema,ATFolder
 
@@ -92,7 +93,13 @@ class ECAssignmentTask(ATFolder):
 	immediate_view = 'ecat_view'
 	suppl_views = None
 
-	actions = ATFolder.actions
+	actions = updateActions(ATFolder, (
+                {'action':      'string:$object_url/ecat_backlinks',
+                 'category':    'object',
+                 'id':          'ecat_backlinks',
+                 'name':        'Backlinks',
+                 'permissions': (permissions.ManageProperties,),},
+                ))
 
 	aliases = updateAliases(ATFolder, {
 		'view'		: 'ecat_view',
