@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
+# $Id$
 #
-# File: ECFolder.py
+# Copyright (c) 2008 Otto-von-Guericke-Universität Magdeburg
 #
-# Copyright (c) 2008 by []
+# This file is part of ECAssignmentBox.
+#
 # Generator: ArchGenXML Version 2.1
 #            http://plone.org/products/archgenxml
 #
@@ -28,39 +30,48 @@ from Products.ECAssignmentBox.config import *
 
 schema = Schema((
 
-    StringField(
-        name='directions',
-        widget=RichWidget(
-            label="Directions",
-            description="Location for this course",
-            label_msgid="label_location",
-            description_msgid="help_location",
-            i18n_domain=I18N_DOMAIN,
+    TextField(
+        'directions',
+        default_content_type = 'text/structured',
+        default_output_type = 'text/html',
+        allowable_content_types = TEXT_TYPES,
+        widget = RichWidget(
+            label = 'Directions',
+            label_msgid = 'label_directions',
+            description = 'Instructions/directions that all assignment boxes in this folder refer to',
+            description_msgid = 'help_directions',
+            i18n_domain = I18N_DOMAIN,
+            rows = 8,
         ),
     ),
-    IntegerField(
-        name='projectedAssignments',
-        widget=IntegerWidget(
-            label="Projected Number of Assignments",
-            description="Enter the type of this course (e.g., Lecture or Lab Exercise)",
-            label_msgid="label_course_type",
-            description_msgid="help_course_type",
-            i18n_domain=I18N_DOMAIN,
-        ),
-        searchable=0,
-    ),
+
     LinesField(
-        name='completedStates',
-        widget=LinesWidget(
-            label="Instructors",
-            description="User names or names of instructors, one per line",
-            label_msgid="label_instructors",
-            description_msgid="help_instructors",
-            i18n_domain=I18N_DOMAIN,
+        'completedStates',
+        searchable = False,
+        vocabulary = 'getWfStatesDisplayList',
+        multiValued = True,
+        widget = MultiSelectionWidget(
+            label = "Completed States",
+            label_msgid = "label_completed_states",
+            description = "States considered as completed",
+            description_msgid = "help_completed_states",
+            i18n_domain = I18N_DOMAIN,
         ),
-        languageIndependent=True,
-        searchable=True,
-        required=True,
+    ),
+
+    IntegerField(
+        'projectedAssignments',
+        searchable = False,
+        required = True,
+        default = 0,
+        #validators = ('isInt', 'isPositive'),
+        widget = IntegerWidget(
+            label = "Projected Number of Assignments",
+            label_msgid = "label_projected_assignments",
+            description = "Projected number of assignments, 0 means undefined",
+            description_msgid = "help_projected_assignments",
+            i18n_domain = I18N_DOMAIN,
+        ),
     ),
 
 ),
@@ -91,6 +102,15 @@ class ECFolder(ATFolder):
     ##/code-section class-header
 
     # Methods
+    #security.declarePrivate('getWfStatesDisplayList')
+    def getWfStatesDisplayList(self):
+        """
+        @deprecated use getWfStatesDisplayList in ecab_utils instead
+        """
+        #utils = self.ecab_utils
+        utils = self.portal_ecabtool
+        return utils.getWfStatesDisplayList(ECA_WORKFLOW_ID)
+
 
 registerType(ECFolder, PROJECTNAME)
 # end of class ECFolder
