@@ -20,6 +20,9 @@ add_permission  = permissions.AddPortalContent
 edit_permission = permissions.ModifyPortalContent
 view_permission = permissions.View
 
+ECA_WORKFLOW_ID = 'ec_assignment_workflow'
+WORKFLOW_SCRIPTS = ['notify_students',]
+
 # Supported formats in text areas
 TEXT_TYPES = (
     'text/structured',
