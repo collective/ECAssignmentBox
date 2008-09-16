@@ -40,9 +40,9 @@
         </tal:nothing>
       
         <div tal:define="
-                global ecab_utils nocall:portal/ecab_utils;
+                global ecab_utils nocall:portal/portal_ecabtool;
                 auth_filter   nocall: modules/ZTUtils/LazyFilter;
-                default_types here/allowed_content_types;
+                default_types here/allowed_content_types | python:[];
                 types         types | here/show_content_types | default_types;
                 raw_items     python: here.contentValues(filter={'portal_type': types });
                 items         python: auth_filter(raw_items, skip='View');
