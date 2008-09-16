@@ -25,12 +25,83 @@ from Products.ECAssignmentBox.config import *
 ##/code-section module-header
 
 schema = Schema((
+    FileField(
+        'file',
+        searchable = True,
+        primary = True,
+        widget = FileWidget(
+            label = "Answer",
+            label_msgid = "label_answer",
+            description = "The submission for this assignment",
+            description_msgid = "help_answer",
+            i18n_domain = I18N_DOMAIN,
+            macro = 'answer_widget',
+        ),
+    ),
 
+    TextField(
+        'remarks',
+        default_content_type = 'text/structured',
+        default_output_type = 'text/html',
+        allowable_content_types = TEXT_TYPES,
+        widget = TextAreaWidget(
+            label = "Remarks",
+            label_msgid = "label_remarks",
+            description = "Your remarks for this assignment (they will not be shown to the student)",
+            description_msgid = "help_remarks",
+            i18n_domain = I18N_DOMAIN,
+            rows = 8,
+        ),
+        read_permission = permissions.ModifyPortalContent,
+    ),
+
+    TextField(
+        'feedback',
+        searchable = True,
+        default_content_type = 'text/structured',
+        default_output_type = 'text/html',
+        allowable_content_types = TEXT_TYPES,
+        widget = TextAreaWidget(
+            label = "Feedback",
+            label_msgid = "label_feedback",
+            description = "The grader's feedback for this assignment",
+            description_msgid = "help_feedback",
+            i18n_domain = I18N_DOMAIN,
+            rows = 8,
+        ),
+    ),
+
+    StringField(
+        'mark',
+        #searchable = True,
+        accessor = 'getGradeIfAllowed',
+        edit_accessor = 'getGradeForEdit',
+        mutator = 'setGrade',
+        widget=StringWidget(
+            label = 'Grade',
+            label_msgid = 'label_grade',
+            description = "The grade awarded for this assignment",
+            description_msgid = "help_grade",
+            i18n_domain = I18N_DOMAIN,
+        ),
+    ),
 
 ),
 )
 
 ##code-section after-local-schema #fill in your manual code here
+# alter default fields -> hide title and description
+
+# FIXME: add method _generateTitle
+schema['title'].default_method = '_generateTitle'
+schema['title'].widget.visible = {
+    'view' : 'invisible',
+    'edit' : 'invisible'
+}
+schema['description'].widget.visible = {
+    'view' : 'invisible',
+    'edit' : 'invisible'
+}
 ##/code-section after-local-schema
 
 ECAssignment_schema = BaseSchema.copy() + \
@@ -55,6 +126,7 @@ class ECAssignment(BaseContent, BrowserDefaultMixin):
     ##/code-section class-header
 
     # Methods
+
 
 registerType(ECAssignment, PROJECTNAME)
 # end of class ECAssignment
