@@ -67,7 +67,11 @@
 		item_type item/portal_type;
 		item_type_class python: 'contenttype-' +
 		normalizeString(item_type);
-		item_ref item/getReference | nothing">
+		item_ref item/getReference | nothing;
+		url      python:item.getTypeInfo().getActionInfo(['object/view'])['url'];
+	    template python:(url and url.split('/')[-1]) or item.default_view;
+	    macro    python:path('item/%s/macros/view|nothing' % template);
+	    ">
                 <dt>
                   <span tal:attributes="class item_type_class"
                          tal:condition="python:item_type != 'Link'">
@@ -116,7 +120,7 @@
                     <tal:block tal:condition="python: is_published and item.hasExpired()">
                       <p class="visualNoPrint">&#x25B6;
                         <a href="/assignments"
-                            tal:attributes="href python: '%s/%s' % (item.getId(), item.getTypeInfo().getActionById('assignments'))"
+                            tal:attributes="href macro"
                            i18n:translate="label_view_submissions">
                           View submissions
                         </a>
@@ -126,7 +130,7 @@
                     <tal:block tal:condition="not: is_published">
                       <p class="visualNoPrint">&#x25B6;
                         <a href="/assignments"
-                            tal:attributes="href python: '%s/%s' % (item.getId(), item.getTypeInfo().getActionById('view'))"
+                            tal:attributes="href macro"
                            i18n:translate="label_view_assignment">
                           View assignment
                         </a>
