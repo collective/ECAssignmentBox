@@ -16,6 +16,5 @@ class IECAssignmentBox(Interface):
 class IECAssignment(Interface):
     """Marker interface for .ECAssignment.ECAssignment
     """
-
 ##code-section FOOT
 ##/code-section FOOT
