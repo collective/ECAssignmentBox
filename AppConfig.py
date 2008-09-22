@@ -23,13 +23,17 @@ view_permission = permissions.View
 ECA_WORKFLOW_ID = 'ec_assignment_workflow'
 WORKFLOW_SCRIPTS = ['notify_students',]
 
-# Supported formats in text areas
+# supported formats in text areas
 TEXT_TYPES = (
     'text/structured',
     'text/x-rst',
     'text/html',
     'text/plain',
     )
+
+# extra permissions
+GradeAssignments    = 'eduComponents: Grade Assignments'
+permissions.setDefaultRoles(GradeAssignments,  ('Manager',))
 
 # content types
 #default_content_type = zconf.
