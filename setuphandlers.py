@@ -31,7 +31,7 @@ def setupHideToolsFromNavigation(context):
     if isNotECAssignmentBoxProfile(context): return 
     # uncatalog tools
     site = context.getSite()
-    toolnames = ['portal_ecabtool']
+    toolnames = ['ecab_utils']
     portalProperties = getToolByName(site, 'portal_properties')
     navtreeProperties = getattr(portalProperties, 'navtree_properties')
     if navtreeProperties.hasProperty('idsNotToList'):
@@ -50,7 +50,7 @@ def fixTools(context):
     """do post-processing on auto-installed tool instances"""
     if isNotECAssignmentBoxProfile(context): return 
     site = context.getSite()
-    tool_ids=['portal_ecabtool']
+    tool_ids=['ecab_utils']
     for tool_id in tool_ids:
 	    if hasattr(site, tool_id):
 	        tool=site[tool_id]
