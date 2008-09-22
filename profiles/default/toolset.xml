@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <tool-setup>
- <required tool_id="portal_ecabtool"
+ <required tool_id="ecab_utils"
            class="Products.ECAssignmentBox.tool.ECABTool.ECABTool"/>
 
  <!-- ##code-section toolset.xml -->
