@@ -567,7 +567,7 @@ class ECAssignmentBox(ATFolder):
         putils = getToolByName(self, 'plone_utils')
 
         addresses = []
-        addresses.append(self.ecab_utils.getUserPropertyById(
+        addresses.append(context.ecab_utils.getUserPropertyById(
                                          putils.getOwnerName(self), 'email'))
 
         return addresses

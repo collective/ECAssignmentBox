@@ -282,7 +282,7 @@ class ECAssignment(BaseContent, HistoryAwareMixin):
         box = self.aq_parent
         
         # COMMENTED OUT FOR DEBUGGING PURPOSES, RAISES ATTRIBUTE ERROR, SOMETHING SEEMS TO BE WRONG WITH IMPORTS
-        # if not box.getSendNotificationEmail():
+        #if not box.getSendNotificationEmail():
         #    return
 
         #portal_url = getToolByName(self, 'portal_url')
@@ -301,7 +301,7 @@ class ECAssignment(BaseContent, HistoryAwareMixin):
         submissionURL = self.ecab_utils.normalizeURL(self.absolute_url())
 
         addresses = box.getNotificationEmailAddresses()
-        prefLang = self.ecab_utils.getUserPropertyById(box.Creator(),
+        prefLang = box.getUserPropertyById(box.Creator(),
                                                        'language')
         if not prefLang:
             prefLang = portal_language
