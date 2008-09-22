@@ -332,16 +332,19 @@ class ECAssignmentBox(ATFolder):
     #_at_rename_after_creation = True
 
     schema = ECAssignmentBox_schema
-    content_icon = "ecab.png"
-    portal_type = meta_type = ECAB_META
-    archetype_name = ECAB_NAME
+    #content_icon = "ecab.png"
+    #portal_type = meta_type = ECAB_META
+    #archetype_name = ECAB_NAME
 
-    filter_content_types = 1
-    allowed_content_types = [ECAssignment.meta_type]
+    #filter_content_types = 1
+    
+    # FIXME: allowed_content_types is defined in profile.default.types.ECAssignmentBox.xml
+    #        and should be used elsewhere
+    allowed_content_types = ['ECAssignment']
 
-    suppl_views = None
-    default_view = 'ecab_view'
-    immediate_view = 'ecab_view'
+    #suppl_views = None
+    #default_view = 'ecab_view'
+    #immediate_view = 'ecab_view'
 
     typeDescription = 'Allows the creation, submission and grading ' \
                       'of online assignments.'
