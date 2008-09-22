@@ -1,12 +1,15 @@
 <configure xmlns="http://namespaces.zope.org/zope" 
            xmlns:browser="http://namespaces.zope.org/browser" 
-           xmlns:five="http://namespaces.zope.org/five"> 
+           xmlns:five="http://namespaces.zope.org/five"
+           i18n_domain="eduComponents"> 
   
   <include file="profiles.zcml" />
 
-
-
   <!-- ##code-section configure.zcml -->
+  
+  <!-- declare permissions for this product -->
+  <include file="permissions.zcml" />
+  
   <!-- ##/code-section configure.zcml -->
 
 </configure>
