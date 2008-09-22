@@ -124,28 +124,29 @@ schema = Schema((
 # alter default fields -> hide title and description
 
 # FIXME: add method _generateTitle
-schema['title'].default_method = '_generateTitle'
-schema['title'].widget.visible = {
-    'view' : 'invisible',
-    'edit' : 'invisible'
-}
-schema['description'].widget.visible = {
-    'view' : 'invisible',
-    'edit' : 'invisible'
-}
+#schema['title'].default_method = '_generateTitle'
+#schema['title'].widget.visible = {
+#    'view' : 'invisible',
+#    'edit' : 'invisible'
+#}
+#schema['description'].widget.visible = {
+#    'view' : 'invisible',
+#    'edit' : 'invisible'
+#}
+
 ##/code-section after-local-schema
 
 # alter default fields -> hide title and description
 ECAssignmentSchema = ATContentTypeSchema.copy()
-ECAssignmentSchema['title'].default_method = '_generateTitle'
-ECAssignmentSchema['title'].widget.visible = {
-    'view' : 'invisible',
-    'edit' : 'invisible'
-}
-ECAssignmentSchema['description'].widget.visible = {
-    'view' : 'invisible',
-    'edit' : 'invisible'
-}
+#ECAssignmentSchema['title'].default_method = '_generateTitle'
+#ECAssignmentSchema['title'].widget.visible = {
+#    'view' : 'invisible',
+#    'edit' : 'invisible'
+#}
+#ECAssignmentSchema['description'].widget.visible = {
+#    'view' : 'invisible',
+#    'edit' : 'invisible'
+#}
 
 
 
@@ -236,13 +237,13 @@ class ECAssignment(BaseContent, HistoryAwareMixin):
     schema = ECAssignmentSchema
 
     ##code-section class-header #fill in your manual code here
-    meta_type = ECA_META
-    archetype_name = ECA_NAME
-    content_icon = "eca.png"
+    # meta_type = ECA_META
+    #archetype_name = ECA_NAME
+    #content_icon = "eca.png"
     global_allow = False
 
-    default_view   = 'eca_view'
-    immediate_view = 'eca_view'
+    #default_view   = 'eca_view'
+    #immediate_view = 'eca_view'
 
     typeDescription = "A submission to an assignment box."
     typeDescMsgId = 'description_edit_eca'
