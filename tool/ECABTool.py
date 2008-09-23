@@ -65,7 +65,7 @@ class ECABTool(UniqueObject, BaseContent, BrowserDefaultMixin):
     def __init__(self, id=None):
         """
         """
-        BaseContent.__init__(self,'portal_ecabtool')
+        BaseContent.__init__(self,'ecab_utils')
         self.setTitle('')
         
         ##code-section constructor-footer #fill in your manual code here

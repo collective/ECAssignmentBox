@@ -107,8 +107,8 @@ class ECFolder(ATFolder):
         """
         @deprecated use getWfStatesDisplayList in ecab_utils instead
         """
-        #utils = self.ecab_utils
-        utils = self.portal_ecabtool
+        utils = self.ecab_utils
+        #utils = self.portal_ecabtool
         return utils.getWfStatesDisplayList(ECA_WORKFLOW_ID)
 
 

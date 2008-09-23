@@ -9,7 +9,7 @@
             appId="ECAssignmentBox" 
             category="Products" 
             condition_expr=""
-            url_expr="string:${portal_url}/portal_ecabtool/view"
+            url_expr="string:${portal_url}/ecab_utils/ecabtool_form"
             visible="True" 
             i18n:attributes="title">
   <permission>Manage portal</permission>
