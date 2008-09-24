@@ -190,7 +190,7 @@ class ECABTool(UniqueObject, BaseContent, BrowserDefaultMixin):
         """
         
         if not item:
-            return false
+            return False
         else:
             return hasattr(item, 'isAssignmentBoxType') and item.isAssignmentBoxType
 
