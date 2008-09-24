@@ -183,12 +183,16 @@ class ECABTool(UniqueObject, BaseContent, BrowserDefaultMixin):
 
 
     #security.declarePublic('isAssignmentBoxType')
-    def isAssignmentBoxType(self, item):
+    def isAssignmentBoxType(self, item=None):
         """
         Returns True if item has a method 'isAssignmentBoxType' or - in case
         item is a ctalog brain- index 'isAssignmentBoxType' is True
         """
-        return hasattr(item, 'isAssignmentBoxType') and item.isAssignmentBoxType
+        
+        if not item:
+            return false
+        else:
+            return hasattr(item, 'isAssignmentBoxType') and item.isAssignmentBoxType
 
     def isGrader(self, item, id=None):
         """
