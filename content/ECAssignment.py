@@ -45,7 +45,7 @@ from Products.PortalTransforms.utils import TransformException
 
 # local imports
 from Products.ECAssignmentBox.config import *
-from Products.ECAssignmentBox import permissions
+from Products.ECAssignmentBox.permissions import *
 from ECAssignmentBox import *
 
 # PlagDetector imports
@@ -232,6 +232,8 @@ class ECAssignment(BaseContent, HistoryAwareMixin):
     implements(interfaces.IECAssignment)
 
     meta_type = 'ECAssignment'
+    #dirty hack, just for debugging purposes
+    GradeAssignments    = 'eduComponents: Grade Assignments'
     _at_rename_after_creation = True
 
     schema = ECAssignmentSchema
@@ -282,8 +284,8 @@ class ECAssignment(BaseContent, HistoryAwareMixin):
         box = self.aq_parent
         
         # COMMENTED OUT FOR DEBUGGING PURPOSES, RAISES ATTRIBUTE ERROR, SOMETHING SEEMS TO BE WRONG WITH IMPORTS
-        #if not box.getSendNotificationEmail():
-        #    return
+        if not box.getSendNotificationEmail():
+            return
 
         #portal_url = getToolByName(self, 'portal_url')
         #portal = portal_url.getPortalObject()
@@ -492,7 +494,7 @@ class ECAssignment(BaseContent, HistoryAwareMixin):
         return (1, '')
 
     
-    #security.declarePublic('getGradeIfAllowed')
+    security.declarePublic('getGradeIfAllowed')
     def getGradeIfAllowed(self):
         """
         The accessor for field grade. Returns the grade if this assigment is in
@@ -507,7 +509,8 @@ class ECAssignment(BaseContent, HistoryAwareMixin):
         #isReviewer = currentUser.checkPermission(permissions.ReviewPortalContent, self)
         #isOwner = currentUser.has_role(['Owner', 'Reviewer', 'Manager'], self)
         #isGrader = currentUser.has_role(['ECAssignment Grader', 'Manager'], self)
-        isGrader = currentUser.checkPermission(permissions.GradeAssignments,
+        #isGrader =  currentUser.checkPermission(permissions.GradeAssignments,self)
+        isGrader = currentUser.checkPermission(GradeAssignments,
                                                self)
 
         if self.mark:
