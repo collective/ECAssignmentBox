@@ -170,7 +170,7 @@ class ECABTool(UniqueObject, BaseContent, BrowserDefaultMixin):
         return sn + ', ' + givenName
 
 
-    #security.declarePublic('getUserPropertyById')
+    security.declarePublic('getUserPropertyById')
     def getUserPropertyById(self, id, property=''):
         """
         """
