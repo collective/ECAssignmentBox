@@ -17,7 +17,9 @@ REQUEST  = container.REQUEST
 RESPONSE = REQUEST.RESPONSE
 
 # set default target action (e.g. in case of an error)
-target_action = context.getTypeInfo().getActionById('view')
+# target_action = context.getTypeInfo().getActionById('view')
+target_action = context.getTypeInfo().getActionInfo(['object/view'])['url']
+
 
 # remember the context type
 contextType = context.meta_type
@@ -77,7 +79,7 @@ if result:
     else:
         msg = result
     
-target_action = '%s/%s' % (assignment.getId(), assignment.getTypeInfo().getActionById('view'))
+target_action = '%s/%s' % (assignment.getId(), assignment.getTypeInfo().getActionInfo(['object/view'])['url'])
 
 #return state.set(portal_status_message = msg)
 RESPONSE.redirect('%s/%s?portal_status_message=%s' % 
