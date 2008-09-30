@@ -45,7 +45,7 @@ from Products.PortalTransforms.utils import TransformException
 
 # local imports
 from Products.ECAssignmentBox.config import *
-from Products.ECAssignmentBox.permissions import *
+from Products.ECAssignmentBox import permissions
 from ECAssignmentBox import *
 
 # PlagDetector imports
