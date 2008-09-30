@@ -11,9 +11,10 @@
  <property name="factory">addECAssignment</property>
  <property name="immediate_view">eca_view</property>
  <property name="global_allow">True</property>
- <property name="filter_content_types">False</property>
+ <property name="filter_content_types">True</property>
  <property name="allowed_content_types">
  </property>
+ <property name="global_allow">false</property>
  <property name="allow_discussion">False</property>
  <property name="default_view">eca_view</property>
  <property name="view_methods">
