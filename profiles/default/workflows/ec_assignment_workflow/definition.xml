@@ -1,0 +1,158 @@
+<?xml version="1.0"?>
+<dc-workflow workflow_id="ec_assignment_workflow"
+             title="ECAssignment Workflow"
+             state_variable="review_state"
+             initial_state="private">
+ <state state_id="accepted"
+        title="Accepted">
+  <exit-transition transition_id="grade"/>
+  <exit-transition transition_id="retract"/>
+ </state>
+ <state state_id="graded"
+        title="Graded">
+  <exit-transition transition_id="retract"/>
+ </state>
+ <state state_id="pending"
+        title="Pending">
+  <exit-transition transition_id="accept"/>
+  <exit-transition transition_id="reject"/>
+ </state>
+ <state state_id="private"
+        title="private">
+  <exit-transition transition_id="submit"/>
+ </state>
+ <state state_id="rejected"
+        title="Rejected">
+  <exit-transition transition_id="retract"/>
+ </state>
+ <state state_id="submitted"
+        title="Submitted">
+  <exit-transition transition_id="review"/>
+  <exit-transition transition_id="accept"/>
+  <exit-transition transition_id="reject"/>
+  <exit-transition transition_id="supersede"/>
+  <exit-transition transition_id="grade"/>
+ </state>
+ <state state_id="superseded"
+        title="Superseded">
+  <exit-transition transition_id="retract"/>
+ </state>
+ <transition transition_id="accept"
+             title="Accept"
+             new_state="accepted"
+             trigger="USER"
+             before_script=""
+             after_script="">
+  <action url="" category="workflow">Accept</action>
+  <guard>
+  </guard>
+ </transition>
+ <transition transition_id="grade"
+             title="Grade"
+             new_state="graded"
+             trigger="USER"
+             before_script=""
+             after_script="">
+  <action url="" category="workflow">Grade</action>
+  <guard>
+  </guard>
+ </transition>
+ <transition transition_id="submit"
+             title="Submit"
+             new_state="submitted"
+             trigger="USER"
+             before_script=""
+             after_script="">
+  <action url="" category="workflow">submit</action>
+  <guard>
+  </guard>
+ </transition>
+ <transition transition_id="reject"
+             title="Reject"
+             new_state="rejected"
+             trigger="USER"
+             before_script=""
+             after_script="">
+  <action url="" category="workflow">Reject</action>
+  <guard>
+  </guard>
+ </transition>
+ <transition transition_id="retract"
+             title="Retract"
+             new_state="submitted"
+             trigger="USER"
+             before_script=""
+             after_script="">
+  <action url="" category="workflow">Retract</action>
+  <guard>
+  </guard>
+ </transition>
+ <transition transition_id="review"
+             title="Review"
+             new_state="pending"
+             trigger="USER"
+             before_script=""
+             after_script="">
+  <action url="" category="workflow">Review</action>
+  <guard>
+  </guard>
+ </transition>
+ <transition transition_id="supersede"
+             title="Supersede"
+             new_state="superseded"
+             trigger="USER"
+             before_script=""
+             after_script="">
+  <action url="" category="workflow">Supersede</action>
+  <guard>
+  </guard>
+ </transition>
+ <variable variable_id="action" for_catalog="False"
+           for_status="True" update_always="True">
+  <description>The last transition</description>
+  <default>
+   <expression>transition/getId|nothing</expression>
+  </default>
+  <guard>
+  </guard>
+ </variable>
+ <variable variable_id="actor" for_catalog="False"
+           for_status="True" update_always="True">
+  <description>The ID of the user who performed the last transition</description>
+  <default>
+   <expression>user/getId</expression>
+  </default>
+  <guard>
+  </guard>
+ </variable>
+ <variable variable_id="comments" for_catalog="False"
+           for_status="True" update_always="True">
+  <description>Comments about the last transition</description>
+  <default>
+   <expression>python:state_change.kwargs.get('comment', '')</expression>
+  </default>
+  <guard>
+  </guard>
+ </variable>
+ <variable variable_id="review_history" for_catalog="False"
+           for_status="False" update_always="False">
+  <description>Provides access to workflow history</description>
+  <default>
+   <expression>state_change/getHistory</expression>
+  </default>
+  <guard>
+   <guard-permission>Request review</guard-permission>
+   <guard-permission>Review portal content</guard-permission>
+  </guard>
+ </variable>
+ <variable variable_id="time" for_catalog="False"
+           for_status="True" update_always="True">
+  <description>Time of the last transition</description>
+  <default>
+   <expression>state_change/getDateTime</expression>
+  </default>
+  <guard>
+  </guard>
+ </variable>
+ <!-- We dont use workflow scripts any more, we use subscribers -->
+</dc-workflow>
