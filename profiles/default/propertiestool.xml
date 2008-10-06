@@ -6,4 +6,18 @@
   <property name="major_attr" type="string"></property>
   <property name="personal_title_attr" type="string"></property>
  </object>
+ <object name="site_properties" meta_type="Plone Property Sheet">
+  <property name="use_folder_tabs" type="lines">
+   <element value="ECAssignmentBox"/>
+   <element value="ECFolder"/>
+   <element value="ECAssignmentTask"/>
+   <element value="ECLecture"/>
+  </property>
+  <property name="typesLinkToFolderContentsInFC" type="lines">
+   <element value="ECAssignmentBox"/>
+   <element value="ECFolder"/>
+   <element value="ECAssignmentTask"/>
+   <element value="ECLecture"/>
+  </property>
+ </object>
 </object>
