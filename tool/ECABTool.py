@@ -19,6 +19,7 @@ from Products.Archetypes.atapi import *
 from zope.interface import implements
 import interfaces
 from urlparse import *
+from urllib import *
 from string import *
 from socket import *
 
