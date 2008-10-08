@@ -20,6 +20,7 @@ from zope.interface import implements
 import interfaces
 from urlparse import *
 import urllib
+import cgi
 from string import *
 from socket import *
 
