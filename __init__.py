@@ -52,6 +52,7 @@ from Products.CMFCore import permissions as cmfpermissions
 from Products.CMFCore import utils as cmfutils
 from Products.CMFPlone.utils import ToolInit
 from config import *
+from AppConfig import *
 
 DirectoryView.registerDirectory('skins', product_globals)
 
