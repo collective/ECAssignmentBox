@@ -65,7 +65,7 @@
 
             <div tal:condition="error" 
                 tal:content="error" 
-                i18n:translate="error_student_id_attr">Error message
+                >Error message
             </div>
 
             <input name="student_id_attr" 
@@ -88,7 +88,7 @@
 
             <div tal:condition="error" 
                 tal:content="error" 
-                i18n:translate="error_major_attr">Error message
+                >Error message
             </div>
     
             <input name="major_attr" 
@@ -112,7 +112,7 @@
 
             <div tal:condition="error" 
                 tal:content="error" 
-                i18n:translate="error_personal_title_attr">Error message
+                >Error message
             </div>
     
             <input name="personal_title_attr" 
