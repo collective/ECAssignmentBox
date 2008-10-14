@@ -138,17 +138,19 @@ schema = Schema((
 
 # alter default fields -> hide title and description
 ECAssignmentSchema = ATContentTypeSchema.copy()
-#ECAssignmentSchema['title'].default_method = '_generateTitle'
-#ECAssignmentSchema['title'].widget.visible = {
-#    'view' : 'invisible',
-#    'edit' : 'invisible'
-#}
-#ECAssignmentSchema['description'].widget.visible = {
-#    'view' : 'invisible',
-#    'edit' : 'invisible'
-#}
-
-
+ECAssignmentSchema['id'].widget.visible = {
+    'view' : 'invisible',
+    'edit' : 'invisible'
+}
+ECAssignmentSchema['title'].default_method = '_generateTitle'
+ECAssignmentSchema['title'].widget.visible = {
+    'view' : 'invisible',
+    'edit' : 'invisible'
+}
+ECAssignmentSchema['description'].widget.visible = {
+    'view' : 'invisible',
+    'edit' : 'invisible'
+}
 
 # define schema
 ECAssignmentSchema = ECAssignmentSchema + Schema((
