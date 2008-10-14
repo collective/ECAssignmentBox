@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # $Id: eca_workflow_scripts.py,v 1.1 2006/09/13 16:23:21 mxp Exp $
 #
-# Copyright (c) 2005 Otto-von-Guericke-Universit‰t Magdeburg
+# Copyright (c) 2005 Otto-von-Guericke-Universit√§t Magdeburg
 #
 # This file is part of ECAssignmentBox.
 #
