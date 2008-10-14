@@ -1,17 +1,25 @@
 # -*- coding: utf-8 -*-
 # $Id$
 #
-# Copyright (c) 2008 Otto-von-Guericke-Universität Magdeburg
+# Copyright (c) 2006-2008 Otto-von-Guericke-Universität Magdeburg
 #
 # This file is part of ECAssignmentBox.
 #
-# Generator: ArchGenXML Version 2.1
-#            http://plone.org/products/archgenxml
+# ECAssignmentBox is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
 #
-# GNU General Public License (GPL)
+# ECAssignmentBox is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
 #
-
-__author__ = """unknown <unknown>"""
+# You should have received a copy of the GNU General Public License
+# along with ECAssignmentBox; if not, write to the Free Software
+# Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+#
+__author__ = """Mario Amelung <amelung@iws.cs.uni-magdeburg.de>"""
 __docformat__ = 'plaintext'
 
 from AccessControl import ClassSecurityInfo
@@ -108,8 +116,8 @@ class ECFolder(ATFolder):
         @deprecated use getWfStatesDisplayList in ecab_utils instead
         """
         utils = self.ecab_utils
-        #utils = self.portal_ecabtool
         return utils.getWfStatesDisplayList(ECA_WORKFLOW_ID)
+
     
     security.declarePublic('summarize')
     def summarize(self):
