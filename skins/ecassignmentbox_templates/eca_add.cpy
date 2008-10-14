@@ -43,7 +43,7 @@ now = DateTime()
 user_id = REQUEST.get('AUTHENTICATED_USER', 'unknown')
 # generate unique Id for this submission
 id = str(user_id) + '.' + now.strftime('%Y%m%d') + '.' + now.strftime('%H%M%S')
-    
+
 # create assignment object
 context.invokeFactory(id=id, type_name=context.allowed_content_types[0])
 assignment = getattr(context, id)
@@ -64,7 +64,7 @@ assignment.setFile(file, filename=filename)
     
 # evaluate this submission (actually implemented in ECAAB)
 result = assignment.evaluate(context)
-            
+
 if result:
     if result[0]:
         # The submission was evaluated.
@@ -81,7 +81,10 @@ if result:
     
 target_action = '%s/%s' % (assignment.getId(), assignment.getTypeInfo().getActionInfo(['object/view'])['url'])
 
-#return state.set(portal_status_message = msg)
-RESPONSE.redirect('%s/%s?portal_status_message=%s' % 
-            (context.absolute_url(), target_action, msg,))
+##return state.set(portal_status_message = msg)
+#RESPONSE.redirect('%s/%s?portal_status_message=%s' % 
+#            (context.absolute_url(), target_action, msg,))
+
+context.plone_utils.addPortalMessage(msg)
+RESPONSE.redirect('%s/%s' % (context.absolute_url(), target_action,))
 

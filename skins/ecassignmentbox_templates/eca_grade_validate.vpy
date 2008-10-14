@@ -10,6 +10,8 @@ errors = {}
 errors = context.validate(REQUEST=context.REQUEST, errors=errors, data=1, metadata=0)
 
 if errors:
-    return state.set(status='failure', errors=errors, portal_status_message='Please correct the indicated errors.')
+    context.plone_utils.addPortalMessage('Please correct the indicated errors: %s' % errors)
+    return state.set(status='failure', errors=errors)
 else:
-    return state.set(portal_status_message='Your changes have been saved.')
+    #context.plone_utils.addPortalMessage('Your changes have been saved.')
+    return state
