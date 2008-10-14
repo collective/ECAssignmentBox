@@ -3,14 +3,14 @@
         meta_type="Factory-based Type Information with dynamic views"
         xmlns:i18n="http://xml.zope.org/namespaces/i18n">
    
- <property name="title">ECAssignment</property>
+ <property name="title">Assignment</property>
  <property name="description"></property>
  <property name="content_icon">eca.png</property>
  <property name="content_meta_type">ECAssignment</property>
  <property name="product">ECAssignmentBox</property>
  <property name="factory">addECAssignment</property>
  <property name="immediate_view">eca_view</property>
- <property name="global_allow">True</property>
+ <property name="global_allow">False</property>
  <property name="filter_content_types">True</property>
  <property name="allowed_content_types">
  </property>

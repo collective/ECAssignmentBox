@@ -3,7 +3,7 @@
         meta_type="Factory-based Type Information with dynamic views"
         xmlns:i18n="http://xml.zope.org/namespaces/i18n">
    
- <property name="title">ECAssignmentBox</property>
+ <property name="title">Assignment Box</property>
  <property name="description"></property>
  <property name="content_icon">ecab.png</property>
  <property name="content_meta_type">ECAssignmentBox</property>
