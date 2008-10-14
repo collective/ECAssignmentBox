@@ -35,6 +35,7 @@
          visible="True">
   <permission value="View"/>
  </action>
+<!--
  <action title="Edit" 
          action_id="edit"
          category="object" 
@@ -43,10 +44,19 @@
          visible="True">
   <permission value="Modify portal content"/>
  </action>
+-->
+ <action title="Edit" 
+         action_id="edit"
+         category="object" 
+         condition_expr="python:here.Creator() == portal.portal_membership.getAuthenticatedMember().getUserName()"
+         url_expr="string:${object_url}/edit" 
+         visible="True">
+  <permission value="Modify portal content"/>
+ </action>
  <action title="Grade" 
          action_id="grade"
          category="object"
-         condition_expr=""
+         condition_expr="python:1"
          url_expr="string:$object_url/eca_grade"
          visible="True">
   <permission value="Modify portal content"/>
@@ -54,7 +64,7 @@
  <action title="Properties" 
          action_id="metadata"
          category="object" 
-         condition_expr=""
+         condition_expr="python:1"
          url_expr="string:${object_url}/properties" 
          visible="True">
   <permission value="Modify portal content"/>
