@@ -2,9 +2,9 @@
 <object name="portal_controlpanel" 
         meta_type="Plone Control Panel Tool"
         xmlns:i18n="http://xml.zope.org/namespaces/i18n"
-        i18n:domain="ECAssignmentBox">
+        i18n:domain="eduComponents">
 
- <configlet title="ECABTool" 
+ <configlet title="Assignment Box Settings" 
             action_id="ECABTool"
             appId="ECAssignmentBox" 
             category="Products" 
