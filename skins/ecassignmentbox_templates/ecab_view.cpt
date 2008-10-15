@@ -142,7 +142,7 @@
               name="answer"
               tabindex=""
               tal:attributes="tabindex tabindex/next; wrap python:('off', 'on')[here.getWrapAnswer()]"
-              tal:content="reference/getAnswerTemplate | here/getAnswerTemplate | nothing"></textarea>
+              tal:content="reference/answerTemplate | here/answerTemplate | nothing"></textarea>
           </div>
   
          <!-- upload file button -->
