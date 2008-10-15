@@ -27,8 +27,8 @@
                       isOwner       python: user.has_role(['Owner', 'Reviewer', 'Manager'], here);
                       canSupersed   python: here.canSupersed();
                       canRetry      python: here.canRetry();
-		      tries_left    python: here.getMaxTries() - here.getTries();
-		      reference     python: here.getReference();
+		              tries_left    python: here.getMaxTries() - here.getTries();
+		              reference     python: here.getReference();
                       needRegistration python: (hasattr(here, 'associatedGroup') and here.getAssociatedGroup()) or False;
                       canParticipate python: (needRegistration and here.isParticipant(user_id)) or (not needRegistration);">
                       
@@ -103,8 +103,13 @@
              tal:content="structure reference/Description | here/Description"/>
 
 
-		<div class="field"
+		<!-- 
+        <div class="field"
 			tal:content="structure reference/getAssignment_text | here/getAssignment_text"/>
+        -->
+        <div class="field">
+            <metal:field use-macro="python:here.widget('assignment_text', mode='view')" />
+        </div>
       
         <a href="" 
           tal:attributes="href string:${here/absolute_url}/downloadAnswerTemplate"
