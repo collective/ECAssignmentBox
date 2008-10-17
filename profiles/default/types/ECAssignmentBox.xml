@@ -46,10 +46,18 @@
  <action title="Assignments" 
          action_id="all_assignments"
          category="object" 
-         condition_expr="python:1"
+         condition_expr="python: len(here.portal_catalog(path={'query':'/'.join(here.getPhysicalPath()), 'depth':1, },)) > 0"
          url_expr="string:${object_url}/all_assignments" 
          visible="True">
   <permission value="View"/>
+ </action>
+ <action title="Analysis" 
+         action_id="analysis"
+         category="object" 
+         condition_expr="python:1"
+         url_expr="string:${object_url}/analysis" 
+         visible="True">
+  <permission value="Manage Properties"/>
  </action>
  <action title="Properties" 
          action_id="metadata"
