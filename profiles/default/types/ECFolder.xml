@@ -3,7 +3,7 @@
         meta_type="Factory-based Type Information with dynamic views"
         xmlns:i18n="http://xml.zope.org/namespaces/i18n">
    
- <property name="title">EC Folder</property>
+ <property name="title">ECFolder</property>
  <property name="description"></property>
  <property name="content_icon">ecfolder.png</property>
  <property name="content_meta_type">ECFolder</property>
@@ -63,6 +63,14 @@
          category="object" 
          condition_expr="python:1"
          url_expr="analysis" 
+         visible="True">
+  <permission value="Manage Properties"/>
+ </action>
+ <action title="Set Assignment Box Options" 
+         action_id="ecf_modify_boxes"
+         category="folder_buttons"
+         condition_expr="python:1"
+         url_expr="string:ecf_modify_boxes:method"
          visible="True">
   <permission value="Manage Properties"/>
  </action>
