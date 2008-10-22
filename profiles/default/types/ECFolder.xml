@@ -62,7 +62,7 @@
          action_id="analysis"
          category="object" 
          condition_expr="python:1"
-         url_expr="analysis" 
+         url_expr="string:${object_url}/analysis" 
          visible="True">
   <permission value="Manage Properties"/>
  </action>

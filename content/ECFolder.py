@@ -5,10 +5,10 @@
 #
 # This file is part of ECAssignmentBox.
 #
-# ECAssignmentBox is free software; you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation; either version 2 of the License, or
-# (at your option) any later version.
+# ECAssignmentBox is free software; you can redistribute it and/or 
+# modify it under the terms of the GNU General Public License as 
+# published by the Free Software Foundation; either version 2 of the 
+# License, or (at your option) any later version.
 #
 # ECAssignmentBox is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -16,10 +16,11 @@
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with ECAssignmentBox; if not, write to the Free Software
-# Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+# along with ECAssignmentBox; if not, write to the 
+# Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, 
+# MA  02110-1301  USA
 #
-__author__ = """Mario Amelung <amelung@iws.cs.uni-magdeburg.de>"""
+__author__ = """Mario Amelung <mario.amelung@gmx.de>"""
 __docformat__ = 'plaintext'
 
 from AccessControl import ClassSecurityInfo
@@ -27,6 +28,7 @@ from Products.Archetypes.atapi import *
 from zope.interface import implements
 import interfaces
 
+from Products.CMFCore.utils import getToolByName
 from Products.CMFDynamicViewFTI.browserdefault import BrowserDefaultMixin
 
 from Products.ATContentTypes.content.folder import ATFolder
@@ -40,15 +42,16 @@ schema = Schema((
 
     TextField(
         'directions',
-        default_content_type = 'text/structured',
-        default_output_type = 'text/html',
-        allowable_content_types = TEXT_TYPES,
+        allowable_content_types = EC_MIME_TYPES, 
+        default_content_type = EC_DEFAULT_MIME_TYPE, 
+        default_output_type = EC_DEFAULT_FORMAT,
         widget = RichWidget(
             label = 'Directions',
             label_msgid = 'label_directions',
             description = 'Instructions/directions that all assignment boxes in this folder refer to',
             description_msgid = 'help_directions',
             i18n_domain = I18N_DOMAIN,
+            allow_file_upload = False,
             rows = 8,
         ),
     ),
@@ -195,7 +198,7 @@ class ECFolder(ATFolder):
             
             if item.portal_type == 'ECFolder':
                 grades = item.summarizeGrades(published)
-            elif self.ecab_utils.isAssignmentBoxType(item):
+            elif self.ecab_utils.testAssignmentBoxType(item):
                 grades = item.getGradesByStudent()
 
             # No grades were assigned--no problem.

@@ -31,7 +31,7 @@ treshold = REQUEST.get('treshold', None)
 #objects = REQUEST.get('paths', None)
 all_objs = context.objectValues()
 wtool = context.portal_workflow
-#objects = [o for o in all_objs if context.ecab_utils.isAssignmentBoxType(o) and wtool.getInfoFor(o, 'review_state', '')!='superseded']
+#objects = [o for o in all_objs if context.ecab_utils.testAssignmentBoxType(o) and wtool.getInfoFor(o, 'review_state', '')!='superseded']
 objects = [o for o in all_objs if wtool.getInfoFor(o, 'review_state', '')!='superseded']
 strList = []
 idList = []

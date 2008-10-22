@@ -36,7 +36,7 @@
                      all_paths python:request.get('paths', []);
                      all_objects python:here.getObjectsFromPathList(all_paths, batch=True);
                      paths python:['/'.join(o.getPhysicalPath())
-                           for o in all_objects if here.ecab_utils.isAssignmentBoxType(o)];
+                           for o in all_objects if here.ecab_utils.testAssignmentBoxType(o)];
                      batch python:here.getObjectsFromPathList(paths, batch=True);
                      came_from python:request.get('HTTP_REFERER', here.absolute_url()).split('?')[0];
                      dummy python:request.set('orig_template', came_from);

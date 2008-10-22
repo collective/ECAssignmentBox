@@ -19,7 +19,7 @@ result = REQUEST.get('selected_result', None)
 results = REQUEST.SESSION.get('results', None)
 #get assignments
 all_objs = context.objectValues()
-objects = [o for o in all_objs if context.ecab_utils.isAssignmentBoxType(o)]
+objects = [o for o in all_objs if context.ecab_utils.testAssignmentBoxType(o)]
 strList = []
 idList = []
 for o in objects:

@@ -42,7 +42,7 @@ function popup(name,einstellungen) {{
 			paths 		python: ['/'.join(o.getPhysicalPath()) for o in all_objects];
 			batch 		python: here.getObjectsFromPathList(paths, batch = True); 
 			all_objs 	python: here.objectValues();
-			objects 	python: [o for o in all_objs if here.ecab_utils.isAssignmentBoxType(o)];">
+			objects 	python: [o for o in all_objs if here.ecab_utils.testAssignmentBoxType(o)];">
 
     <div metal:use-macro="here/document_actions/macros/document_actions" />
 		
@@ -50,7 +50,7 @@ function popup(name,einstellungen) {{
 
 	<!-- PlagDetector MODIFICATION
 		TODO: Check this!
-			paths 		python: ['/'.join(o.getPhysicalPath()) for o in all_objects if here.ecab_utils.isAssignmentBoxType(o)];
+			paths 		python: ['/'.join(o.getPhysicalPath()) for o in all_objects if here.ecab_utils.testAssignmentBoxType(o)];
 	-->
 
   	<!-- Start Form -->

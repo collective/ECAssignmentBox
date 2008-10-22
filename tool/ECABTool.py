@@ -1,18 +1,28 @@
 # -*- coding: utf-8 -*-
-# $Id: ECABTool.py,v 1.25 2008/05/15 16:41:35 amelung Exp $
+# $Id: ECAssignment.py,v 1.1.2.10 2008/10/15 20:37:41 amelung Exp $
 #
 # Copyright (c) 2006-2008 Otto-von-Guericke-Universität Magdeburg
 #
-# Generator: ArchGenXML Version 2.1
-#            http://plone.org/products/archgenxml
-#
 # This file is part of ECAssignmentBox.
 #
-# GNU General Public License (GPL)
+# ECAssignmentBox is free software; you can redistribute it and/or 
+# modify it under the terms of the GNU General Public License as 
+# published by the Free Software Foundation; either version 2 of the 
+# License, or (at your option) any later version.
 #
-
-__author__ = """unknown <unknown>"""
+# ECAssignmentBox is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with ECAssignmentBox; if not, write to the 
+# Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, 
+# MA  02110-1301  USA
+#
+__author__ = """Mario Amelung <mario.amelung@gmx.de>"""
 __docformat__ = 'plaintext'
+
 
 from AccessControl import ClassSecurityInfo
 from Products.Archetypes.atapi import *
@@ -25,18 +35,17 @@ from string import *
 from socket import *
 
 from Products.CMFDynamicViewFTI.browserdefault import BrowserDefaultMixin
-
 from Products.ECAssignmentBox.config import *
-
-
 from Products.CMFCore.utils import UniqueObject
+from Products.DCWorkflow.Transitions import TRIGGER_USER_ACTION
 
     
 ##code-section module-header #fill in your manual code here
+import logging
+logger = logging.getLogger('ECAssignmentBox')
 ##/code-section module-header
 
 schema = Schema((
-
 
 ),
 )
@@ -44,8 +53,7 @@ schema = Schema((
 ##code-section after-local-schema #fill in your manual code here
 ##/code-section after-local-schema
 
-ECABTool_schema = BaseSchema.copy() + \
-    schema.copy()
+ECABTool_schema = BaseSchema.copy() + schema.copy()
 
 ##code-section after-schema #fill in your manual code here
 ##/code-section after-schema
@@ -54,12 +62,9 @@ class ECABTool(UniqueObject, BaseContent, BrowserDefaultMixin):
     """
     """
     security = ClassSecurityInfo()
-
     implements(interfaces.IECABTool)
-
     meta_type = 'ECABTool'
     _at_rename_after_creation = True
-
     schema = ECABTool_schema
 
     ##code-section class-header #fill in your manual code here
@@ -113,6 +118,50 @@ class ECABTool(UniqueObject, BaseContent, BrowserDefaultMixin):
 
         #return dl.sortedByValue()
         return dl
+
+    #security.declarePrivate('getWfTransitions')
+    def getWfTransitions(self, wfName=ECA_WORKFLOW_ID):
+        """
+        @return all transitions for the given workflow
+        """
+        
+        result = {}
+        
+        wtool = self.portal_workflow
+        wf = wtool.getWorkflowById(wfName)
+
+        for tid in wf.transitions.keys():
+            tdef = wf.transitions.get(tid, None)
+            if tdef is not None and \
+               tdef.trigger_type == TRIGGER_USER_ACTION and \
+               tdef.actbox_name and \
+               not result.has_key(tdef.id):
+                result[tdef.id] = {
+                        'id': tdef.id,
+                        'title': tdef.title,
+                        'title_or_id': tdef.title_or_id(),
+                        'description': tdef.description,
+                        'name': tdef.actbox_name}
+        
+        return tuple(result.values())
+
+
+    #security.declarePrivate('getWfTransitionsDisplayList')
+    def getWfTransitionsDisplayList(self, wfName=ECA_WORKFLOW_ID):
+        """
+        @return a DisplayList containing all transition keys and titles in 
+                assignment's workflow
+        """
+        dl = DisplayList(())
+
+        wtool = self.portal_workflow
+        wf = wtool.getWorkflowById(wfName)
+
+        for transition in self.getWfTransitions():
+            # FIXME: not sure if this works with the result from getWfTransitions
+            dl.add(transition.id, transition.actbox_name)
+
+        return dl.sortedByValue()
 
     #security.declarePublic('localizeNumber')
     def localizeNumber(self, format, value):
@@ -187,17 +236,21 @@ class ECABTool(UniqueObject, BaseContent, BrowserDefaultMixin):
         return value
 
 
-    #security.declarePublic('isAssignmentBoxType')
-    def isAssignmentBoxType(self, item=None):
+    #security.declarePublic('testAssignmentBoxType')
+    def testAssignmentBoxType(self, item=None):
         """
-        Returns True if item has a method 'isAssignmentBoxType' or - in case
-        item is a ctalog brain- index 'isAssignmentBoxType' is True
+        Returns True if item has an attribut 'isAssignmentBoxType' or - in case
+        item is a catalog brain- index 'isAssignmentBoxType' is True
         """
+        
+        logger.info('xxx: testAssignmentBoxType: %s' % item)
         
         if not item:
             return False
         else:
+            logger.info('xxx: %s' % item.Title)
             return hasattr(item, 'isAssignmentBoxType') and item.isAssignmentBoxType
+
 
     def isGrader(self, item, id=None):
         """

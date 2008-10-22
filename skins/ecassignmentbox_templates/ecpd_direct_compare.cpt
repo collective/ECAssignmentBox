@@ -34,7 +34,7 @@
 		tal:define="all_paths python:request.get('paths', []);
 				all_objects python:here.getObjectsFromPathList(all_paths, batch=True);
 				paths python:['/'.join(o.getPhysicalPath())
-						for o in all_objects if here.ecab_utils.isAssignmentBoxType(o)];
+						for o in all_objects if here.ecab_utils.testAssignmentBoxType(o)];
 				batch python:here.getObjectsFromPathList(paths, batch = True);
 				">
 
@@ -122,7 +122,7 @@
         
 										 <tal:block tal:repeat="item items"
 										 						>	<!--and ((not userName) or (item.Creator() == userName))"-->
-      	  					 						<tr tal:condition="python: here.ecab_utils.isAssignmentBoxType(item)"
+      	  					 						<tr tal:condition="python: here.ecab_utils.testAssignmentBoxType(item)"
    															   	    tal:define="oddrow      repeat/item/odd;
 								      	                						item_type           item/portal_type;
       	                														item_wf_state       item/review_state | python: wtool.getInfoFor(item, 'review_state', '');
@@ -220,7 +220,7 @@
   		                id      python:context.getIdentifier(item)[0]+','+context.getIdentifier(item)[1];
   		                checked python:test(request.get('ids_checked', False), 'checked', None);
   		                " />
-<!-- scheint immer alle PlagResults auszuwählen ...             
+<!-- scheint immer alle PlagResults auszuwï¿½hlen ...             
                <input type="hidden" name="obj_paths:list" value=""
 							 				tal:attributes="value item" />--> <!--OO TODO: OO-->
              </td>

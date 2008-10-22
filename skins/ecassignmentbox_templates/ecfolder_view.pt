@@ -84,7 +84,7 @@
                   </span>
                 </dt>
                 <dd class="ec-listing">
-                  <tal:block tal:condition="python: ecab_utils.isAssignmentBoxType(item)">
+                  <tal:block tal:condition="python: ecab_utils.testAssignmentBoxType(item)">
                     <div class="documentByLine"
                          tal:condition="python: item.submission_period_end and item.isEffective() and not item.hasExpired()">
                       <span i18n:translate="submission_period_ends">
@@ -105,7 +105,7 @@
                   <div tal:condition="item_description"
                        class="ec-description" tal:content="structure item_ref/Description | item_description"/>
 
-                  <tal:block tal:condition="python: ecab_utils.isAssignmentBoxType(item)">      
+                  <tal:block tal:condition="python: ecab_utils.testAssignmentBoxType(item)">      
 
                     <div class="field" tal:content="structure item_ref/getAssignment_text | item/getAssignment_text"/>
 

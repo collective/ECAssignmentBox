@@ -35,7 +35,7 @@
 				all_paths python:request.get('paths', []);
 				all_objects python:here.getObjectsFromPathList(all_paths, batch=True);
 				paths python:['/'.join(o.getPhysicalPath())
-						for o in all_objects if here.ecab_utils.isAssignmentBoxType(o)];
+						for o in all_objects if here.ecab_utils.testAssignmentBoxType(o)];
 				batch python:here.getObjectsFromPathList(paths, batch = True);
 				">
 
@@ -224,7 +224,7 @@
   		                id      python:context.getIdentifier(item)[0]+','+context.getIdentifier(item)[1];
   		                checked python:test(request.get('ids_checked', False), 'checked', None);
   		                " />
-<!-- scheint immer alle PlagResults auszuwählen ...             
+<!-- scheint immer alle PlagResults auszuwï¿½hlen ...             
                <input type="hidden" name="obj_paths:list" value=""
 							 				tal:attributes="value item" />--> <!--OO TODO: OO-->
              </td>

@@ -23,10 +23,5 @@
 
 from Products.CMFCore import permissions
 
-View                = permissions.View
-ModifyPortalContent = permissions.ModifyPortalContent
-ManageProperties    = permissions.ManageProperties
-
 GradeAssignments    = 'eduComponents: Grade Assignments'
-
 permissions.setDefaultRoles(GradeAssignments,  ('Manager',))

@@ -49,7 +49,7 @@
         <a class="link-parent visualNoPrint"
            tal:define="
               parent     python: here.aq_parent;
-              template   python: parent.getTypeInfo().getActionInfo(['object/'+template_id])['url'];
+              template   python: (parent.getTypeInfo().listActionInfos('object/'+template_id) or '') and parent.getTypeInfo().getActionInfo(['object/'+template_id])['url'];
               parent_url python:here.navigationParent(here, fallThroughDefaultPage=False)"
            tal:condition="parent_url"
            tal:attributes="href python: '%s/%s' % (parent_url, template)"
@@ -145,8 +145,10 @@
                       <b tal:content="c"/>
                     </td>
                     <td>
-                      <span tal:replace="python:
+                      <span tal:condition="python: n_boxes != 0" tal:replace="python:
                           ecab_utils.localizeNumber('%.1f', round(float(c)/n_boxes * 100, 2))"/>
+
+                      <span tal:condition="python: n_boxes == 0" tal:replace="string:---"/>
                     </td>
                     <td tal:condition="here/projectedAssignments">
                       <b tal:content="python:

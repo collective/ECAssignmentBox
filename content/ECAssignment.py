@@ -5,10 +5,10 @@
 #
 # This file is part of ECAssignmentBox.
 #
-# ECAssignmentBox is free software; you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation; either version 2 of the License, or
-# (at your option) any later version.
+# ECAssignmentBox is free software; you can redistribute it and/or 
+# modify it under the terms of the GNU General Public License as 
+# published by the Free Software Foundation; either version 2 of the 
+# License, or (at your option) any later version.
 #
 # ECAssignmentBox is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -16,10 +16,11 @@
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with ECAssignmentBox; if not, write to the Free Software
-# Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+# along with ECAssignmentBox; if not, write to the 
+# Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, 
+# MA  02110-1301  USA
 #
-__author__ = """Mario Amelung <amelung@iws.cs.uni-magdeburg.de>"""
+__author__ = """Mario Amelung <mario.amelung@gmx.de>"""
 __docformat__ = 'plaintext'
 
 
@@ -45,8 +46,8 @@ from Products.PortalTransforms.utils import TransformException
 
 # local imports
 from Products.ECAssignmentBox.config import *
-from Products.ECAssignmentBox import permissions
-from ECAssignmentBox import *
+#from Products.ECAssignmentBox import permissions
+#from ECAssignmentBox import *
 
 # PlagDetector imports
 from Products.ECAssignmentBox.PlagDetector.PlagChecker import PlagChecker
@@ -92,10 +93,11 @@ ECAssignmentSchema = ECAssignmentSchema + Schema((
 
     TextField(
         'remarks',
-        default_content_type = 'text/structured',
-        default_output_type = 'text/html',
-        allowable_content_types = TEXT_TYPES,
-        widget = TextAreaWidget(
+        allowable_content_types = ECA_MIME_TYPES, 
+        default_content_type = EC_DEFAULT_MIME_TYPE, 
+        default_output_type = EC_DEFAULT_FORMAT,
+        widget=RichWidget(
+        #widget = TextAreaWidget(
             label = "Remarks",
             label_msgid = "label_remarks",
             description = "Your remarks for this assignment (they will not be shown to the student)",
@@ -103,16 +105,17 @@ ECAssignmentSchema = ECAssignmentSchema + Schema((
             i18n_domain = I18N_DOMAIN,
             rows = 8,
         ),
-        read_permission = permissions.ModifyPortalContent,
+        read_permission = 'Modify Portal Content',
     ),
 
     TextField(
         'feedback',
         searchable = True,
-        default_content_type = 'text/structured',
-        default_output_type = 'text/html',
-        allowable_content_types = TEXT_TYPES,
-        widget = TextAreaWidget(
+        allowable_content_types = ECA_MIME_TYPES, 
+        default_content_type = EC_DEFAULT_MIME_TYPE, 
+        default_output_type = EC_DEFAULT_FORMAT,
+        widget=RichWidget(
+        #widget = TextAreaWidget(
             label = "Feedback",
             label_msgid = "label_feedback",
             description = "The grader's feedback for this assignment",
@@ -576,7 +579,7 @@ class ECAssignment(BaseContent, HistoryAwareMixin):
         user = self.portal_membership.getAuthenticatedMember()
         isOwner = user.has_role(['Owner', 'Reviewer', 'Manager'], self);
         isGrader = self.portal_membership.checkPermission(
-                                          permissions.GradeAssignments, self)        
+                                          GradeAssignments, self)        
 
         viewers = self.getViewerNames()
         

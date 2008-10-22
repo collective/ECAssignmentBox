@@ -82,9 +82,9 @@
            i18n:translate="go_to_parent_url">
           Up one level
         </a>
-        
+
         <!-- show a collapsible box with the directions text from ecfolder -->
-        <dl class="collapsible collapsedBlockCollapsible"
+        <dl class="collapsible inline collapsedInlineCollapsible"
             tal:define="parent nocall:here/aq_parent;"
             tal:condition="python: hasattr(parent, 'directions') and parent.directions"
         >
@@ -102,12 +102,10 @@
         <div class="documentDescription"
              tal:content="structure reference/Description | here/Description"/>
 
-
-		<!-- 
-        <div class="field"
-			tal:content="structure reference/getAssignment_text | here/getAssignment_text"/>
-        -->
-        <div class="field">
+        <div class="field" tal:condition="reference">
+			<div tal:replace="structure reference/getAssignment_text" />
+        </div>
+        <div class="field" tal:condition="not:reference">
             <metal:field use-macro="python:here.widget('assignment_text', mode='view')" />
         </div>
       
@@ -142,7 +140,7 @@
               name="answer"
               tabindex=""
               tal:attributes="tabindex tabindex/next; wrap python:('off', 'on')[here.getWrapAnswer()]"
-              tal:content="reference/answerTemplate | here/answerTemplate | nothing"></textarea>
+              tal:content="reference/getAnswerTemplate | here/getAnswerTemplate | nothing"></textarea>
           </div>
   
          <!-- upload file button -->

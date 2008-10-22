@@ -8,7 +8,7 @@
 ##title=
 ##
 
-from Products.CMFPlone import transaction_note
+from Products.CMFPlone.utils import transaction_note
 from ZODB.POSException import ConflictError
 
 I18N_DOMAIN = 'eduComponents'
@@ -24,7 +24,9 @@ if not workflow_action:
     message = context.translate('Unexpected workflow action: ${workflow_action}',
                                 {'workflow_action': workflow_action},
                                 domain = I18N_DOMAIN)
-    return state.set(status=status, portal_status_message = message)
+
+    context.plone_utils.addPortalMessage(message)
+    return state.set(status=status)
 
 # paths
 paths = []
@@ -99,4 +101,5 @@ if excepted:
     message = message + context.translate('Changing state for "${titles}" caused an exception.',
                                           {'titles': '", "'.join(excepted.keys())})
 
-return state.set(status=status, portal_status_message = message)
+context.plone_utils.addPortalMessage(message)
+return state.set(status=status)

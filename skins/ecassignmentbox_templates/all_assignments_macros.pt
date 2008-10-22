@@ -83,9 +83,9 @@
       <tbody>
         <!-- hint: remember that all items are catalog brains, each representing an single assignment object -->
         <tal:block tal:repeat="brain brains">
-          <!--  <tr tal:condition="python: ecab_utils.isAssignmentBoxType(assignment) and ((not userName) or (assignment.Creator() == userName))" -->
-          <tr
-              tal:define="assignment                python: brain.getObject();
+          <!--  <tr tal:condition="python: ecab_utils.testAssignmentBoxType(assignment) and ((not userName) or (assignment.Creator() == userName))" -->
+          <tal:if condition="python: brain.isAssignmentType">
+          <tr tal:define="assignment                python: brain.getObject();
                           oddrow                    repeat/brain/odd;
                           assignment_type           brain/portal_type;
                           assignment_wf_state       brain/review_state;
@@ -181,6 +181,7 @@
                     i18n:translate="label_action_download">[Download]</a>
             </td>
           </tr>
+          </tal:if>
         </tal:block>
       </tbody>
     </metal:define>
@@ -224,7 +225,7 @@
       <tbody>
         <!-- hint: remember that all items are catalog brains, each representing an single assignment object -->
         <tal:block tal:repeat="brain brains">
-          <!--  <tr tal:condition="python: ecab_utils.isAssignmentBoxType(assignment) and ((not userName) or (assignment.Creator() == userName))" -->
+          <!--  <tr tal:condition="python: ecab_utils.testAssignmentBoxType(assignment) and ((not userName) or (assignment.Creator() == userName))" -->
           <tr
               tal:define="assignment                python: brain.getObject();
                           oddrow                    repeat/brain/odd;

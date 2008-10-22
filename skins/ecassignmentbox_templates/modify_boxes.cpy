@@ -29,7 +29,7 @@ if REQUEST.has_key('paths'):
         try:
             obj = portal.restrictedTraverse(path)
 
-            if context.ecab_utils.isAssignmentBoxType(obj):
+            if context.ecab_utils.testAssignmentBoxType(obj):
                 if use_submission_period_start:
                     obj.setSubmission_period_start(submission_period_start)
                 if use_submission_period_end:

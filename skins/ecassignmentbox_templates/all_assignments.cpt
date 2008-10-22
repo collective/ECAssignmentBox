@@ -30,12 +30,11 @@
                   mkUrl             python: lambda d : '%s/%s?%s' % (here.absolute_url(), template.getId(), ecab_utils.urlencode(dict(resFlt2.items() + d.items())));"
       >
       
-        <!--  debug -->
-         
+        <!--  debug 
         <div tal:content="python: 'showSuperseded:%s' % resFlt['show_superseded']" />
         <div tal:content="python: 'mkUrl:%s' % mkUrl({})" />
         <div tal:content="string: resFlt:$resFlt" />
-        
+        -->
       
         <div metal:use-macro="here/document_actions/macros/document_actions" />
     
@@ -54,7 +53,7 @@
             Up one level
           </a>
 
-          <p tal:condition="python: not ecab_utils.isAssignmentBoxType(here)">
+          <p tal:condition="python: not ecab_utils.testAssignmentBoxType(here)">
             <b i18n:translate="label_n_boxes">
               Published assignment boxes inside this folder:
             </b>
@@ -117,21 +116,19 @@
                     level python: 1;"
             >
             
-              <!--  debug -->
-              
+              <!--  debug 
               <div tal:content="string:states:$statesToShow" />
               <div tal:content="string:userId:$userName" />
-              
+              -->
             
               <!-- start searching all child folders -->
-
 			  <div metal:use-macro="template/macros/list" /> 
   
             </tal:contain> 
 
             <!-- 
               This macro searches recursivly through all items inside 
-              the current folECABTool.pyder.
+              the current folder.
             
               @param item current folder
               @param level current level (means depth) 
@@ -140,18 +137,20 @@
               <metal:macro define-macro="list">
               
                 <!-- is current item an assignment box (e.g., ECAB or ECAAB)? -->
-                <tal:if condition="python: ecab_utils.isAssignmentBoxType(item)">
+                <tal:if condition="python: ecab_utils.testAssignmentBoxType(item)">
 
                   <tal:define define="
                           path   python: (hasattr(item, 'getPath') and item.getPath()) or '/'.join(item.getPhysicalPath());
-                          brains python: (userName and here.portal_catalog(path={'query':path, 'depth':1, }, 
+                          brains python: (userName and here.portal_catalog.searchResults(path = dict(query=path,depth=1), 
                                                                            sort_on = 'getObjPositionInParent', 
-                                                                           review_state=statesToShow, 
-                                                                           Creator=userName, ))
+                                                                           review_state = statesToShow, 
+                                                                           isAssignmentType = True,
+                                                                           Creator = userName, ))
                                          or 
-                                         (not userName and here.portal_catalog(path={'query':path, 'depth':1, }, 
-                                                                 sort_on = 'getObjPositionInParent', 
-                                                                 review_state=statesToShow, ));
+                                         (not userName and here.portal_catalog.searchResults(path = dict(query=path,depth=1),
+                                                                           sort_on = 'getObjPositionInParent',
+                                                                           isAssignmentType = True,
+                                                                           review_state = statesToShow,));
                           grades python: [];"
                   >
 
@@ -159,6 +158,11 @@
                     FIXME: Currently we have no informationen about grades in the brain!
                     
                     grades              item/getNumericGrades | nothing;
+                    -->
+
+                    <!--  debug
+                    <div tal:content="string:path:$path" />
+                    <div tal:content="string:brains:$brains" />
                     -->
 
                     <p tal:condition="not: brains"
@@ -204,12 +208,12 @@
                 </tal:if>
 
                 <!-- process all other published items inside this item -->
-                <tal:if condition="python: not ecab_utils.isAssignmentBoxType(item)
+                <tal:if condition="python: not ecab_utils.testAssignmentBoxType(item)
                                            and item.is_folderish">
-                
+
                   <div tal:define="
                           path   python: (hasattr(item, 'getPath') and item.getPath()) or '/'.join(item.getPhysicalPath());
-                          brains python: here.portal_catalog(path={'query':path, 'depth':1, },
+                          brains python: here.portal_catalog.searchResults(path = dict(query=path, depth=1),
                                                              sort_on = 'getObjPositionInParent', );"
                       tal:repeat="brain brains">
                       
@@ -248,7 +252,6 @@
                       </metal:recurse>
 
                     </tal:block>
-
                   </div>
 
                   <hr tal:condition="python: level > 1" />

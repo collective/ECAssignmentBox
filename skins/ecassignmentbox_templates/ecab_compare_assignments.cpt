@@ -43,7 +43,7 @@
 
 	<!-- PlagDetector MODIFICATION 
 		TODO: Check this!
-					paths 		python:['/'.join(o.getPhysicalPath()) for o in all_objects if here.ecab_utils.isAssignmentBoxType(o)];
+					paths 		python:['/'.join(o.getPhysicalPath()) for o in all_objects if here.ecab_utils.testAssignmentBoxType(o)];
 	-->
 
       <metal:block tal:condition="python: paths and not batch"

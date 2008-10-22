@@ -1,14 +1,14 @@
 # -*- coding: utf-8 -*-
 # $Id$
 #
-# Copyright (c) 2006 Otto-von-Guericke-Universität Magdeburg
+# Copyright (c) 2006-2008 Otto-von-Guericke-Universität Magdeburg
 #
 # This file is part of ECAssignmentBox.
 #
-# ECAssignmentBox is free software; you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation; either version 2 of the License, or
-# (at your option) any later version.
+# ECAssignmentBox is free software; you can redistribute it and/or 
+# modify it under the terms of the GNU General Public License as 
+# published by the Free Software Foundation; either version 2 of the 
+# License, or (at your option) any later version.
 #
 # ECAssignmentBox is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -16,11 +16,11 @@
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with ECAssignmentBox; if not, write to the Free Software
-# Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-
-
-__author__ = """unknown <unknown>"""
+# along with ECAssignmentBox; if not, write to the 
+# Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, 
+# MA  02110-1301  USA
+#
+__author__ = """Mario Amelung <mario.amelung@gmx.de>"""
 __docformat__ = 'plaintext'
 
 from AccessControl import ClassSecurityInfo
@@ -34,8 +34,6 @@ from Products.ATContentTypes.content.folder import ATFolder
 from Products.ATContentTypes.content.folder import ATFolderSchema
 from Products.ECAssignmentBox.config import *
 
-from hotshot import log
-
 from DateTime import DateTime
 
 from Products.CMFCore.utils import getToolByName
@@ -46,16 +44,13 @@ from Products.ATReferenceBrowserWidget.ATReferenceBrowserWidget \
      import ReferenceBrowserWidget
 
 # local imports
-from Products.ECAssignmentBox import permissions
-from ECAssignment import ECAssignment
 from Statistics import Statistics
-from PlainTextField import PlainTextField
+#from PlainTextField import PlainTextField
 
 ##code-section module-header #fill in your manual code here
+import logging
+logger = logging.getLogger('ECAssignmentBox')
 ##/code-section module-header
-
-##code-section after-local-schema #fill in your manual code here
-##/code-section after-local-schema
 
 ECAssignmentBox_schema = ATFolderSchema.copy() + Schema((
     ReferenceField(
@@ -81,16 +76,17 @@ ECAssignmentBox_schema = ATFolderSchema.copy() + Schema((
         'assignment_text',
         required = False,
         searchable = True,
-        default_output_type = 'text/html',
-        default_content_type = 'text/structured',
-        allowable_content_types = TEXT_TYPES,
+        allowable_content_types = EC_MIME_TYPES, 
+        default_content_type = EC_DEFAULT_MIME_TYPE, 
+        default_output_type = EC_DEFAULT_FORMAT,
         widget=RichWidget(
             label = 'Assignment text',
             label_msgid = 'label_assignment_text',
             description = 'Enter text and hints for the assignment',
             description_msgid = 'help_assignment_text',
             i18n_domain = I18N_DOMAIN,
-            #rows=10,
+            rows = 10,
+            allow_file_upload = True,
         ),
     ),
 
@@ -98,17 +94,18 @@ ECAssignmentBox_schema = ATFolderSchema.copy() + Schema((
     TextField(
         'answerTemplate',
         searchable = True,
-        default_output_type = 'text/html',
-        default_content_type = 'text/plain',
-        allowable_content_types = TEXT_TYPES,
-        widget=RichWidget(
+        allowable_content_types = ('text/plain',), #('text/x-web-intelligent',), 
+        #default_content_type = EC_DEFAULT_MIME_TYPE, 
+        #default_output_type = EC_DEFAULT_FORMAT,
+        #widget=RichWidget(
+        widget = TextAreaWidget(
             label = 'Answer template',
             label_msgid = 'label_answer_template',
             description = 'You can provide a template for the students\' answers',
             description_msgid = 'help_answer_template',
             i18n_domain = I18N_DOMAIN,
-            #rows = 12,
-            format = 0,
+            rows = 12,
+            #format = 0,
         ),
     ),
 
@@ -167,34 +164,36 @@ ECAssignmentBox_schema = ATFolderSchema.copy() + Schema((
         ),
     ),
 
-    BooleanField('sendNotificationEmail',
-        default=False,
-        widget=BooleanWidget(
-            label="Send notification e-mail messages",
-            description="If selected, the owner of this assignment box will receive an e-mail message each time an assignment is submitted.",
-            label_msgid='label_sendNotificationEmail',
-            description_msgid='help_sendNotificationEmail',
-            i18n_domain=I18N_DOMAIN,
-        ),
-    ),
-    
-    BooleanField('sendGradingNotificationEmail',
-        default=False,
-        widget=BooleanWidget(
-            label="Send grading notification e-mail messages",
-            description="If selected, students will receive an e-mail message when their submissions to this assignment box are graded.",
-            label_msgid='label_sendGradingNotificationEmail',
-            description_msgid='help_sendGradingNotificationEmail',
-            i18n_domain=I18N_DOMAIN,
-        ),
-    ),
+#    BooleanField('sendNotificationEmail',
+#        default=False,
+#        widget=BooleanWidget(
+#            label="Send notification e-mail messages",
+#            description="If selected, the owner of this assignment box will receive an e-mail message each time an assignment is submitted.",
+#            label_msgid='label_sendNotificationEmail',
+#            description_msgid='help_sendNotificationEmail',
+#            i18n_domain=I18N_DOMAIN,
+#        ),
+#    ),
+#    
+#    BooleanField('sendGradingNotificationEmail',
+#        default=False,
+#        widget=BooleanWidget(
+#            label="Send grading notification e-mail messages",
+#            description="If selected, students will receive an e-mail message when their submissions to this assignment box are graded.",
+#            label_msgid='label_sendGradingNotificationEmail',
+#            description_msgid='help_sendGradingNotificationEmail',
+#            i18n_domain=I18N_DOMAIN,
+#        ),
+#    ),
                                                         
 ) # , marshall = PrimaryFieldMarshaller()
 )
 
-##code-section after-schema #fill in your manual code here
-finalizeATCTSchema(ECAssignmentBox_schema, folderish=True, moveDiscussion=False)
-##/code-section after-schema
+##code-section after-local-schema 
+#fill in your manual code here
+##/code-section after-local-schema
+
+#finalizeATCTSchema(ECAssignmentBox_schema, folderish=True, moveDiscussion=False)
 
 class ECAssignmentBox(ATFolder):
     """
