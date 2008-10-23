@@ -164,27 +164,27 @@ ECAssignmentBox_schema = ATFolderSchema.copy() + Schema((
         ),
     ),
 
-#    BooleanField('sendNotificationEmail',
-#        default=False,
-#        widget=BooleanWidget(
-#            label="Send notification e-mail messages",
-#            description="If selected, the owner of this assignment box will receive an e-mail message each time an assignment is submitted.",
-#            label_msgid='label_sendNotificationEmail',
-#            description_msgid='help_sendNotificationEmail',
-#            i18n_domain=I18N_DOMAIN,
-#        ),
-#    ),
-#    
-#    BooleanField('sendGradingNotificationEmail',
-#        default=False,
-#        widget=BooleanWidget(
-#            label="Send grading notification e-mail messages",
-#            description="If selected, students will receive an e-mail message when their submissions to this assignment box are graded.",
-#            label_msgid='label_sendGradingNotificationEmail',
-#            description_msgid='help_sendGradingNotificationEmail',
-#            i18n_domain=I18N_DOMAIN,
-#        ),
-#    ),
+    BooleanField('sendNotificationEmail',
+        default=False,
+        widget=BooleanWidget(
+            label="Send notification e-mail messages",
+            description="If selected, the owner of this assignment box will receive an e-mail message each time an assignment is submitted.",
+            label_msgid='label_sendNotificationEmail',
+            description_msgid='help_sendNotificationEmail',
+            i18n_domain=I18N_DOMAIN,
+        ),
+    ),
+    
+    BooleanField('sendGradingNotificationEmail',
+        default=False,
+        widget=BooleanWidget(
+            label="Send grading notification e-mail messages",
+            description="If selected, students will receive an e-mail message when their submissions to this assignment box are graded.",
+            label_msgid='label_sendGradingNotificationEmail',
+            description_msgid='help_sendGradingNotificationEmail',
+            i18n_domain=I18N_DOMAIN,
+        ),
+    ),
                                                         
 ) # , marshall = PrimaryFieldMarshaller()
 )
