@@ -10,7 +10,7 @@
 
 # Borrowed from Plone's folder_delete.cpy
 
-from Products.CMFPlone import transaction_note
+from Products.CMFPlone.utils import transaction_note
 from ZODB.POSException import ConflictError
 
 REQUEST  = context.REQUEST
@@ -63,5 +63,6 @@ if failed:
                                           {'titles': '", "'.join(failed.keys())},
                                           domain = I18N_DOMAIN)
 
-return state.set(status=status, portal_status_message=message)
-
+#return state.set(status=status, portal_status_message=message)
+context.plone_utils.addPortalMessage(message)
+return state.set(status=status)

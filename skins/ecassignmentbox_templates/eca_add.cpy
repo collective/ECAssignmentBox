@@ -35,7 +35,9 @@ if not file:
           domain  = I18N_DOMAIN,
           default = 'Neither answer nor uploaded file found.')
 
-        return state.set(status = 'failure', portal_status_message = msg)
+        #return state.set(status = 'failure', portal_status_message = msg)
+        context.plone_utils.addPortalMessage(msg)
+        return state.set(status = 'failure')
 
 # get current date and time
 now = DateTime()

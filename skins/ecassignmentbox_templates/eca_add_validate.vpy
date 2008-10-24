@@ -59,7 +59,10 @@ elif not isOwner and not context.canSupersed():
                   'An earlier submission is under review or has already been accepted.')
 
 else:
-    status = 'success'
-    msg = ''
+    #return stateset(status ='success')
+    return stateset
 
-return state.set(status = status, portal_status_message = msg)
+#return state.set(status = status, portal_status_message = msg)
+# in error case return error message
+context.plone_utils.addPortalMessage(msg)
+return state.set(status = status)
