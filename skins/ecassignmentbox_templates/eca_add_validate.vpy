@@ -59,8 +59,8 @@ elif not isOwner and not context.canSupersed():
                   'An earlier submission is under review or has already been accepted.')
 
 else:
-    #return stateset(status ='success')
-    return stateset
+    #return state.set(status ='success')
+    return state
 
 #return state.set(status = status, portal_status_message = msg)
 # in error case return error message
