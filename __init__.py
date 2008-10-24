@@ -52,7 +52,6 @@ from Products.CMFCore import permissions as cmfpermissions
 from Products.CMFCore import utils as cmfutils
 from Products.CMFPlone.utils import ToolInit
 from config import *
-from AppConfig import *
 
 DirectoryView.registerDirectory('skins', product_globals)
 
@@ -69,7 +68,6 @@ def initialize(context):
     # imports packages and types for registration
     import content
     import tool
-
 
     # Initialize portal tools
     tools = [tool.ECABTool.ECABTool]
