@@ -243,12 +243,11 @@ class ECABTool(UniqueObject, BaseContent, BrowserDefaultMixin):
         item is a catalog brain- index 'isAssignmentBoxType' is True
         """
         
-        logger.info('xxx: testAssignmentBoxType: %s' % item)
+        logger.debug('here we are in ECABTool#testAssignmentBoxType: %s' % item)
         
         if not item:
             return False
         else:
-            logger.info('xxx: %s' % item.Title)
             return hasattr(item, 'isAssignmentBoxType') and item.isAssignmentBoxType
 
 
