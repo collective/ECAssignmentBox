@@ -52,6 +52,7 @@ import logging
 logger = logging.getLogger('ECAssignmentBox')
 ##/code-section module-header
 
+#ECAssignmentBox_schema = BaseBTreeFolderSchema.copy() + Schema((
 ECAssignmentBox_schema = ATFolderSchema.copy() + Schema((
     ReferenceField(
         'assignment_reference',
@@ -189,46 +190,32 @@ ECAssignmentBox_schema = ATFolderSchema.copy() + Schema((
 ) # , marshall = PrimaryFieldMarshaller()
 )
 
-##code-section after-local-schema 
-#fill in your manual code here
+##code-section after-local-schema #fill in your manual code here
 ##/code-section after-local-schema
-
-#finalizeATCTSchema(ECAssignmentBox_schema, folderish=True, moveDiscussion=False)
 
 class ECAssignmentBox(ATFolder):
     """
     """
-    __implements__ = (ATFolder.__implements__)
-	
-    security = ClassSecurityInfo()
-
-    implements(interfaces.IECAssignmentBox)
-
-    meta_type = 'ECAssignmentBox'
-    #_at_rename_after_creation = True
-
-    schema = ECAssignmentBox_schema
-    #content_icon = "ecab.png"
-    #portal_type = meta_type = ECAB_META
-    #archetype_name = ECAB_NAME
-
-    #filter_content_types = 1
-    
-    # FIXME: allowed_content_types is defined in profile.default.types.ECAssignmentBox.xml
-    #        and should be used elsewhere
-    allowed_content_types = ['ECAssignment']
-
-    #suppl_views = None
-    #default_view = 'ecab_view'
-    #immediate_view = 'ecab_view'
-
     typeDescription = 'Allows the creation, submission and grading ' \
                       'of online assignments.'
     typeDescMsgId   = 'description_edit_ecab'
 
+
+    __implements__ = (ATFolder.__implements__)
+    implements(interfaces.IECAssignmentBox)
+    security = ClassSecurityInfo()
+
+    meta_type = 'ECAssignmentBox'
+    schema = ECAssignmentBox_schema
     _at_rename_after_creation = True
     
+    ##code-section class-header #fill in your manual code here
+
     isAssignmentBoxType = True
+    # FIXME: allowed_content_types is defined in profile.default.types.ECAssignmentBox.xml
+    #        and should be used elsewhere
+    allowed_content_types = ['ECAssignment']
+
     ##/code-section class-header
 
     # Methods
@@ -455,6 +442,3 @@ registerType(ECAssignmentBox, PROJECTNAME)
 
 ##code-section module-footer #fill in your manual code here
 ##/code-section module-footer
-
-
-
