@@ -8,6 +8,12 @@
     <permission name="eduComponents: Grade Assignments"
                 acquire="True">
       <role name="ECAssignment Grader"/>
+      <role name="Manager"/>
+    </permission>
+    <permission name="eduComponents: View Assignments"
+                acquire="True">
+      <role name="ECAssignment Viewer"/>
+      <role name="Manager"/>
     </permission>
   </permissions>
 </rolemap>
