@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# $Id: ECAssignment.py,v 1.1.2.10 2008/10/15 20:37:41 amelung Exp $
+# $Id: ECAssignmentBox.py,v 1.1.2.9 2008/10/24 09:06:57 amelung Exp $
 #
 # Copyright (c) 2006-2008 Otto-von-Guericke-Universität Magdeburg
 #
@@ -22,10 +22,11 @@
 #
 __author__ = """Mario Amelung <mario.amelung@gmx.de>"""
 __docformat__ = 'plaintext'
-
+__version__   = '$Revision: 1.1 $'
 
 from AccessControl import ClassSecurityInfo
 from Products.Archetypes.atapi import *
+from Products.Archetypes.utils import shasattr
 from zope.interface import implements
 import interfaces
 from urlparse import *
@@ -35,14 +36,21 @@ from string import *
 from socket import *
 
 from Products.CMFDynamicViewFTI.browserdefault import BrowserDefaultMixin
-from Products.ECAssignmentBox.config import *
 from Products.CMFCore.utils import UniqueObject
 from Products.DCWorkflow.Transitions import TRIGGER_USER_ACTION
 
+from Products.ECAssignmentBox.config import *
     
 ##code-section module-header #fill in your manual code here
+from ZODB.POSException import ConflictError
+from Products.CMFCore.utils import getToolByName
+
+from email.MIMEText import MIMEText
+from email.Header import Header
+
+
 import logging
-logger = logging.getLogger('ECAssignmentBox')
+log = logging.getLogger('ECAssignmentBox')
 ##/code-section module-header
 
 schema = Schema((
@@ -188,8 +196,12 @@ class ECABTool(UniqueObject, BaseContent, BrowserDefaultMixin):
     #security.declarePublic('getFullNameById')
     def getFullNameById(self, id):
         """
-        Returns the full name of a user by the given ID. 
+        Returns the full name of a user by the given ID.  If full name is
+        devided into given and last name, we return it in the format
+        Doo, John; otherwise we will return 'fullname' as provided by Plone. 
         """
+        #log.debug('Here we are in ECABTool#getFullNameById')
+
         mtool = self.portal_membership
         member = mtool.getMemberById(id)
         error = False
@@ -200,42 +212,51 @@ class ECABTool(UniqueObject, BaseContent, BrowserDefaultMixin):
         try:
             sn        = member.getProperty('sn')
             givenName = member.getProperty('givenName')
+
+            #log.info('xxx_sn: %s' % str(sn))
+            #log.info('xxx_gn: %s' % str(givenName))
         except:
             error = True
 
         if error or (not sn) or (not givenName):
+            # return fullname
             fullname = member.getProperty('fullname', '')
 
             if fullname == '':
                 return id
-
-            if fullname.find(' ') == -1:
+            else: 
                 return fullname
 
-            sn = fullname[fullname.rfind(' ') + 1:]
-            givenName = fullname[0:fullname.find(' ')]
-
-        #log('xxx_sn: %s' % str(sn))
-        #log('xxx_gn: %s' % str(givenName))
-
-        return sn + ', ' + givenName
+            #if fullname.find(' ') == -1:
+            #    return fullname
+            #
+            #sn = fullname[fullname.rfind(' ') + 1:]
+            #givenName = fullname[0:fullname.find(' ')]
+            
+        else:
+            #return sn + ', ' + givenName
+            return '%s %s' % (givenName, sn, )
 
 
     security.declarePublic('getUserPropertyById')
-    def getUserPropertyById(self, id, property=''):
+    def getUserPropertyById(self, userId, property, fallback=None):
         """
+        @return: Value for 'property' or None
         """
-        mtool = self.portal_membership
-        member = mtool.getMemberById(id)
+        
+        #log.debug('Here we are in ECABTool#getUserPropertyById')
+        
+        membership = getToolByName(self, 'portal_membership')
+        member = membership.getMemberById(userId)
 
         try:
             value = member.getProperty(property)
         except:
-            return None
+            return fallback
 
         return value
-
-
+    
+    
     #security.declarePublic('testAssignmentBoxType')
     def testAssignmentBoxType(self, item=None):
         """
@@ -243,14 +264,14 @@ class ECABTool(UniqueObject, BaseContent, BrowserDefaultMixin):
         item is a catalog brain- index 'isAssignmentBoxType' is True
         """
         
-        logger.debug('here we are in ECABTool#testAssignmentBoxType: %s' % item)
+        #log.debug('Here we are in ECABTool#testAssignmentBoxType: %s' % item)
         
-        if not item:
-            return False
+        if (item and shasattr(item, 'isAssignmentBoxType')):
+            return item.isAssignmentBoxType
         else:
-            return hasattr(item, 'isAssignmentBoxType') and item.isAssignmentBoxType
+            return False
 
-
+    #security.declarePublic('isGrader')
     def isGrader(self, item, id=None):
         """
         Returns True if the user given by id has permission to grade the
@@ -291,7 +312,6 @@ class ECABTool(UniqueObject, BaseContent, BrowserDefaultMixin):
             result += ('superseded',)
 
         return result
-
 
 
     #security.declarePublic('findAssignments')
@@ -341,6 +361,8 @@ class ECABTool(UniqueObject, BaseContent, BrowserDefaultMixin):
 
         return stats.median
 
+
+    #security.declarePublic('normalizeURL')
     def normalizeURL(self, url):
         """
         Takes a URL (as returned by absolute_url(), for example) and
@@ -371,10 +393,15 @@ class ECABTool(UniqueObject, BaseContent, BrowserDefaultMixin):
 
     #security.declarePublic('urlencode')
     def urlencode(self, *args, **kwargs):
+        """
+        """
         return urllib.urlencode(*args, **kwargs)
+
 
     #security.declarePublic('parseQueryString')
     def parseQueryString(self, *args, **kwargs):
+        """
+        """
         return cgi.parse_qs(*args, **kwargs)
 
 
@@ -396,7 +423,7 @@ class ECABTool(UniqueObject, BaseContent, BrowserDefaultMixin):
         fromAddress = portal.getProperty('email_from_address', None)
 
         if fromAddress is None:
-            log('Cannot send notification e-mail: E-mail sender address or name not set')
+            log.error('Cannot send email: address or name is %s' % fromAddress)
             return
 
         try:
@@ -405,7 +432,7 @@ class ECABTool(UniqueObject, BaseContent, BrowserDefaultMixin):
             else:
                 message = MIMEText(text, 'plain', charset)
         except Exception, e:
-            log_exc('Cannot send notification e-mail: %s' % e)
+            log.error('Cannot send notification email: %s' % e)
             return
 
         try:
@@ -414,7 +441,7 @@ class ECABTool(UniqueObject, BaseContent, BrowserDefaultMixin):
             else:
                 subjHeader = Header(subject, charset)
         except Exception, e:
-            log_exc('Cannot send notification e-mail: %s' % e)
+            log.error('Cannot send notification email: %s' % e)
             return
 
         message['Subject'] = subjHeader
@@ -430,12 +457,14 @@ class ECABTool(UniqueObject, BaseContent, BrowserDefaultMixin):
                               mto = address,
                               mfrom = fromAddress,)
             except ConflictError, ce:
-                log_exc('Cannot send notification e-mail: %s' % ce)
+                log.error('Cannot send notification email: %s' % ce)
                 raise
-            except:
-                log_exc('Could not send e-mail from %s to %s regarding submission to %s\ntext is:\n%s\n' % (fromAddress, address, self.absolute_url(), message,))
+            except Exception, e:
+                log.error('Could not send email from %s to %s: %s' % 
+                          (fromAddress, address, e,))
 
 
+    #security.declarePrivate('pathQuote')
     def pathQuote(self, string=''):
         """
         Returns a string which is save to use as a filename.
@@ -460,6 +489,3 @@ registerType(ECABTool, PROJECTNAME)
 
 ##code-section module-footer #fill in your manual code here
 ##/code-section module-footer
-
-
-

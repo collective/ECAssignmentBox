@@ -22,7 +22,7 @@
 #
 __author__ = """Mario Amelung <mario.amelung@gmx.de>"""
 __docformat__ = 'plaintext'
-
+__version__   = '$Revision$'
 
 from AccessControl import ClassSecurityInfo
 from Products.Archetypes.atapi import *
@@ -40,18 +40,19 @@ from Products.CMFCore.utils import getToolByName
 from Products.ATContentTypes.content.schemata import ATContentTypeSchema, finalizeATCTSchema
 from Products.ATContentTypes.lib.historyaware import HistoryAwareMixin
 from Products.ATContentTypes.interfaces import IATDocument
+
 # The following two imports are for getAsPlainText()
 #from Products.ATContentTypes.content.base import translateMimetypeAlias
 from Products.PortalTransforms.utils import TransformException
 
-# local imports
 from Products.ECAssignmentBox.config import *
-#from Products.ECAssignmentBox import permissions
-#from ECAssignmentBox import *
 
 # PlagDetector imports
-from Products.ECAssignmentBox.PlagDetector.PlagChecker import PlagChecker
-from Products.ECAssignmentBox.PlagDetector.PlagVisualizer import PlagVisualizer
+#from Products.ECAssignmentBox.PlagDetector.PlagChecker import PlagChecker
+#from Products.ECAssignmentBox.PlagDetector.PlagVisualizer import PlagVisualizer
+
+import logging
+log = logging.getLogger('ECAssignmentBox')
 
 ##code-section module-header #fill in your manual code here
 ##/code-section module-header
@@ -103,7 +104,7 @@ ECAssignmentSchema = ECAssignmentSchema + Schema((
             description = "Your remarks for this assignment (they will not be shown to the student)",
             description_msgid = "help_remarks",
             i18n_domain = I18N_DOMAIN,
-            rows = 8,
+            rows = 7,
         ),
         read_permission = 'Modify Portal Content',
     ),
@@ -121,7 +122,7 @@ ECAssignmentSchema = ECAssignmentSchema + Schema((
             description = "The grader's feedback for this assignment",
             description_msgid = "help_feedback",
             i18n_domain = I18N_DOMAIN,
-            rows = 8,
+            rows = 7,
         ),
     ),
 
@@ -144,35 +145,22 @@ ECAssignmentSchema = ECAssignmentSchema + Schema((
 
 finalizeATCTSchema(ECAssignmentSchema)
 
-
 ##code-section after-schema #fill in your manual code here
 ##/code-section after-schema
 
 class ECAssignment(BaseContent, HistoryAwareMixin):
     """A submission to an assignment box"""
-    #__implements__ = (ATCTContent.__implements__,
-     #                 IATDocument,
-      #                HistoryAwareMixin.__implements__,
-       #              )
     security = ClassSecurityInfo()
 
     implements(interfaces.IECAssignment)
 
     meta_type = 'ECAssignment'
-    #dirty hack, just for debugging purposes
-    GradeAssignments    = 'eduComponents: Grade Assignments'
     _at_rename_after_creation = True
 
     schema = ECAssignmentSchema
 
     ##code-section class-header #fill in your manual code here
-    # meta_type = ECA_META
-    #archetype_name = ECA_NAME
-    #content_icon = "eca.png"
     global_allow = False
-
-    #default_view   = 'eca_view'
-    #immediate_view = 'eca_view'
 
     typeDescription = "A submission to an assignment box."
     typeDescMsgId = 'description_edit_eca'
@@ -180,6 +168,7 @@ class ECAssignment(BaseContent, HistoryAwareMixin):
     # work-around for indexing in a correct way
     isAssignmentBoxType = False
     isAssignmentType = True
+    
     ##/code-section class-header
 
     # Methods
@@ -189,7 +178,7 @@ class ECAssignment(BaseContent, HistoryAwareMixin):
         """
         BaseContent.manage_afterAdd(self, item, container)
         
-        wtool = self.portal_workflow
+        wtool = getToolByName(self, 'portal_workflow')
         assignments = self.contentValues(filter = {'Creator': item.Creator()})
         if assignments:
             for a in assignments:
@@ -203,14 +192,17 @@ class ECAssignment(BaseContent, HistoryAwareMixin):
         self.sendNotificationEmail()
     
     
+    security.declarePrivate('sendNotificationEmail')
     def sendNotificationEmail(self):
         """
         When this assignment is created, send a notification email to
         the owner of the assignment box, unless emailing is turned off.
         """
+        #log.debug('Here we are in ECAssignmentBox#sendNotificationEmail')
+
         box = self.aq_parent
         
-        # COMMENTED OUT FOR DEBUGGING PURPOSES, RAISES ATTRIBUTE ERROR, SOMETHING SEEMS TO BE WRONG WITH IMPORTS
+        # emailing is turned off by assignment box
         if not box.getSendNotificationEmail():
             return
 
@@ -221,19 +213,20 @@ class ECAssignment(BaseContent, HistoryAwareMixin):
         # 'en' is used as fallback language if default_language is not
         # set; this shouldn't normally happen
 
+        ecab_utils = getToolByName(self, 'ecab_utils')
+
         portal_language = getattr(site_properties, 'default_language', 'en')
         portal_qi = getToolByName(self, 'portal_quickinstaller')
         productVersion = portal_qi.getProductVersion(PROJECTNAME)
         
         submitterId   = self.Creator()
-        submitterName = self.ecab_utils.getFullNameById(submitterId)
-        submissionURL = self.ecab_utils.normalizeURL(self.absolute_url())
+        submitterName = ecab_utils.getFullNameById(submitterId)
+        submissionURL = ecab_utils.normalizeURL(self.absolute_url())
 
-        addresses = box.getNotificationEmailAddresses()
-        prefLang = box.getUserPropertyById(box.Creator(),
-                                                       'language')
-        if not prefLang:
-            prefLang = portal_language
+        #addresses = box.getNotificationEmailAddresses()
+        addresses = []
+        addresses.append(ecab_utils.getUserPropertyById(box.Creator(), 'email'))
+        prefLang = ecab_utils.getUserPropertyById(box.Creator(), 'language', portal_language)
         
         default_subject = '[${id}] Submission to "${box_title}" by ${student}'
         subject = self.translate(domain=I18N_DOMAIN,
@@ -259,9 +252,10 @@ class ECAssignment(BaseContent, HistoryAwareMixin):
                                            'version': productVersion},
                                   default=default_mailText)
 
-        self.ecab_utils.sendEmail(addresses, subject, mailText)
+        log.info('Sending notification email to: %s' % addresses)
+        ecab_utils.sendEmail(addresses, subject, mailText)
 
-
+    #security.declarePrivate('sendGradingNotificationEmail')
     def sendGradingNotificationEmail(self):
         """
         When this assignment is graded, send a notification email to
@@ -273,6 +267,8 @@ class ECAssignment(BaseContent, HistoryAwareMixin):
             return
 
         site_properties = self.portal_properties.site_properties
+        ecab_utils = getToolByName(self, 'ecab_utils', None)
+
         # 'en' is used as fallback language if default_language is not
         # set; this shouldn't normally happen
         portal_language = getattr(site_properties, 'default_language', 'en')
@@ -280,17 +276,13 @@ class ECAssignment(BaseContent, HistoryAwareMixin):
         productVersion = portal_qi.getProductVersion(PROJECTNAME)
         
         submitterId   = self.Creator()
-        submitterName = self.ecab_utils.getFullNameById(submitterId)
-        submissionURL = self.ecab_utils.normalizeURL(self.absolute_url())
+        submitterName = ecab_utils.getFullNameById(submitterId)
+        submissionURL = ecab_utils.normalizeURL(self.absolute_url())
 
         addresses = []
-        addresses.append(self.ecab_utils.getUserPropertyById(submitterId,
-                                                             'email'))
+        addresses.append(ecab_utils.getUserPropertyById(submitterId, 'email'))
         
-        prefLang = self.ecab_utils.getUserPropertyById(submitterId,
-                                                       'language')
-        if not prefLang:
-            prefLang = portal_language
+        prefLang = ecab_utils.getUserPropertyById(submitterId, 'language', portal_language)
 
         default_subject = 'Your submission to "${box_title}" has been graded'
         subject = self.translate(domain=I18N_DOMAIN,
@@ -317,31 +309,47 @@ class ECAssignment(BaseContent, HistoryAwareMixin):
                                            'version': productVersion},
                                   default=default_mailText)
 
-        self.ecab_utils.sendEmail(addresses, subject, mailText)
+        log.info('Sending grading notification email to %s' % addresses)
+        ecab_utils.sendEmail(addresses, subject, mailText)
 
 
-    # FIXME: deprecated, set security
+    #security.declarePublic('setField')
     def setField(self, name, value, **kw):
-        """Sets value of a field"""
+        """
+        FIXME: set security
+        @deprecated: Why?
+        Sets value of a field
+        """
         field = self.getField(name)
         field.set(self, value, **kw)
 
 
     security.declarePrivate('_generateTitle')
     def _generateTitle(self):
+        """
+        """
         #log("Title changed from '%s' to '%s'" % \
         #        (self.title, self.getCreatorFullName(),), severity=DEBUG)
         return self.getCreatorFullName()
 
 
-    # FIXME: set security
+    #security.declarePublic('getCreatorFullName')
     def getCreatorFullName(self):
-        #return util.getFullNameById(self, self.Creator())
-        return self.ecab_utils.getFullNameById(self.Creator())
+        """
+        FIXME: set security
+        """
+        ecab_utils = getToolByName(self, 'ecab_utils', None)
 
-    # EXPERIMENTAL
+        if ecab_utils:
+            return ecab_utils.getFullNameById(self.Creator())
+        else:
+            return self.Creator()
+
+    #security.declarePublic('get_data')
     def get_data(self):
         """
+        XXX:  EXPERIMENTAL
+        
         If wrapAnswer is set for the box, plain text entered in the
         text area is stored as one line per paragraph. For display
         inside a <pre> element it should be wrapped.
@@ -370,9 +378,11 @@ class ECAssignment(BaseContent, HistoryAwareMixin):
             return None
         
     
-    # FIXME: deprecated, use get_data or data in page templates
+    #security.declarePublic('getAsPlainText')
     def getAsPlainText(self):
         """
+        FIXME: deprecated, use get_data or data in page templates
+        
         Return the file contents as plain text.
         Cf. <http://www.bozzi.it/plone/>,
         <http://plone.org/Members/syt/PortalTransforms/user_manual>;
@@ -392,9 +402,6 @@ class ECAssignment(BaseContent, HistoryAwareMixin):
         else:
             return None
         
-        # FIXME: cut this for the moment because result of Word or PDF files 
-        #        looks realy ugly
-
         try:
             result = ptTool.convertTo('text/plain-pre', str(f.get(self)),
                                       mimetype=mt)
@@ -429,7 +436,9 @@ class ECAssignment(BaseContent, HistoryAwareMixin):
         
         @return string value of the given grade or nothing
         """
-        wtool = self.portal_workflow
+        wtool = getToolByName(self, 'portal_workflow')
+        ecab_utils = getToolByName(self, 'ecab_utils')
+        
         state = wtool.getInfoFor(self, 'review_state', '')
         
         currentUser = self.portal_membership.getAuthenticatedMember()
@@ -444,8 +453,7 @@ class ECAssignment(BaseContent, HistoryAwareMixin):
             try:
                 value = self.mark
                 prec = len(value) - value.find('.') - 1
-                result = self.ecab_utils.localizeNumber("%.*f",
-                                                        (prec, float(value)))
+                result = ecab_utils.localizeNumber("%.*f", (prec, float(value)))
             except ValueError:
                 result = self.mark
 
@@ -463,14 +471,15 @@ class ECAssignment(BaseContent, HistoryAwareMixin):
         @return string value of the given grade or nothing
         """
         wtool = self.portal_workflow
+        ecab_utils = getToolByName(self, 'ecab_utils')
+
         state = wtool.getInfoFor(self, 'review_state', '')
         
         if self.mark:
             try:
                 value = self.mark
                 prec = len(value) - value.find('.') - 1
-                result = self.ecab_utils.localizeNumber("%.*f",
-                                                        (prec, float(value)))
+                result = ecab_utils.localizeNumber("%.*f", (prec, float(value)))
             except ValueError:
                 result = self.mark
 
@@ -488,10 +497,14 @@ class ECAssignment(BaseContent, HistoryAwareMixin):
         
         @return string value of the given grade or nothing
         """
+        
         try:
             value = self.mark
             prec = len(value) - value.find('.') - 1
-            return self.ecab_utils.localizeNumber("%.*f", (prec, float(value)))
+            ecab_utils =  getToolByName(self, 'ecab_utils')
+            
+            return ecab_utils.localizeNumber("%.*f", (prec, float(value)))
+        
         except ValueError:
             return self.mark
 
@@ -522,6 +535,7 @@ class ECAssignment(BaseContent, HistoryAwareMixin):
         
         @return list of user and/or group names
         """
+        ecab_utils = getToolByName(self, 'ecab_utils')
         principalIds = self.users_with_local_role('ECAssignment Viewer')
         names = []
         
@@ -529,7 +543,7 @@ class ECAssignment(BaseContent, HistoryAwareMixin):
             if self.portal_groups.getGroupById(id):
                 names.append(self.portal_groups.getGroupById(id).getGroupName())
             else:
-                names.append(self.ecab_utils.getFullNameById(id))
+                names.append(ecab_utils.getFullNameById(id))
 
         return names
 

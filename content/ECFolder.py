@@ -22,6 +22,7 @@
 #
 __author__ = """Mario Amelung <mario.amelung@gmx.de>"""
 __docformat__ = 'plaintext'
+__version__   = '$Revision$'
 
 from AccessControl import ClassSecurityInfo
 from Products.Archetypes.atapi import *
@@ -36,6 +37,10 @@ from Products.ATContentTypes.content.folder import ATFolderSchema
 from Products.ECAssignmentBox.config import *
 
 ##code-section module-header #fill in your manual code here
+
+import logging
+log = logging.getLogger('ECAssignmentBox')
+
 ##/code-section module-header
 
 schema = Schema((
@@ -91,8 +96,7 @@ schema = Schema((
 ##code-section after-local-schema #fill in your manual code here
 ##/code-section after-local-schema
 
-ECFolder_schema = ATFolderSchema.copy() + \
-    schema.copy()
+ECFolder_schema = ATFolderSchema.copy() + schema.copy()
 
 ##code-section after-schema #fill in your manual code here
 ##/code-section after-schema
@@ -116,10 +120,19 @@ class ECFolder(ATFolder):
     #security.declarePrivate('getWfStatesDisplayList')
     def getWfStatesDisplayList(self):
         """
-        @deprecated use getWfStatesDisplayList in ecab_utils instead
+        @deprecated use getWfStatesDisplayList in ecab_utils directly
         """
-        utils = self.ecab_utils
-        return utils.getWfStatesDisplayList(ECA_WORKFLOW_ID)
+#        try:
+#            utils = getToolByName(self, 'ecab_utils')
+#            return utils.getWfStatesDisplayList(ECA_WORKFLOW_ID)
+#        except AttributeError:
+#            return DisplayList(())
+        ecab_utils = getToolByName(self, 'ecab_utils', None)
+        
+        if (ecab_utils != None):
+            return ecab_utils.getWfStatesDisplayList(ECA_WORKFLOW_ID)
+        else:
+            return DisplayList(())
 
     
     security.declarePublic('summarize')
@@ -241,7 +254,7 @@ class ECFolder(ATFolder):
             
             grades = item.getGradesByStudent()
             
-            #log('xxx: %s: %s' % (item.title, grades, ))
+            #log.debug('xxx: %s: %s' % (item.title, grades, ))
 
             # No grades were assigned--no problem.
             if grades == {}:
@@ -313,22 +326,30 @@ class ECFolder(ATFolder):
         return retval
 
 
-    #security.declarePrivate('getWfStates')
+    security.declarePublic('getWfStates')
     def getWfStates(self):
         """
-        @deprecated use getWfStates in ecab_utils instead
+        @deprecated use getWfStates in ecab_utils directly
         """
-        utils = self.ecab_utils
-        return utils.getWfStates(ECA_WORKFLOW_ID)
+        ecab_utils = getToolByName(self, 'ecab_utils', None)
+        
+        if (ecab_utils != None):
+            return ecab_utils.getWfStates(ECA_WORKFLOW_ID)
+        else:
+            return ()
 
 
-    #security.declarePrivate('getWfTransitionsDisplayList')
+    security.declarePublic('getWfTransitionsDisplayList')
     def getWfTransitionsDisplayList(self):
         """
-        @deprecated use getWfTransitionsDisplayList in ecab_utils instead
+        @deprecated use getWfTransitionsDisplayList in ecab_utils directly
         """
-        utils = self.ecab_utils
-        return utils.getWfTransitionsDisplayList(ECA_WORKFLOW_ID)
+        ecab_utils = getToolByName(self, 'ecab_utils', None)
+        
+        if (ecab_utils != None):
+            return ecab_utils.getWfTransitionsDisplayList(ECA_WORKFLOW_ID)
+        else:
+            return DisplayList(())
 
 
     security.declarePublic('countContainedBoxes')

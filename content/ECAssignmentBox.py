@@ -22,6 +22,7 @@
 #
 __author__ = """Mario Amelung <mario.amelung@gmx.de>"""
 __docformat__ = 'plaintext'
+__version__   = '$Revision$'
 
 from AccessControl import ClassSecurityInfo
 from Products.Archetypes.atapi import *
@@ -34,22 +35,18 @@ from Products.ATContentTypes.content.folder import ATFolder
 from Products.ATContentTypes.content.folder import ATFolderSchema
 from Products.ECAssignmentBox.config import *
 
-from DateTime import DateTime
-
 from Products.CMFCore.utils import getToolByName
 
 from Products.ATContentTypes.content.base import registerATCT
 from Products.ATContentTypes.content.schemata import finalizeATCTSchema
-from Products.ATReferenceBrowserWidget.ATReferenceBrowserWidget \
-     import ReferenceBrowserWidget
-
-# local imports
-from Statistics import Statistics
-#from PlainTextField import PlainTextField
+from Products.ATReferenceBrowserWidget.ATReferenceBrowserWidget import ReferenceBrowserWidget
 
 ##code-section module-header #fill in your manual code here
+from DateTime import DateTime
+from Statistics import Statistics
+
 import logging
-logger = logging.getLogger('ECAssignmentBox')
+log = logging.getLogger('ECAssignmentBox')
 ##/code-section module-header
 
 #ECAssignmentBox_schema = BaseBTreeFolderSchema.copy() + Schema((
@@ -428,10 +425,11 @@ class ECAssignmentBox(ATFolder):
             return []
 
         putils = getToolByName(self, 'plone_utils')
+        ecab_utils = getToolByName(self, 'ecab_utils')
 
         addresses = []
-        addresses.append(context.ecab_utils.getUserPropertyById(
-                                         putils.getOwnerName(self), 'email'))
+        addresses.append(ecab_utils.getUserPropertyById(
+                                        putils.getOwnerName(self), 'email'))
 
         return addresses
 
