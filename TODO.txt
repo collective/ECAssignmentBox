@@ -1,0 +1,21 @@
+<!-- -*- coding: utf-8 -*- -->
+
+# Todos for release 1.4 (2008-12-04)
+
+- Email notification on workflow transition 'grade' and notification
+  for box creators is still untested.  
+
+- The action/button 'set assignment box options' on ECFolder's content
+  tab is still missing.  That means it's not possible to modify the
+  submission period and other settings for more than one assignment box
+  at a time.
+
+- Migration of 'ECAssignmentBox' content from Plone 2.x has not been 
+  tested.
+
+- Collapsible box for direction text in 'ECAssignmentBox' and 
+  assignment text in 'ECAssignment' cannot be expanded.
+
+- 'ECAssignmentTask' have not been integrated.
+
+- The more experimental 'PlagDetector' have not been integrated.
