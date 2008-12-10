@@ -1,30 +1,43 @@
 # -*- coding: utf-8 -*-
+# $Id$
 #
-# File: setuphandlers.py
+# Copyright (c) 2006-2008 Otto-von-Guericke-Universität Magdeburg
 #
-# Copyright (c) 2008 by []
-# Generator: ArchGenXML Version 2.1
-#            http://plone.org/products/archgenxml
+# This file is part of ECAssignmentBox.
 #
-# GNU General Public License (GPL)
+# ECAssignmentBox is free software; you can redistribute it and/or 
+# modify it under the terms of the GNU General Public License as 
+# published by the Free Software Foundation; either version 2 of the 
+# License, or (at your option) any later version.
 #
-
-__author__ = """unknown <unknown>"""
+# ECAssignmentBox is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with ECAssignmentBox; if not, write to the 
+# Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, 
+# MA  02110-1301  USA
+#
+__author__ = """Mario Amelung <mario.amelung@gmx.de>"""
 __docformat__ = 'plaintext'
+__version__   = '$Revision$'
 
-
+import os
+import transaction
 import logging
-logger = logging.getLogger('ECAssignmentBox: setuphandlers')
+log = logging.getLogger('ECAssignmentBox: setuphandlers')
+
 from Products.ECAssignmentBox.config import PROJECTNAME
 from Products.ECAssignmentBox.config import DEPENDENCIES
-import os
 from Products.CMFCore.utils import getToolByName
-import transaction
 ##code-section HEAD
 ##/code-section HEAD
 
 def isNotECAssignmentBoxProfile(context):
     return context.readDataFile("ECAssignmentBox_marker.txt") is None
+
 
 def setupHideToolsFromNavigation(context):
     """hide tools"""
@@ -46,6 +59,7 @@ def setupHideToolsFromNavigation(context):
                 kwargs = {'idsNotToList': current}
                 navtreeProperties.manage_changeProperties(**kwargs)
 
+
 def fixTools(context):
     """do post-processing on auto-installed tool instances"""
     if isNotECAssignmentBoxProfile(context): return 
@@ -55,7 +69,6 @@ def fixTools(context):
 	    if hasattr(site, tool_id):
 	        tool=site[tool_id]
 	        tool.initializeArchetype()
-
 
 
 def updateRoleMappings(context):
@@ -70,8 +83,63 @@ def postInstall(context):
     """Called as at the end of the setup process. """
     # the right place for your custom code
     if isNotECAssignmentBoxProfile(context): return 
-    site = context.getSite()
 
+    reindexIndexes(context)
 
 ##code-section FOOT
+
+def installGSDependencies(context):
+    """Install dependend profiles."""
+    
+    if isNotECAssignmentBoxProfile(context): return 
+    # Has to be refactored as soon as generic setup allows a more 
+    # flexible way to handle dependencies.
+    
+    return
+
+
+def installQIDependencies(context):
+    """Install dependencies"""
+    if isNotECAssignmentBoxProfile(context): return 
+
+    site = context.getSite()
+
+    portal = getToolByName(site, 'portal_url').getPortalObject()
+    quickinstaller = portal.portal_quickinstaller
+    for dependency in DEPENDENCIES:
+        log.info('Installing dependency %s:' % dependency)
+        quickinstaller.installProduct(dependency)
+        transaction.savepoint() 
+
+
+def reindexIndexes(context):
+    """Reindex some indexes.
+
+    Indexes that are added in the catalog.xml file get cleared
+    everytime the GenericSetup profile is applied.  So we need to
+    reindex them.
+
+    Since we are forced to do that, we might as well make sure that
+    these get reindexed in the correct order.
+    """
+    if isNotECAssignmentBoxProfile(context): return 
+
+    site = context.getSite()
+
+    pc = getToolByName(site, 'portal_catalog')
+    indexes = [
+        'isAssignmentBoxType',
+        'isAssignmentType',
+        'getRawAssignment_reference',
+        'getRawRelatedItems',
+        'review_state',
+        ]
+    # Don't reindex an index if it isn't actually in the catalog.
+    # Should not happen, but cannot do any harm.
+    ids = [id for id in indexes if id in pc.indexes()]
+    if ids:
+        pc.manage_reindexIndex(ids=ids)
+    
+    log.info('Reindexed %s' % indexes)
+
 ##/code-section FOOT
