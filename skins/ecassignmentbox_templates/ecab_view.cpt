@@ -84,7 +84,7 @@
         </a>
 
         <!-- show a collapsible box with the directions text from ecfolder -->
-        <dl class="collapsible inline collapsedInlineCollapsible"
+        <dl class="collapsible inline collapsedOnLoad"
             tal:define="parent nocall:here/aq_parent;"
             tal:condition="python: hasattr(parent, 'directions') and parent.directions"
         >

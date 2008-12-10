@@ -64,16 +64,15 @@
       </a>
 
       <!-- display assignmentbox text in a collapsible box-->
-      <dl class="collapsible collapsedBlockCollapsible"
-	tal:define="reference python: here.aq_parent.getReference();">
+      <dl class="collapsible inline collapsedOnLoad"
+	      tal:define="reference python: here.aq_parent.getReference();">
         <dt class="collapsibleHeader"
-	  i18n:translate="assignment_text">Assignment text</dt>
+	        i18n:translate="assignment_text">Assignment text</dt>
         <dd class="collapsibleContent">
           <div class="documentDescription"
-	    tal:content="structure here/aq_parent/Description"
-	    tal:condition="here/aq_parent/Description"/>
-	  <div tal:replace="structure reference/getAssignment_text
-	    | here/aq_parent/getAssignment_text"/>
+	           tal:content="structure here/aq_parent/Description"
+	           tal:condition="here/aq_parent/Description"/>
+	      <div tal:replace="structure reference/getAssignment_text | here/aq_parent/getAssignment_text"/>
         </dd>
       </dl>
 
@@ -117,7 +116,7 @@
     <metal:define define-macro="user_details">
       <div tal:condition="userName">
     <img src="ec_userinfo.png"/>
-    <dl class="collapsible inline collapsedInlineCollapsible">
+    <dl class="collapsible inline collapsedOnLoad">
       <dt class="collapsibleHeader"
         i18n:translate="label_student_details">Student details</dt>
       <dd class="collapsibleContent">
