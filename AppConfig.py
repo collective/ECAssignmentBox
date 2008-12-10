@@ -22,6 +22,7 @@
 #
 __author__ = """Mario Amelung <mario.amelung@gmx.de>"""
 __docformat__ = 'plaintext'
+__version__   = '$Revision$'
 
 try: # New CMF 
     from Products.CMFCore import permissions
@@ -39,7 +40,6 @@ DEPENDENCIES = []
 
 # names and titles
 ECA_WORKFLOW_ID = 'ec_assignment_workflow'
-WORKFLOW_SCRIPTS = ['notify_students',]
 
 # supported mime types for textfields
 #EC_MIME_TYPES = ('text/x-web-intelligent',)
@@ -55,11 +55,9 @@ EC_DEFAULT_MIME_TYPE = 'text/plain'
 #EC_DEFAULT_FORMAT = 'text/html'
 EC_DEFAULT_FORMAT = 'text/x-html-safe'
 
-# define default permissions
-#View                      = CMFCorePermissions.View
-#ModifyPortalContent       = CMFCorePermissions.ModifyPortalContent
-#AccessContentsInformation = CMFCorePermissions.AccessContentsInformation
-
 # extra permissions
 GradeAssignments = 'eduComponents: Grade Assignments'
 permissions.setDefaultRoles(GradeAssignments,  ('Manager',))
+
+ViewAssignments = 'eduComponents: View Assignments'
+permissions.setDefaultRoles(ViewAssignments,  ('Manager',))

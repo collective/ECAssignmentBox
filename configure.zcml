@@ -1,7 +1,6 @@
 <configure xmlns="http://namespaces.zope.org/zope" 
            xmlns:browser="http://namespaces.zope.org/browser" 
-           xmlns:five="http://namespaces.zope.org/five"
-           i18n_domain="eduComponents"> 
+           xmlns:five="http://namespaces.zope.org/five"> 
   
   <include file="profiles.zcml" />
 
@@ -12,8 +11,11 @@
   
   <!-- local roles managed in the @@sharing view -->
   <utility name="ECAssignment Grader"
-      factory=".sharing.ECAssignmentResultGraderRole" />
+      factory=".sharing.ECAssignmentGraderRole" />
 
+  <utility name="ECAssignment Viewer"
+      factory=".sharing.ECAssignmentViewerRole" />
+  
   <!-- ##/code-section configure.zcml -->
 
 </configure>
