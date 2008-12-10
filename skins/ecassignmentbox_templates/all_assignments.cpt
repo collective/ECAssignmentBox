@@ -112,8 +112,9 @@
   
             <!-- start showing folder title and items -->
             <tal:contain define="
-                    item  nocall: here; 
-                    level python: 1;"
+                    item              nocall:here; 
+                    level             python:1;
+                    maxRecursionDepth python:42;"
             >
             
               <!--  debug 
@@ -135,6 +136,10 @@
             -->
             <tal:hidemacro replace="nothing">
               <metal:macro define-macro="list">
+
+                <!--  debug 
+                <div tal:content="nocall:item" />
+                -->
               
                 <!-- is current item an assignment box (e.g., ECAB or ECAAB)? -->
                 <tal:if condition="python: ecab_utils.testAssignmentBoxType(item)">
@@ -241,12 +246,18 @@
                            tal:content="item_title"/>
                       </h4>
                       
-                      <metal:recurse tal:define="item  brain;
-                                                 level python: level + 1;"
+                      <metal:recurse tal:define="item  nocall:brain;
+                                                 level python:level + 1;"
                       >
 
+                        <!--  debug
+                        <div tal:content="string:level:$level" />
+                        <div tal:content="string:maxRecursionDepth:$maxRecursionDepth" />
+                        -->
+
                         <!-- process next item -->                      
-                        <div class="visualIconPadding">
+                        <div class="visualIconPadding"
+                             tal:condition="python: level &lt; maxRecursionDepth">
                           <div metal:use-macro="template/macros/list"/>
                         </div>
                       </metal:recurse>
@@ -254,7 +265,7 @@
                     </tal:block>
                   </div>
 
-                  <hr tal:condition="python: level > 1" />
+                  <hr tal:condition="python: level &gt; 1" />
                 </tal:if>
 
               </metal:macro>
