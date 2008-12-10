@@ -22,6 +22,7 @@
 #
 __author__ = """Mario Amelung <mario.amelung@gmx.de>"""
 __docformat__ = 'plaintext'
+__version__   = '$Revision$'
 
 ##code-section init-module-header #fill in your manual code here
 ##/code-section init-module-header
