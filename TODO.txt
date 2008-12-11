@@ -16,6 +16,6 @@
 - Collapsible box for direction text in 'ECAssignmentBox' and 
   assignment text in 'ECAssignment' cannot be expanded.
 
-- 'ECAssignmentTask' have not been integrated.
+- 'ECAssignmentTask' has not been integrated.
 
-- The more experimental 'PlagDetector' have not been integrated.
+- The more experimental 'PlagDetector' has not been integrated.
