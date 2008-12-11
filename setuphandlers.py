@@ -107,9 +107,14 @@ def installQIDependencies(context):
     portal = getToolByName(site, 'portal_url').getPortalObject()
     quickinstaller = portal.portal_quickinstaller
     for dependency in DEPENDENCIES:
-        log.info('Installing dependency %s:' % dependency)
-        quickinstaller.installProduct(dependency)
-        transaction.savepoint() 
+        if quickinstaller.isProductInstalled(dependency):
+            log.info('Reinstalling dependency %s:' % dependency)
+            quickinstaller.reinstallProducts([dependency])
+            transaction.savepoint()
+        else:
+            log.info('Installing dependency %s:' % dependency)
+            quickinstaller.installProduct(dependency)
+            transaction.savepoint()
 
 
 def reindexIndexes(context):
