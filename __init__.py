@@ -36,6 +36,7 @@ import logging
 log = logging.getLogger('ECAssignmentBox')
 log.debug('Installing Product')
 
+import sys
 import os
 import os.path
 from Globals import package_home
@@ -47,10 +48,19 @@ from Products.CMFCore import DirectoryView
 from Products.CMFCore import permissions as cmfpermissions
 from Products.CMFCore import utils as cmfutils
 from Products.CMFPlone.utils import ToolInit
-from config import *
+
+from Products.ECAssignmentBox import content
+from Products.ECAssignmentBox import tool
+from Products.ECAssignmentBox.config import *
 
 DirectoryView.registerDirectory('skins', product_globals)
 
+# this will help to migrate assignment boxes 
+# created with version 1.3 or earlier 
+sys.modules['Products.ECAssignmentBox.ECFolder'] = content.ECFolder
+sys.modules['Products.ECAssignmentBox.ECAssignmentBox'] = content.ECAssignmentBox
+sys.modules['Products.ECAssignmentBox.ECAssignment'] = content.ECAssignment
+sys.modules['Products.ECAssignmentBox.ECABTool'] = tool.ECABTool
 
 ##code-section custom-init-head #fill in your manual code here
 ##/code-section custom-init-head
