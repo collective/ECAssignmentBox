@@ -46,17 +46,15 @@
                 tal:omit-tag="" />
         </h1>
 
-        <a class="link-parent visualNoPrint"
-           tal:define="
-              parent     python: here.aq_parent;
-              template   python: (parent.getTypeInfo().listActionInfos('object/'+template_id) or '') and parent.getTypeInfo().getActionInfo(['object/'+template_id])['url'];
-              parent_url python:here.navigationParent(here, fallThroughDefaultPage=False)"
-           tal:condition="parent_url"
-           tal:attributes="href python: '%s/%s' % (parent_url, template)"
-           i18n:domain="plone"
-           i18n:translate="go_to_parent_url">
-          Up one level
-        </a>
+         <a class="link-parent visualNoPrint"
+         href=""
+         tal:define="parent_url python:here.navigationParent(here, template_id)"
+         tal:condition="parent_url"
+         tal:attributes="href python: '%s/%s' % (parent_url, 'by_student')"
+         i18n:domain="plone"
+         i18n:translate="go_to_parent_url">
+        Up one level
+      </a>
 
         <p>
           <b i18n:translate="label_n_boxes">Published assignment boxes inside this folder:</b>
