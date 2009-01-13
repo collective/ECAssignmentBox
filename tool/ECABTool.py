@@ -48,6 +48,7 @@ from Products.CMFCore.utils import getToolByName
 from email.MIMEText import MIMEText
 from email.Header import Header
 
+from zLOG import LOG, INFO, ERROR
 
 import logging
 log = logging.getLogger('ECAssignmentBox')
@@ -201,7 +202,7 @@ class ECABTool(UniqueObject, BaseContent, BrowserDefaultMixin):
         Doo, John; otherwise we will return 'fullname' as provided by Plone. 
         """
         #log.debug('Here we are in ECABTool#getFullNameById')
-
+    
         mtool = self.portal_membership
         member = mtool.getMemberById(id)
         error = False
@@ -213,13 +214,10 @@ class ECABTool(UniqueObject, BaseContent, BrowserDefaultMixin):
             sn        = member.getProperty('sn')
             givenName = member.getProperty('givenName')
 
-            #log.info('xxx_sn: %s' % str(sn))
-            #log.info('xxx_gn: %s' % str(givenName))
         except:
             error = True
 
         if error or (not sn) or (not givenName):
-            # return fullname
             fullname = member.getProperty('fullname', '')
 
             if fullname == '':
@@ -235,7 +233,8 @@ class ECABTool(UniqueObject, BaseContent, BrowserDefaultMixin):
             
         else:
             #return sn + ', ' + givenName
-            return '%s %s' % (givenName, sn, )
+           # print 'givenName, sn: %s, %s' % (givenName, sn, )
+            return '%s, %s' % (sn, givenName)
 
 
     security.declarePublic('getUserPropertyById')
