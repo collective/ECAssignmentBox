@@ -1,6 +1,6 @@
 <!-- -*- coding: utf-8 -*- -->
 
-# Todos for release 1.4 (2008-12-04)
+# Todos for release 1.4
 
 - Email notification on workflow transition 'grade' and notification
   for box creators is still untested.  
@@ -11,10 +11,10 @@
   at a time.
 
 - Migration of 'ECAssignmentBox' content from Plone 2.x has not been 
-  tested.
+  tested extensively.
 
-- Collapsible box for direction text in 'ECAssignmentBox' and 
-  assignment text in 'ECAssignment' cannot be expanded.
+
+# Todos for release 1.5
 
 - 'ECAssignmentTask' has not been integrated.
 

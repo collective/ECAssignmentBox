@@ -8,31 +8,30 @@ Overview
 
 Download
 
-  * "Project page":http://wdok.cs.uni-magdeburg.de/software/
-
-  * "plone.org products page":http://plone.org/products/ecassignmentbox
+  * "plone.org products page":http://plone.org/products/ecassignmentbox/
 
 Prerequisites
 
- To use ECAssignmentBox you need a Plone 2.1.x or 2.5 installation.
- Check "plone.org":http://plone.org/products/plone for Plone's
- prerequisites.
+  To use ECAssignmentBox you need a current Plone installation, 
+  specifically Plone 3.x.  Check 
+  "plone.org":http://plone.org/products/plone for Plone's 
+  prerequisites.
 
 Installation
 
- If you have a suitable Zope/Plone installation, you can install
- ECAssignmentBox as follows:
+  If you have a suitable Zope/Plone installation (not using 
+  build-outs), you can install ECAssignmentBox as follows:
 
- 1. Extract the archive into the 'Products' directory of your Zope
-    instance. (You can find out where your Zope instance is installed
-    by opening the Zope Management Interface (ZMI) and going to the
-    Control Panel; the directory listed as 'INSTANCE_HOME' is what
-    you're looking for.)
+  1. Extract the archive into the 'Products' directory of your Zope
+     instance. (You can find out where your Zope instance is installed
+     by opening the Zope Management Interface (ZMI) and going to the
+     Control Panel; the directory listed as 'INSTANCE_HOME' is what
+     you're looking for.)
 
- 2. Restart Zope
+  2. Restart Zope
 
- 3. Use the 'portal_quickinstaller' of your Plone site in which you
-    want to use ECAssignmentBox.
+  3. Use the 'portal_quickinstaller' of your Plone site in which you
+     want to use ECAssignmentBox.
 
 Support
 
@@ -62,25 +61,28 @@ Credits
   are licensed under a "Creative Commons Attribution 2.5
   License":http://creativecommons.org/licenses/by/2.5/.
 
+  ECAssignmentBox was ported to Plone 3 by the Eudemonia Solutions AG 
+  with support from 
+  "Katrin Krieger":http://wdok.cs.uni-magdeburg.de/Members/kkrieger/ 
+  and the Otto-von-Guericke University of Magdeburg.
+
 License
 
- ECAssignmentBox is licensed under the
- "GPL":http://opensource.org/licenses/gpl-license.
+  ECAssignmentBox is licensed under the
+  "GPL":http://opensource.org/licenses/gpl-license.
 
- Copyright © 2007 Otto-von-Guericke-Universität Magdeburg
+  Copyright © 2007 Otto-von-Guericke-Universität Magdeburg
 
- ECAssignmentBox is free software; you can redistribute it and/or modify
- it under the terms of the GNU General Public License as published by
- the Free Software Foundation; either version 2 of the License, or
- (at your option) any later version.
+  ECAssignmentBox is free software; you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation; either version 2 of the License, or
+  (at your option) any later version.
 
- ECAssignmentBox is distributed in the hope that it will be useful,
- but WITHOUT ANY WARRANTY; without even the implied warranty of
- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- GNU General Public License for more details.
+  ECAssignmentBox is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
 
- You should have received a copy of the GNU General Public License
- along with ECAssignmentBox; if not, write to the Free Software
- Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-
-
+  You should have received a copy of the GNU General Public License
+  along with ECAssignmentBox; if not, write to the Free Software
+  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
