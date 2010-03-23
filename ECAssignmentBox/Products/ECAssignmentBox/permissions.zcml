@@ -1,0 +1,10 @@
+<configure xmlns="http://namespaces.zope.org/zope"
+    i18n_domain="eduComponents">
+
+    <permission id="eduComponents.GradeAssignments"
+        title="eduComponents: Grade Assignments" />
+
+    <permission id="eduComponents.ViewAssignments"
+        title="eduComponents: View Assignments" />
+
+</configure>

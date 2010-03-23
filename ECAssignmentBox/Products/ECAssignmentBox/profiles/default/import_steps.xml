@@ -1,0 +1,64 @@
+<?xml version="1.0"?>
+<import-steps>
+
+ <import-step 
+    id="ECAssignmentBox-Hide-Tools-From-Navigation" 
+    handler="Products.ECAssignmentBox.setuphandlers.setupHideToolsFromNavigation"
+    title="Hide Custom tools from Navigation for ECAssignmentBox"
+    version="2008-09-08T09:13:15.015472">
+   <dependency step="ECAssignmentBox-QI-dependencies"/>
+   Hides custom tools from navigation tree for ECAssignmentBox
+ </import-step>
+
+ <import-step 
+    id="ECAssignmentBox-Fix-Tools" 
+    handler="Products.ECAssignmentBox.setuphandlers.fixTools"
+    title="Fix tools for ECAssignmentBox"
+    version="2008-09-08T09:13:15.015472">
+   <dependency step="ECAssignmentBox-QI-dependencies"/>
+   call initializeArchetyps for tools in ECAssignmentBox
+ </import-step>
+ 
+ 
+ <import-step 
+    id="ECAssignmentBox-Update-RoleMappings" 
+    handler="Products.ECAssignmentBox.setuphandlers.updateRoleMappings"
+    title="Update Workflow role mappings for ECAssignmentBox"
+    version="2008-09-08T09:13:15.015472">
+   <dependency step="ECAssignmentBox-QI-dependencies"/>
+   updates the workflow role mappings for ECAssignmentBox
+ </import-step>
+
+ <import-step 
+    id="ECAssignmentBox-postInstall" 
+    handler="Products.ECAssignmentBox.setuphandlers.postInstall"
+    title="Manual coded post-install for ECAssignmentBox"
+    version="2008-09-08T09:13:15.015472">
+   <dependency step="ECAssignmentBox-QI-dependencies"/>
+   manual coded post-install for ECAssignmentBox
+ </import-step>
+
+<!-- ##code-section ADDITIONALSTEPS -->
+
+ <import-step 
+    id="ECAssignmentBox-GS-dependencies" 
+    handler="Products.ECAssignmentBox.setuphandlers.installGSDependencies"
+    title="Dependend GS profiles for ECAssignmentBox"
+    version="2008-102-6T10:42:15.000000">
+   <dependency step="plone-final"/>
+   install Generic Setup profile dependencies for ECAssignmentBox
+ </import-step>
+
+ <import-step 
+    id="ECAssignmentBox-QI-dependencies" 
+    handler="Products.ECAssignmentBox.setuphandlers.installQIDependencies"
+    title="Dependend QI installables for ECAssignmentBox"
+    version="2008-10-26T10:42:16.000000">
+   <dependency step="ECAssignmentBox-GS-dependencies"/>
+   install quickinstaller dependencies for ECAssignmentBox
+ </import-step>
+
+<!-- ##/code-section ADDITIONALSTEPS --> 
+
+</import-steps>
+ 
