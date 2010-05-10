@@ -61,3 +61,4 @@
 
 - Performance improvements: We are now using portal_catalog where
   possible.
+  .
