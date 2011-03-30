@@ -16,48 +16,41 @@
 
     <metal:main fill-slot="main">
       <tal:main-macro metal:define-macro="main"
-          define="global ecab_utils nocall: portal/ecab_utils;
-                  permission        python: modules['AccessControl'].getSecurityManager().checkPermission;
-                  isOwner           python: user.has_role(['Owner', 'Reviewer', 'Manager'], context);
-                  isGrader          python: here.portal_membership.checkPermission('eduComponents: Grade Assignments', context);
-                  resFlt            python: {'user_id':request.get('user_id', None), 
-                                             'state':request.get('state', None), 
-                                             'show_superseded':request.get('show_superseded', None),
-                                             'show_full_text':request.get('show_full_text', None), };
-                  resFlt2           python: dict([(k,v) for k,v in resFlt.items() if v is not None]);
-                  userName          python: resFlt['user_id'];
-                  statesToShow      python: ecab_utils.getStatesToShow(resFlt['show_superseded'], resFlt['state']);
-                  mkUrl             python: lambda d : '%s/%s?%s' % (here.absolute_url(), template.getId(), ecab_utils.urlencode(dict(resFlt2.items() + d.items())));"
-      >
+          condition="python:hasattr(here, 'countContainedBoxes')">
       
         <!--  debug 
         <div tal:content="python: 'showSuperseded:%s' % resFlt['show_superseded']" />
         <div tal:content="python: 'mkUrl:%s' % mkUrl({})" />
         <div tal:content="string: resFlt:$resFlt" />
         -->
-      
-        <div metal:use-macro="here/document_actions/macros/document_actions" />
+
+        <div tal:replace="structure provider:plone.documentactions" />
     
-        <div tal:define="global has_items python: 0;">
+        <div tal:define="global has_items python:0;
+                  template_id  template/getId;
+                  ecab_utils   nocall:context/ecab_utils;
+                  permission   python:modules['AccessControl'].getSecurityManager().checkPermission;
+                  isOwner      python:user.has_role(['Owner', 'Reviewer', 'Manager'], context);
+                  isGrader     python:here.portal_membership.checkPermission('eduComponents: Grade Assignments', context);
+                  resFlt       python:{'user_id':request.get('user_id', None), 
+                                       'state':request.get('state', None), 
+                                       'show_superseded':request.get('show_superseded', None),
+                                       'show_full_text':request.get('show_full_text', None), };
+                  resFlt2      python:dict([(k,v) for k,v in resFlt.items() if v is not None]);
+                  userName     python:resFlt['user_id'];
+                  statesToShow python:ecab_utils.getStatesToShow(resFlt['show_superseded'], resFlt['state']);
+                  mkUrl        python:lambda d : '%s/%s?%s' % (here.absolute_url(), template.getId(), ecab_utils.urlencode(dict(resFlt2.items() + d.items())));"
+        >
 
           <metal:use use-macro="here/all_assignments_macros/macros/all_assignments_heading" />
           
-          <a class="link-parent visualNoPrint"
-              tal:define="parent     python: here.aq_parent;
-                          template   python: parent.getTypeInfo().getActionInfo(['object/view'])['url'];
-                          parent_url python: here.navigationParent(here, fallThroughDefaultPage=False)"
-              tal:condition="parent_url"
-              tal:attributes="href python: '%s/%s' % (parent_url, template)"
-              i18n:domain="plone"
-              i18n:translate="go_to_parent_url">
-            Up one level
-          </a>
-
+          <metal:use use-macro="here/base_macros/macros/up_one_level" />
+          
           <p tal:condition="python: not ecab_utils.testAssignmentBoxType(here)">
             <b i18n:translate="label_n_boxes">
               Published assignment boxes inside this folder:
             </b>
-            <span tal:omit-tag="" tal:content="here/countContainedBoxes"/>
+            <span tal:omit-tag="" tal:content="python:here.countContainedBoxes()"/>
           </p>
 
           <metal:use use-macro="here/base_macros/macros/user_details" />
@@ -73,9 +66,7 @@
                      type="submit"
                      name="form.button.ToggleFullText"
                      value="Show submission text"
-                     tabindex=""
                      i18n:attributes="value"
-                     tal:attributes="tabindex tabindex/next;"
                      tal:condition="python: not resFlt['show_full_text']"
               />
 
@@ -83,9 +74,7 @@
                      type="submit"
                      name="form.button.ToggleFullText"
                      value="Hide submission text"
-                     tabindex=""
                      i18n:attributes="value"
-                     tal:attributes="tabindex tabindex/next;"
                      tal:condition="python: resFlt['show_full_text']"
               />
 
@@ -93,9 +82,7 @@
                      type="submit"
                      name="form.button.ToggleSuperseded"
                      value="Show superseded"
-                     tabindex=""
                      i18n:attributes="value"
-                     tal:attributes="tabindex tabindex/next;"
                      tal:condition="python: not resFlt['show_superseded']"
               />
   
@@ -103,9 +90,7 @@
                      type="submit"
                      name="form.button.ToggleSuperseded"
                      value="Hide superseded"
-                     tabindex=""
                      i18n:attributes="value"
-                     tal:attributes="tabindex tabindex/next;"
                      tal:condition="python: resFlt['show_superseded']"
               />
             </div>
@@ -123,161 +108,9 @@
               -->
                           
               <!-- start searching all child folders -->
-			  <div metal:use-macro="template/macros/list" /> 
-  
+              <div metal:use-macro="here/all_assignments_macros/macros/list_all_assignments" />
+
             </tal:contain> 
-
-            <!-- 
-              This macro searches recursivly through all items inside 
-              the current folder.
-            
-              @param item current folder
-              @param level current level (means depth) 
-            -->
-            <tal:hidemacro replace="nothing">
-              <metal:macro define-macro="list">
-
-                <!--  debug 
-                <div tal:content="nocall:item" />
-                -->
-                              
-                <!-- is current item an assignment box (e.g., ECAB or ECAAB)? -->
-                <tal:if condition="python: ecab_utils.testAssignmentBoxType(item)">
-
-                  <tal:define define="
-                          path   python: (hasattr(item, 'getPath') and item.getPath()) or '/'.join(item.getPhysicalPath());
-                          brains python: (userName and here.portal_catalog.searchResults(path = dict(query=path,depth=1), 
-                                                                           sort_on = 'getObjPositionInParent', 
-                                                                           review_state = statesToShow, 
-                                                                           isAssignmentType = True,
-                                                                           Creator = userName, ))
-                                         or 
-                                         (not userName and here.portal_catalog.searchResults(path = dict(query=path,depth=1),
-                                                                           sort_on = 'getObjPositionInParent',
-                                                                           isAssignmentType = True,
-                                                                           review_state = statesToShow,));
-                          grades python: [];"
-                  >
-
-                    <!--
-                    FIXME: Currently we have no informationen about grades in the brain!
-                    
-                    grades              item/getNumericGrades | nothing;
-                    -->
-
-                    <!--  debug
-                    <div tal:content="string:path:$path" />
-                    <div tal:content="string:brains:$brains" />
-                    -->
-
-                    <p tal:condition="not: brains"
-                        class="visualIconPadding" style="margin: 0em 0em 1em 0em;"
-                        i18n:translate="no_submissions">There are no submissions in this assignment box.
-                    </p>
-                    
-                    <table class="listing" tal:condition="python: brains and not resFlt['show_full_text']">
-                      <!-- write table header -->
-                      <metal:use use-macro="here/all_assignments_macros/macros/all_assignments_thead" />
-                                            
-                      <!--  add table contents -->
-                      <tal:block define="wtool here/portal_workflow;
-                                         global has_items python: 1;"
-                      >
-                        <metal:use use-macro="here/all_assignments_macros/macros/all_assignments_tbody" />
-                      </tal:block>
-
-                      <!-- write table footer -->
-                      <metal:use use-macro="here/all_assignments_macros/macros/all_assignments_tfoot" />
-
-                    </table>
-
-                    <table class="listing" tal:condition="python: brains and resFlt['show_full_text']">
-                      <!-- write table header -->
-                      <metal:use use-macro="here/all_assignments_macros/macros/all_assignments_full_thead" />
-                      
-                      <!-- write table footer -->
-                      <!-- FIXME: 
-                      <metal:use use-macro="here/all_assignments_macros/macros/all_assignments_full_tfoot" />
-                      -->
-                      
-                      <!--  add table contents -->
-                      <tal:block define="wtool here/portal_workflow;
-                                         global has_items python: 1;"
-                      >
-                        <metal:use use-macro="here/all_assignments_macros/macros/all_assignments_full_tbody" />
-                      </tal:block>
-
-                    </table>
-
-                  </tal:define>
-                </tal:if>
-
-                <!--  
-                <div tal:content="item/@@plone/isStructuralFolder" />
-                <div tal:content="item/is_folderish" />
-                <div tal:content="item/@@plone/isStructuralFolder | item/is_folderish" />
-                -->
-                
-                <!-- process all other published items inside this item -->
-                <!--<tal:if define="is_folderish item/@@plone/isStructuralFolder | item/is_folderish;" -->
-                <tal:if define="is_folderish item/is_folderish;" 
-                    condition="python: not ecab_utils.testAssignmentBoxType(item) and is_folderish">
-
-                  <div tal:define="
-                          path   python: (hasattr(item, 'getPath') and item.getPath()) or '/'.join(item.getPhysicalPath());
-                          brains python: here.portal_catalog.searchResults(path = dict(query=path, depth=1),
-                                                             sort_on = 'getObjPositionInParent', );"
-                      tal:repeat="brain brains">
-                      
-<!--  
-                                                             review_state=('published', ),
--->
-
-                    <tal:block define="
-                        item_title          brain/Title;
-                        item_description    brain/Description;
-                        item_type           brain/portal_type;
-                        item_path           brain/getURL;
-                        item_wf_state       brain/review_state;
-                        item_wf_state_class python:'state-' + normalizeString(item_wf_state);
-                        item_type_class     python: 'contenttype-' + normalizeString(item_type);"
-                    >
-
-                      <!-- show title or id of the current item -->
-                      <h4 tal:attributes="class item_type_class"
-                          tal:condition="python:item_type != 'Link'">
-  
-                        <a tal:attributes="href  item_path;
-                                           class string:$item_wf_state_class visualIconPadding;
-                                           title item_description"
-                           tal:content="item_title"/>
-                      </h4>
-                      
-                      <metal:recurse tal:define="item  nocall:brain;
-                                                 level python:level + 1;"
-                      >
-
-                        <!--  debug
-                        <div tal:content="string:level:$level" />
-                        <div tal:content="string:maxRecursionDepth:$maxRecursionDepth" />
-                        -->
-
-                        <!-- process next item -->                      
-                        <div class="visualIconPadding"
-                             tal:condition="python: level &lt; maxRecursionDepth">
-                          <div metal:use-macro="template/macros/list"/>
-                        </div>
-                      </metal:recurse>
-
-                    </tal:block>
-                  </div>
-
-                  <hr tal:condition="python: level &gt; 1" />
-                </tal:if>
-
-              </metal:macro>
-            </tal:hidemacro>
-            <!-- end list items -->
             
             <div class="field visualNoPrint" tal:condition="python: isOwner and has_items">
               <label i18n:domain="plone" i18n:translate="label_change_status">Change State</label>
@@ -293,28 +126,28 @@
               <div tal:content="python:ecab_utils.getWfTransitions()" />
               -->
 
-              <div class="field" tal:define="tabindex tabindex/next;">
+              <div class="field">
 
                 <tal:block define="transitions python: ecab_utils.getWfTransitions()"
                           repeat="transition transitions">
-                 <input class="noborder"
-                        id=""
-                        type="radio"
-                        name="workflow_action"
-                        title=""
-                        value=""
-                        i18n:attributes="title"
-                        i18n:domain="plone"
-                        tal:attributes="value transition/id;
-                                        id    transition/id;
-                                        title transition/name;" />
-                 <label for=""
-                        i18n:translate=""
-                        i18n:domain="plone"
-                        tal:attributes="for transition/id;"
-                        tal:content="transition/name"
-                        >Transition Name</label>
-                        <br />
+                  <input class="noborder"
+                         id=""
+                         type="radio"
+                         name="workflow_action"
+                         title=""
+                         value=""
+                         i18n:attributes="title"
+                         i18n:domain="plone"
+                         tal:attributes="value transition/id;
+                                         id    transition/id;
+                                         title transition/name;" />
+                  <label for=""
+                         i18n:translate=""
+                         i18n:domain="plone"
+                         tal:attributes="for transition/id;"
+                         tal:content="transition/name"
+                         >Transition Name</label>
+                         <br />
                 </tal:block>
   
               </div>
@@ -326,10 +159,8 @@
                      type="submit"
                      name="form.button.Change"
                      value="Change State"
-                     tabindex=""
                      i18n:domain="plone"
                      i18n:attributes="value"
-                     tal:attributes="tabindex tabindex/next;"
               />
   
               <!-- experimental -->
@@ -338,10 +169,8 @@
                      type="submit"
                      name="form.button.Cut"
                      value="Cut"
-                     tabindex=""
                      i18n:domain="plone"
                      i18n:attributes="value"
-                     tal:attributes="tabindex tabindex/next;"
               />
               -->
 
@@ -349,10 +178,8 @@
                      type="submit"
                      name="form.button.Delete"
                      value="Delete"
-                     tabindex=""
                      i18n:domain="plone"
                      i18n:attributes="value"
-                     tal:attributes="tabindex tabindex/next;"
               />
 
             </div>

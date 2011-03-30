@@ -48,7 +48,8 @@
 	-->
 
 	  <!-- Add document actions and heading -->
-      <div metal:use-macro="here/document_actions/macros/document_actions" />
+      <div tal:replace="structure provider:plone.documentactions" />
+      
       <metal:use use-macro="here/all_assignments_macros/macros/all_assignments_heading" />
 
       <metal:block tal:condition="python: paths and not batch"

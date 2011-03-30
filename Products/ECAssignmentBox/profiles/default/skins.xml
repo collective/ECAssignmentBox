@@ -16,7 +16,7 @@
          meta_type="Filesystem Directory View"
          directory="ECAssignmentBox/skins/ecassignmentbox_templates"/>
  
- <skin-path name="Plone Default">
+ <skin-path name="*">
   <layer insert-after="custom" 
          name="ecassignmentbox_images"/>
   <layer insert-after="custom" 

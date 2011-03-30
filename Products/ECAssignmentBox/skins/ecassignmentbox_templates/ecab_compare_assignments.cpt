@@ -31,7 +31,9 @@
     </metal:block>
 
     <div metal:fill-slot="main"
-         tal:define="errors 		options/state/getErrors;
+         tal:define="template_id    template/getId;
+                     here_url       context/@@plone_context_state/object_url;
+                     errors         options/state/getErrors;
                      review_state 	wf_state;
                      all_paths 		python:request.get('paths', []);
                      all_objects 	python:here.getObjectsFromPathList(all_paths, batch=True);
@@ -140,7 +142,7 @@
 
       <div tal:condition="not: request/paths|nothing">
 
-        <div metal:use-macro="here/document_byline/macros/byline">
+        <div tal:replace="structure provider:plone.belowcontenttitle">
             Get the byline - contains details about author and modification date.
         </div>
 

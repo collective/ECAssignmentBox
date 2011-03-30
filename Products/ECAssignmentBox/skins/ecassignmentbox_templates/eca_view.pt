@@ -1,5 +1,6 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
                       "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:tal="http://xml.zope.org/namespaces/tal"
       xmlns:metal="http://xml.zope.org/namespaces/metal"
@@ -16,7 +17,10 @@
 
     <metal:main fill-slot="main">
       <tal:main-macro metal:define-macro="main"
-          define="fieldNames here/getViewModeReadFieldNames">
+          define="template_id template/getId;
+                  wtool       context/portal_workflow;
+                  putils      context/plone_utils;
+                  fieldNames  here/getViewModeReadFieldNames;">
 
         <!-- show header information -->
         <metal:use use-macro="here/base_macros/macros/eca_view_head" />
@@ -28,7 +32,7 @@
           </tal:field>
         </tal:fields>
 
-        <div metal:use-macro="here/document_byline/macros/byline" />
+        <div tal:replace="structure provider:plone.belowcontenttitle" />
 
       </tal:main-macro>
     </metal:main>

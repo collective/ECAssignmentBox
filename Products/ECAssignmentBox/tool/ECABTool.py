@@ -41,9 +41,7 @@ from Products.DCWorkflow.Transitions import TRIGGER_USER_ACTION
 from Products.ECAssignmentBox.tool.Statistics import Statistics
 from Products.ECAssignmentBox.tool.interfaces import IECABTool
 from Products.ECAssignmentBox import config
-
-import logging
-log = logging.getLogger('ECAssignmentBox')
+from Products.ECAssignmentBox import LOG
 
 schema = Schema((
 ),
@@ -155,8 +153,8 @@ class ECABTool(UniqueObject, BaseContent, BrowserDefaultMixin):
         similar to locale.format().
         """
         
-        #log.info('format: %s' % format)
-        #log.info('value: %s' % value)
+        #LOG.info('format: %s' % format)
+        #LOG.info('value: %s' % value)
         
         if not value: return None
 
@@ -182,7 +180,7 @@ class ECABTool(UniqueObject, BaseContent, BrowserDefaultMixin):
         devided into given and last name, we return it in the format
         Doo, John; otherwise we will return 'fullname' as provided by Plone. 
         """
-        #log.debug('Here we are in ECABTool#getFullNameById')
+        #LOG.debug('Here we are in ECABTool#getFullNameById')
     
         mtool = self.portal_membership
         member = mtool.getMemberById(id)
@@ -192,11 +190,14 @@ class ECABTool(UniqueObject, BaseContent, BrowserDefaultMixin):
             return id
 
         try:
-            sn        = member.getProperty('sn')
-            givenName = member.getProperty('givenName')
+            sn        = member.getProperty('sn', None)
+            givenName = member.getProperty('givenName', None)
 
         except:
             error = True
+            
+        #LOG.info('xdebug: sn, givenName: %s, %s' % (type(sn), type(givenName)))
+        #LOG.info('xdebug: sn, givenName: %s, %s' % (sn, givenName))
 
         if error or (not sn) or (not givenName):
             fullname = member.getProperty('fullname', '')
@@ -224,17 +225,15 @@ class ECABTool(UniqueObject, BaseContent, BrowserDefaultMixin):
         @return: Value for 'property' or None
         """
         
-        #log.debug('Here we are in ECABTool#getUserPropertyById')
+        #LOG.info('xdebug: %s, %s, %s' % (userId, property, fallback, ))
         
         membership = getToolByName(self, 'portal_membership')
         member = membership.getMemberById(userId)
-
+        
         try:
-            value = member.getProperty(property)
+            return member.getProperty(property, fallback)
         except:
             return fallback
-
-        return value
     
     
     #security.declarePublic('testAssignmentBoxType')
@@ -244,7 +243,7 @@ class ECABTool(UniqueObject, BaseContent, BrowserDefaultMixin):
         item is a catalog brain- index 'isAssignmentBoxType' is True
         """
         
-        #log.debug('Here we are in ECABTool#testAssignmentBoxType: %s' % item)
+        #LOG.debug('Here we are in ECABTool#testAssignmentBoxType: %s' % item)
         
         if (item and shasattr(item, 'isAssignmentBoxType')):
             return item.isAssignmentBoxType
@@ -325,7 +324,7 @@ class ECABTool(UniqueObject, BaseContent, BrowserDefaultMixin):
         try:
             stats = Statistics(map((float), list))
         #except Exception, e:
-        #    log.warn("calculateMean: %s: %s" % (sys.exc_info()[0], e))
+        #    LOG.warn("calculateMean: %s: %s" % (sys.exc_info()[0], e))
         except:
             return None
 
@@ -339,7 +338,7 @@ class ECABTool(UniqueObject, BaseContent, BrowserDefaultMixin):
         try:
             stats = Statistics(map((float), list))
         #except Exception, e:
-        #    log.warn("calculateMedian: %s: %s" % (sys.exc_info()[0], e))
+        #    LOG.warn("calculateMedian: %s: %s" % (sys.exc_info()[0], e))
         except:
             return None
 
@@ -407,7 +406,7 @@ class ECABTool(UniqueObject, BaseContent, BrowserDefaultMixin):
         fromAddress = portal.getProperty('email_from_address', None)
 
         if fromAddress is None:
-            log.error('Cannot send email: address or name is %s' % fromAddress)
+            LOG.error('Cannot send email: address or name is %s' % fromAddress)
             return
 
         try:
@@ -416,7 +415,7 @@ class ECABTool(UniqueObject, BaseContent, BrowserDefaultMixin):
             else:
                 message = MIMEText(text, 'plain', charset)
         except Exception, e:
-            log.error('Cannot send notification email: %s' % e)
+            LOG.error('Cannot send notification email: %s' % e)
             return
 
         try:
@@ -425,7 +424,7 @@ class ECABTool(UniqueObject, BaseContent, BrowserDefaultMixin):
             else:
                 subjHeader = Header(subject, charset)
         except Exception, e:
-            log.error('Cannot send notification email: %s' % e)
+            LOG.error('Cannot send notification email: %s' % e)
             return
 
         message['Subject'] = subjHeader
@@ -441,10 +440,10 @@ class ECABTool(UniqueObject, BaseContent, BrowserDefaultMixin):
                               mto = address,
                               mfrom = fromAddress,)
             except ConflictError, ce:
-                log.error('Cannot send notification email: %s' % ce)
+                LOG.error('Cannot send notification email: %s' % ce)
                 raise
             except Exception, e:
-                log.error('Could not send email from %s to %s: %s' % 
+                LOG.error('Could not send email from %s to %s: %s' % 
                           (fromAddress, address, e,))
 
 

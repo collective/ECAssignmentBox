@@ -9,16 +9,15 @@ RESPONSE = REQUEST.RESPONSE
 from AccessControl import getSecurityManager
 ecab_utils = context.ecab_utils
 
+siteEncoding = context.getCharset()
+exportEncoding = 'iso-8859-15'
 exportFormat = ['tab', '\t', '\n', '"', '"', '"']
 colDelim     = exportFormat[1]
 rowDelim     = exportFormat[2]
 strStart     = exportFormat[3]
 strEnd       = exportFormat[4]
 escapeChar   = exportFormat[5]
-exportEncoding = 'iso-8859-15'
-siteEncoding   = context.getCharset()
-isReviewer     = getSecurityManager().checkPermission('Review portal content',
-                                                      context)
+isReviewer   = getSecurityManager().checkPermission('Review portal content', context)
 
 def escape(string):
     escaped = ''

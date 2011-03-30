@@ -33,13 +33,14 @@ from Products.ATContentTypes.lib.historyaware import HistoryAwareMixin
 from Products.PortalTransforms.utils import TransformException
 
 from Products.ECAssignmentBox import config
+from Products.ECAssignmentBox import LOG
 
 # PlagDetector imports
 from Products.ECAssignmentBox.PlagDetector.PlagChecker import PlagChecker
 from Products.ECAssignmentBox.PlagDetector.PlagVisualizer import PlagVisualizer
 
-import logging
-log = logging.getLogger('ECAssignmentBox')
+#import logging
+#log = logging.getLogger('ECAssignmentBox')
 
 # alter default fields -> hide title and description
 ECAssignmentSchema = ATContentTypeSchema.copy()
@@ -174,7 +175,7 @@ class ECAssignment(BaseContent, HistoryAwareMixin):
         When this assignment is created, send a notification email to
         the owner of the assignment box, unless emailing is turned off.
         """
-        #log.debug('Here we are in ECAssignmentBox#sendNotificationEmail')
+        #LOG.debug('Here we are in ECAssignmentBox#sendNotificationEmail')
 
         box = self.aq_parent
         
@@ -228,7 +229,7 @@ class ECAssignment(BaseContent, HistoryAwareMixin):
                                            'version': productVersion},
                                   default=default_mailText)
 
-        log.info('Sending notification email to: %s' % addresses)
+        LOG.info('Sending notification email to: %s' % addresses)
         ecab_utils.sendEmail(addresses, subject, mailText)
 
     #security.declarePrivate('sendGradingNotificationEmail')
@@ -285,7 +286,7 @@ class ECAssignment(BaseContent, HistoryAwareMixin):
                                            'version': productVersion},
                                   default=default_mailText)
 
-        log.info('Sending grading notification email to %s' % addresses)
+        LOG.info('Sending grading notification email to %s' % addresses)
         ecab_utils.sendEmail(addresses, subject, mailText)
 
 
@@ -304,8 +305,7 @@ class ECAssignment(BaseContent, HistoryAwareMixin):
     def _generateTitle(self):
         """
         """
-        #log("Title changed from '%s' to '%s'" % \
-        #        (self.title, self.getCreatorFullName(),), severity=DEBUG)
+        #LOG.info("xdebug: Title changed from '%s' to '%s'" % (self.title, self.getCreatorFullName(),))
         return self.getCreatorFullName()
 
 

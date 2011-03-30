@@ -16,35 +16,26 @@
 
     <metal:main fill-slot="main">
       <tal:main-macro metal:define-macro="main"
-          define="global ecab_utils nocall: portal/ecab_utils;
-                  permission        python: modules['AccessControl'].getSecurityManager().checkPermission;
-                  isOwner           python: user.has_role(['Owner', 'Reviewer', 'Manager'], context);
-                  isGrader          python: here.portal_membership.checkPermission('eduComponents: Grade Assignments', context);
-                  n_boxes           python: here.meta_type == 'ECFolder' and here.countContainedBoxes(False);
-                  n_boxes_published python: here.meta_type == 'ECFolder' and here.countContainedBoxes(True);
-                  assignmentStates  here/countContainedAssignments;
-                  totalAssignments  python: assignmentStates[0];
-                  superseededStats  here/getSuperseededStats;
-                  dateStats         here/getSubmissionDateStats;
-                  "
-      >
-        <div metal:use-macro="here/document_actions/macros/document_actions" />
-    
-        <h1 class="documentFirstHeading">
-          <span tal:omit-tag="" tal:content="here/pretty_title_or_id" />
-        </h1>
+          condition="python:hasattr(here, 'countContainedBoxes')">
+        <div tal:replace="structure provider:plone.documentactions" />
 
-        <div tal:define="global has_items python: 0;">
-       
-          <a class="link-parent visualNoPrint"
-         href=""
-         tal:define="parent_url python:here.navigationParent(here, template_id)"
-         tal:condition="parent_url"
-         tal:attributes="href python: '%s/%s' % (parent_url, 'analysis')"
-         i18n:domain="plone"
-         i18n:translate="go_to_parent_url">
-        Up one level
-      </a>
+        <div tal:define="global has_items python: 0;
+                  ecab_utils        nocall:context/ecab_utils;
+                  template_id       template/getId;
+                  permission        python:modules['AccessControl'].getSecurityManager().checkPermission;
+                  isOwner           python:user.has_role(['Owner', 'Reviewer', 'Manager'], context);
+                  isGrader          python:here.portal_membership.checkPermission('eduComponents: Grade Assignments', context);
+                  n_boxes           python:here.meta_type == 'ECFolder' and here.countContainedBoxes(False);
+                  n_boxes_published python:here.meta_type == 'ECFolder' and here.countContainedBoxes(True);
+                  assignmentStates  here/countContainedAssignments;
+                  totalAssignments  python:assignmentStates[0];
+                  superseededStats  here/getSuperseededStats;
+                  dateStats         here/getSubmissionDateStats;"
+        >
+
+          <metal:use use-macro="here/all_assignments_macros/macros/all_assignments_heading" />
+        
+          <metal:use use-macro="here/base_macros/macros/up_one_level" />
 
           <div>
             <h4 i18n:translate="label_totals">Totals</h4>
@@ -180,12 +171,12 @@
                 </tal:block>
               </tbody>
             </table>
+            
             <p tal:condition="python: not dateStats">
-                <span tal:omit-tag="" i18n:translate="warn_no_submissions">There are no submissions</span>
+              <span tal:omit-tag="" i18n:translate="warn_no_submissions">There are no submissions</span>
             </p>
-            <br />
           </div>
-
+          
         </div>
       </tal:main-macro>
     </metal:main>

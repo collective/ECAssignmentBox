@@ -15,12 +15,16 @@
     </metal:block>
 
     <metal:main fill-slot="main">
-      <tal:main-macro metal:define-macro="main" define="
-          ecab_utils nocall:portal/ecab_utils;
-          n_boxes    python: here.countContainedBoxes();
-          states     python: ecab_utils.getWfStatesDisplayList();
-          grades     python: here.summarizeGrades();
-          userName   python: request.get('user_id', None);"
+      <tal:main-macro metal:define-macro="main"
+          condition="python:hasattr(here, 'summarizeGrades')">
+
+      <div
+          tal:define="template_id     template/getId;
+                  normalizeString nocall:context/@@plone/normalizeString;
+                  ecab_utils      nocall:context/ecab_utils;
+                  n_boxes         here/countContainedBoxes | string:---;
+                  states          python:ecab_utils.getWfStatesDisplayList();
+                  grades          python:here.summarizeGrades();"
       >
       
         <!-- debug -->
@@ -29,32 +33,12 @@
         <div tal:content="python: '?%s' % ecab_utils.urlencode({'state':'accepted', 'user_id':userName, })" />
         -->
 
-        <div metal:use-macro="here/document_actions/macros/document_actions">
-          Document actions (print, sendto, etc.)
-        </div>
+        <div tal:replace="structure provider:plone.documentactions" />
     
-        <!-- 
-        <h1 class="documentFirstHeading" i18n:translate="label_submissions">
-          Students
-        </h1>
-        -->
-        <h1 class="documentFirstHeading">
-          <span tal:content="here/pretty_title_or_id" tal:omit-tag=""/>
-    
-          <span tal:condition="userName" 
-            tal:replace="python: '(%s)' % ecab_utils.getFullNameById(userName)" 
-                tal:omit-tag="" />
-        </h1>
+        <metal:use use-macro="here/all_assignments_macros/macros/all_assignments_heading" />
+          
+        <metal:use use-macro="here/base_macros/macros/up_one_level" />
 
-         <a class="link-parent visualNoPrint"
-         href=""
-         tal:define="parent_url python:here.navigationParent(here, template_id)"
-         tal:condition="parent_url"
-         tal:attributes="href python: '%s/%s' % (parent_url, 'by_student')"
-         i18n:domain="plone"
-         i18n:translate="go_to_parent_url">
-        Up one level
-      </a>
 
         <p>
           <b i18n:translate="label_n_boxes">Published assignment boxes inside this folder:</b>
@@ -75,7 +59,7 @@
               
               <span
                 tal:content="python: statesDL.getValue(state, default=state)"
-                tal:attributes="class python: 'state-' + putils.normalizeString(state)"
+                tal:attributes="class python: 'state-' + normalizeString(state)"
                 i18n:domain="plone"
                 i18n:translate=""
                 /><span tal:condition="not:repeat/state/end"
@@ -98,7 +82,7 @@
               </tal:block>
     
               <tal:block tal:repeat="state python: states.keys()">
-                <th tal:attributes="class python: 'state-' + putils.normalizeString(state)">
+                <th tal:attributes="class python: 'state-' + normalizeString(state)">
                 <!-- 
                   <span tal:content="python: states.getValue(state, default=state)"
                     tal:omit-tag=""
@@ -183,16 +167,15 @@
           <form name="exportStatistics" 
               action="#" 
               method="post"
-              tal:attributes="action here_url">
+              tal:attributes="action context/@@plone_context_state/object_url">
 
             <input class="context"
-                tabindex="#"
                 type="submit"
                 name="exportStatistics:method"
                 value="Export"
-                tal:attributes="tabindex tabindex/next;"
                 i18n:attributes="value"/>
           </form>
+          <br />
         </div>
 
         <div tal:condition="grades"
@@ -240,6 +223,7 @@
           </p>
         </div>
 
+      </div>
       </tal:main-macro>
     </metal:main>
   </body>

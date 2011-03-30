@@ -13,10 +13,12 @@
       <style type="text/css" media="screen" tal:content="string: @import url($portal_url/ecabstyles.css);"></style>
     </metal:block>
 
-    <metal:main fill-slot="main">
+    <metal:main fill-slot="main" 
+        tal:define="template_id template/getId;">
+      
       <tal:main-macro metal:define-macro="main">
 
-        <div metal:use-macro="here/document_actions/macros/document_actions"/>
+        <div tal:replace="structure provider:plone.documentactions" />
         
         <h1 class="documentFirstHeading" tal:content="here/title_or_id"/>
 
@@ -40,13 +42,14 @@
         </tal:nothing>
       
         <div tal:define="
-                global          ecab_utils nocall:portal/ecab_utils;
-                auth_filter     nocall: modules/ZTUtils/LazyFilter;
-                default_types   here/allowed_content_types | python:[];
-                types           types | here/show_content_types | default_types;
-                raw_items       python: here.contentValues(filter={'portal_type': types });
-                items           python: auth_filter(raw_items, skip='View');
-                use_view_action site_properties/typesUseViewActionInListings;"
+                global ecab_utils nocall:context/ecab_utils;
+                wtool             context/portal_workflow;
+                auth_filter       nocall:modules/ZTUtils/LazyFilter;
+                default_types     here/allowed_content_types | python:[];
+                types             types | here/show_content_types | default_types;
+                raw_items         python:here.contentValues(filter={'portal_type': types });
+                items             python:auth_filter(raw_items, skip='View');
+                use_view_action   site_properties/typesUseViewActionInListings;"
             tal:condition="items"
         >
 
@@ -55,15 +58,16 @@
           <dl>
             <tal:block tal:repeat="item items">
               <div tal:define="
+                normalizeString     nocall:context/@@plone/normalizeString;
                 item_wf_state       item/review_state | python: wtool.getInfoFor(item, 'review_state', '');
                 item_wf_state_class python:'state-' + normalizeString(item_wf_state);
-                is_published        python: item_wf_state == 'published';
+                is_published        python:item_wf_state == 'published';
                 item_url            item/getURL | item/absolute_url;
                 item_id             item/getId | item/id;
                 item_title_or_id    item/pretty_title_or_id;
                 item_description    item/Description | nothing;
                 item_type           item/portal_type;
-                item_type_class     python: 'contenttype-' + normalizeString(item_type);
+                item_type_class     python:'contenttype-' + normalizeString(item_type);
                 item_ref            item/getReference | nothing;"
               >
               
@@ -144,7 +148,7 @@
 
         </div>
 
-        <div metal:use-macro="here/document_byline/macros/byline"/>
+        <div tal:replace="structure provider:plone.belowcontenttitle" />
 
       </tal:main-macro>
     </metal:main>

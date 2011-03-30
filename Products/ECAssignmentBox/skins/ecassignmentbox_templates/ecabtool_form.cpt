@@ -11,8 +11,8 @@
 
   <body>
     <div metal:fill-slot="prefs_configlet_main"
-        tal:define="errors  options/state/getErrors;
-            ecab_utils nocall:portal/ecab_utils;">
+        tal:define="errors     options/state/getErrors;
+                    ecab_utils nocall:context/ecab_utils;">
 
       <h1 i18n:translate="heading_ecab_prefs">Assignment Box Settings</h1>
 

@@ -17,9 +17,10 @@
 
     <metal:main fill-slot="main">
       <tal:main-macro metal:define-macro="main"
-          tal:define="Iterator      python: modules['Products.Archetypes'].IndexIterator;
-                      tabindex      python: Iterator();
+          tal:define="template_id   template/getId;
+                      member        context/@@plone_portal_state/member;
                       user_id       python: member.getId();
+                      wtool         context/portal_workflow;
                       item_wf_state here/review_state | python: wtool.getInfoFor(here, 'review_state', '');
                       hasExpired    here/hasExpired;
                       isEffective   here/isEffective;
@@ -44,7 +45,7 @@
         <div tal:content="string:canParticipate:$canParticipate" />
         -->
  
-        <div metal:use-macro="here/document_actions/macros/document_actions"/>
+        <div tal:replace="structure provider:plone.documentactions" />
       
         <h1 class="documentFirstHeading">
           <metal:field use-macro="python:here.widget('title', mode='view')" />
@@ -130,7 +131,7 @@
           Download answer template
         </a>
       
-        <hr class="visualNoPrint" />
+        <!-- <hr class="visualNoPrint" /> -->
   
         <!-- input field and upload field -->
         <form action=""
@@ -152,8 +153,7 @@
               rows="15"
               wrap="off"
               name="answer"
-              tabindex=""
-              tal:attributes="tabindex tabindex/next; wrap python:('off', 'on')[here.getWrapAnswer()]"
+              tal:attributes="wrap python:('off', 'on')[here.getWrapAnswer()]"
               tal:content="reference/getAnswerTemplate | here/getAnswerTemplate | nothing"></textarea>
           </div>
   
@@ -165,30 +165,24 @@
            </div>
            <input type="file"
              name="file"
-             size="25"
-             tabindex=""
-             tal:attributes="tabindex tabindex/next;" />
+             size="25" />
          </div>
   
          <!-- submit button -->
          <div class="formControls visualNoPrint">
            <input class="context"
-               tabindex=""
                type="submit"
                name="form.button.Submit"
                value="Submit"
                i18n:domain="plone"
-               i18n:attributes="value"
-               tal:attributes="tabindex tabindex/next;"/>
+               i18n:attributes="value" />
   
            <input class="standalone"
-               tabindex=""
                type="submit"
                name="form.button.Cancel"
                i18n:domain="plone"
                value="Cancel"
-               i18n:attributes="value"
-               tal:attributes="tabindex tabindex/next;"/>
+               i18n:attributes="value" />
           </div>
   
           <!-- hidden fields -->
@@ -223,7 +217,7 @@
             Submission not permitted: You have reached the maximum number of attempts.</i>
         </div>
   
-        <div metal:use-macro="here/document_byline/macros/byline" />
+        <div tal:replace="structure provider:plone.belowcontenttitle" />
 
       </tal:main-macro>
     </metal:main>

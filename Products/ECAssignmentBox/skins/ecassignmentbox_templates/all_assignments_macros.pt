@@ -10,71 +10,73 @@
 
 <body>
 
-	<!-- headline in all assignments templates -->
-	<metal:define define-macro="all_assignments_heading">
-		<h1 class="documentFirstHeading">
-			<span tal:content="here/pretty_title_or_id" tal:omit-tag=""/>
-			<span tal:define="userName request/userName | nothing;"
-				  tal:condition="userName" 
-				  tal:replace="python: '(%s)' % ecab_utils.getFullNameById(userName)" 
-				  tal:omit-tag="" />
-		</h1>
-	</metal:define>
+    <!-- headline in all assignments templates -->
+    <metal:define define-macro="all_assignments_heading">
+      <h1 class="documentFirstHeading">
+        <span tal:content="here/pretty_title_or_id" tal:omit-tag=""/>
+        <span tal:define="userName request/user_id | nothing;"
+              tal:condition="userName" 
+              tal:replace="python: '(%s)' % ecab_utils.getFullNameById(userName)" 
+              tal:omit-tag="" />
+      </h1>
+    </metal:define>
 
-	<!-- table's head in all_assignments -->
-	<metal:define define-macro="all_assignments_thead">
-		<thead>
-			<tr>
-				<th class="nosort visualNoPrint">
-					<!-- item is the current assignment box -->
-					<input type="checkbox" onclick="toggleSelect" name="xxx_toggle"
-						 value="#" id="xxx_toggle" class="noborder" tabindex=""
-						 tal:attributes="tabindex tabindex/next;
-								name     string:${item/id}_toggle;
-								id       string:${item/id}_toggle;
-								onclick  string:javascript:toggleSelect(this, '${item/id}:list');"/>
-					<input type="hidden" name="" value="" 
-						 tal:attributes="name  string:ecabox:list; 
-										 value string:${item/id};"/>
-				</th>
-				<th class="nosort">&nbsp;</th>
-				<th i18n:translate="label_date">Date</th>
-				<th i18n:translate="label_user">User</th>
-				<th i18n:translate="label_state">State</th>
-				<th i18n:translate="label_mark">Grade</th>
-				<th class="nosort visualNoPrint" i18n:translate="label_actions">Actions</th>
-			</tr>
-		</thead>
-	</metal:define>
+    <!-- table's head in all_assignments -->
+    <metal:define define-macro="all_assignments_thead">
+      <thead>
+        <tr>
+          <th class="nosort visualNoPrint">
+              <!-- item is the current assignment box -->
+              <input type="checkbox" onclick="toggleSelect" name="xxx_toggle"
+                   value="#" 
+                   id="xxx_toggle" 
+                   class="noborder"
+                   tal:attributes="name    string:${item/id}_toggle;
+                                   id      string:${item/id}_toggle;
+                                   onclick string:javascript:toggleSelect(this, '${item/id}:list');"/>
+              
+              <input type="hidden" name="" value="" 
+                   tal:attributes="name  string:ecabox:list; 
+                                   value string:${item/id};"/>
+          </th>
+          <th class="nosort">&nbsp;</th>
+          <th i18n:translate="label_date">Date</th>
+          <th i18n:translate="label_user">User</th>
+          <th i18n:translate="label_state">State</th>
+          <th i18n:translate="label_mark">Grade</th>
+          <th class="nosort visualNoPrint" i18n:translate="label_actions">Actions</th>
+        </tr>
+      </thead>
+    </metal:define>
 
     <!-- table's foot in all_assignments -->
     <metal:define define-macro="all_assignments_tfoot">
       <tfoot tal:condition="grades">
-          <tr>
-            <td colspan="5"
-              i18n:translate="label_average_grade">Average Grade</td>
-            <td
-              style="text-align: right"
-              tal:content="python: ecab_utils.localizeNumber('%.2f',
-                                   ecab_utils.calculateMean(grades))"/>
-            <td/>
-          </tr>
-          <tr>
-            <td colspan="5"
-              i18n:translate="label_median_grade">Median Grade</td>
-            <td
-              style="text-align: right"
-              tal:content="python: ecab_utils.localizeNumber('%.2f',
-                                   ecab_utils.calculateMedian(grades))"/>
-            <td/>
-          </tr>
-          <tr>
-            <td colspan="7" i18n:translate="grade_statistics_help"
-              class="discreet">
-              Average and median grades are calculated from all assignments
-              in this assignment box which are in the state <em>graded</em> and
-              which have a grade assigned.</td>
-          </tr>
+        <tr>
+          <td colspan="5"
+            i18n:translate="label_average_grade">Average Grade</td>
+          <td
+            style="text-align: right"
+            tal:content="python: ecab_utils.localizeNumber('%.2f',
+                                 ecab_utils.calculateMean(grades))"/>
+          <td/>
+        </tr>
+        <tr>
+          <td colspan="5"
+            i18n:translate="label_median_grade">Median Grade</td>
+          <td
+            style="text-align: right"
+            tal:content="python: ecab_utils.localizeNumber('%.2f',
+                                 ecab_utils.calculateMedian(grades))"/>
+          <td/>
+        </tr>
+        <tr>
+          <td colspan="7" i18n:translate="grade_statistics_help"
+            class="discreet">
+            Average and median grades are calculated from all assignments
+            in this assignment box which are in the state <em>graded</em> and
+            which have a grade assigned.</td>
+        </tr>
       </tfoot>
     </metal:define>
 
@@ -85,17 +87,18 @@
         <tal:block tal:repeat="brain brains">
           <!--  <tr tal:condition="python: ecab_utils.testAssignmentBoxType(assignment) and ((not userName) or (assignment.Creator() == userName))" -->
           <tal:if condition="python: brain.isAssignmentType">
-          <tr tal:define="assignment                python: brain.getObject();
+          <tr tal:define="normalizeString           nocall:context/@@plone/normalizeString;
+                          assignment                python:brain.getObject();
                           oddrow                    repeat/brain/odd;
                           assignment_type           brain/portal_type;
                           assignment_wf_state       brain/review_state;
-                          assignment_state_title    python: wtool.getTitleForStateOnType(assignment_wf_state, assignment_type);
-                          assignment_wf_state_class python: 'state-' + normalizeString(assignment_wf_state);
+                          assignment_state_title    python:wtool.getTitleForStateOnType(assignment_wf_state, assignment_type);
+                          assignment_wf_state_class python:'state-' + normalizeString(assignment_wf_state);
                           assignment_id             brain/id;
                           assignment_title          brain/Title;
                           assignment_url            brain/getURL;
                           assignment_path           brain/getPath;
-                          assignment_date           python: here.toLocalizedTime(brain.CreationDate, True);
+                          assignment_date           python:here.toLocalizedTime(brain.CreationDate, True);
                           assignment_creator        brain/Creator;
                           assignment_grade          assignment/getGradeDisplayValue;"
               tal:attributes="class python: test(oddrow, 'odd', 'even')">
@@ -200,9 +203,7 @@
                 value="#"
                 id="xxx_toggle"
                 class="noborder"
-                tabindex=""
-                tal:attributes="tabindex tabindex/next;
-                                name     string:${item/id}_toggle;
+                tal:attributes="name     string:${item/id}_toggle;
                                 id       string:${item/id}_toggle;
                                 onclick  string:javascript:toggleSelect(this, '${item/id}:list');"
             />
@@ -227,7 +228,8 @@
         <tal:block tal:repeat="brain brains">
           <!--  <tr tal:condition="python: ecab_utils.testAssignmentBoxType(assignment) and ((not userName) or (assignment.Creator() == userName))" -->
           <tr
-              tal:define="assignment                python: brain.getObject();
+              tal:define="normalizeString           nocall:context/@@plone/normalizeString;
+                          assignment                python: brain.getObject();
                           oddrow                    repeat/brain/odd;
                           assignment_type           brain/portal_type;
                           assignment_wf_state       brain/review_state;
@@ -276,7 +278,7 @@
 
               <div>              
                 <a tal:attributes="href python: mkUrl({'user_id' : assignment_creator});"
-                   tal:content="python: ecab_utils.getFullNameById(assignment_creator)" />
+                   tal:content="python:ecab_utils.getFullNameById(assignment_creator)" />
               </div>
 
               <div>
@@ -348,6 +350,153 @@
       </tbody>
     </metal:define>
 
+    <!-- 
+      This macro searches recursivly through all items inside 
+      the current folder.
+    
+      @param item current folder
+      @param level current level (means depth) 
+    -->
+    <metal:define define-macro="list_all_assignments">
+  
+      <!--  debug 
+      <div tal:content="nocall:item" />
+      -->
+                    
+      <!-- is current item an assignment box (e.g., ECAB or ECAAB)? -->
+      <tal:if condition="python:ecab_utils.testAssignmentBoxType(item)">
+  
+        <tal:define define="
+                path   python: (hasattr(item, 'getPath') and item.getPath()) or '/'.join(item.getPhysicalPath());
+                brains python: (userName and here.portal_catalog.searchResults(path = dict(query=path,depth=1), 
+                                                                 sort_on = 'getObjPositionInParent', 
+                                                                 review_state = statesToShow, 
+                                                                 isAssignmentType = True,
+                                                                 Creator = userName, ))
+                               or 
+                               (not userName and here.portal_catalog.searchResults(path = dict(query=path,depth=1),
+                                                                 sort_on = 'getObjPositionInParent',
+                                                                 isAssignmentType = True,
+                                                                 review_state = statesToShow,));
+                grades python: [];"
+        >
+  
+          <!--
+          FIXME: Currently we have no informationen about grades in the brain!
+          
+          grades              item/getNumericGrades | nothing;
+          -->
+  
+          <!--  debug
+          <div tal:content="string:path:$path" />
+          <div tal:content="string:brains:$brains" />
+          -->
+  
+          <p tal:condition="not: brains"
+              class="visualIconPadding" style="margin: 0em 0em 1em 0em;"
+              i18n:translate="no_submissions">There are no submissions in this assignment box.
+          </p>
+          
+          <table class="listing" tal:condition="python: brains and not resFlt['show_full_text']">
+            <!-- write table header -->
+            <metal:use use-macro="here/all_assignments_macros/macros/all_assignments_thead" />
+                                  
+            <!--  add table contents -->
+            <tal:block define="wtool here/portal_workflow;
+                               global has_items python: 1;"
+            >
+              <metal:use use-macro="here/all_assignments_macros/macros/all_assignments_tbody" />
+            </tal:block>
+  
+            <!-- write table footer -->
+            <metal:use use-macro="here/all_assignments_macros/macros/all_assignments_tfoot" />
+  
+          </table>
+  
+          <table class="listing" tal:condition="python: brains and resFlt['show_full_text']">
+            <!-- write table header -->
+            <metal:use use-macro="here/all_assignments_macros/macros/all_assignments_full_thead" />
+            
+            <!-- write table footer -->
+            <!-- FIXME: 
+            <metal:use use-macro="here/all_assignments_macros/macros/all_assignments_full_tfoot" />
+            -->
+            
+            <!--  add table contents -->
+            <tal:block define="wtool            context/portal_workflow;
+                               global has_items python: 1;"
+            >
+              <metal:use use-macro="here/all_assignments_macros/macros/all_assignments_full_tbody" />
+            </tal:block>
+  
+          </table>
+  
+        </tal:define>
+      </tal:if>
+  
+      <!--  
+      <div tal:content="item/@@plone/isStructuralFolder" />
+      <div tal:content="item/is_folderish" />
+      -->
+      
+      <!-- process all other published items inside this item -->
+      <tal:if define="is_folderish item/@@plone/isStructuralFolder | nothing;"
+          condition="python: not ecab_utils.testAssignmentBoxType(item) and is_folderish">
+  
+        <div tal:define="
+              path   python: (hasattr(item, 'getPath') and item.getPath()) or '/'.join(item.getPhysicalPath());
+              brains python: here.portal_catalog.searchResults(path = dict(query=path, depth=1), sort_on = 'getObjPositionInParent', );"
+            tal:repeat="brain brains">
+            
+          <!--  
+          review_state=('published', ),
+          -->
+  
+          <tal:block define="
+              normalizeString     nocall:context/@@plone/normalizeString;
+              item_title          brain/Title;
+              item_description    brain/Description;
+              item_type           brain/portal_type;
+              item_path           brain/getURL;
+              item_wf_state       brain/review_state;
+              item_wf_state_class python:'state-' + normalizeString(item_wf_state);
+              item_type_class     python: 'contenttype-' + normalizeString(item_type);"
+          >
+  
+            <!-- show title or id of the current item -->
+            <h4 tal:attributes="class item_type_class"
+                tal:condition="python:item_type != 'Link'">
+  
+              <a tal:attributes="href  item_path;
+                                 class string:$item_wf_state_class visualIconPadding;
+                                 title item_description"
+                 tal:content="item_title"/>
+            </h4>
+            
+            <metal:recurse tal:define="item  nocall:brain;
+                                       level python:level + 1;"
+            >
+              <!--  debug
+              <div tal:content="string:level:$level" />
+              <div tal:content="string:maxRecursionDepth:$maxRecursionDepth" />
+              -->
+  
+              <!-- process next item -->     
+              <div class="visualIconPadding" tal:condition="python: level &lt; maxRecursionDepth">
+                <div metal:use-macro="here/all_assignments_macros/macros/list_all_assignments" />
+              </div>
+
+            </metal:recurse>
+  
+          </tal:block>
+        </div>
+  
+        <hr tal:condition="python: level &gt; 1" />
+      </tal:if>
+
+    </metal:define>
+    <!-- end list macro -->
+      
 </body>
 </html>
 

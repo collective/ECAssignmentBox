@@ -10,13 +10,25 @@
 
   <body>
 
+    <!--  up-one-level macro -->
+    <metal:define define-macro="up_one_level">
+      <a class="link-parent visualNoPrint"
+          tal:define="parent_url python:here.navigationParent(here, template_id);"
+          tal:condition="parent_url"
+          tal:attributes="href string:${parent_url}/${template_id}"
+          i18n:domain="plone"
+          i18n:translate="go_to_parent_url">
+        Up one level
+      </a>
+    </metal:define>
+
     <!-- base view macro -->
     <metal:define define-macro="base_view">
       <tal:condition condition="field">
-          <tal:view define="mode string:view;
-                    use_label python:True;
-                    accessor  python:field.getAccessor(here);
-                    object    python:accessor();"
+          <tal:view define="mode      string:view;
+                            use_label python:True;
+                            accessor  python:field.getAccessor(here);
+                            object    python:accessor();"
             condition="object | object/get_data | object/data | nothing" >
             <metal:use use-macro="here/widgets/field/macros/view" />
           </tal:view>
@@ -39,7 +51,8 @@
       information about the student's submission
     -->
     <metal:define define-macro="eca_view_head">
-      <div metal:use-macro="here/document_actions/macros/document_actions"/>
+
+      <div tal:replace="structure provider:plone.documentactions" />
 
       <!-- show page title using parent's title -->    
       <h1 class="documentFirstHeading">
@@ -115,59 +128,58 @@
     <!-- shows user details -->
     <metal:define define-macro="user_details">
       <div tal:condition="userName">
-    <img src="ec_userinfo.png"/>
-    <dl class="collapsible inline collapsedOnLoad">
-      <dt class="collapsibleHeader"
-        i18n:translate="label_student_details">Student details</dt>
-      <dd class="collapsibleContent">
-        <div class="card"
-          tal:define="
-          getHomeUrl          nocall: mtool/getHomeUrl;
-          getPersonalPortrait nocall: mtool/getPersonalPortrait;
-          home python:        getHomeUrl(userName, verifyPermission=1);
-          portrait            python: getPersonalPortrait(userName);">
-          <a href="#" tal:attributes="href home">
-        <img src="#" alt=""
-          tal:replace="structure python: portrait.tag(width=75, height=100, border=0)"/>
-          </a>
-        </div>
-
-        <table class="vertical listing">
-          <tbody tal:define="
-        perstitle python: ecab_utils.getUserPropertyById(userName,
-                  portal_properties.ecab_properties.personal_title_attr);
-        fullname  python: ecab_utils.getFullNameById(userName);
-        email     python: ecab_utils.getUserPropertyById(userName, 'email');
-        studentid python: ecab_utils.getUserPropertyById(userName,
-                  portal_properties.ecab_properties.student_id_attr);
-        major     python: ecab_utils.getUserPropertyById(userName,
-                  portal_properties.ecab_properties.major_attr);">
-        <tr>
-          <th i18n:translate="label_name">Name</th>
-          <td tal:content="fullname"/>
-        </tr>
-        <tr tal:condition="perstitle">
-          <th i18n:translate="label_personal_title">Title</th>
-          <td tal:content="perstitle"/>
-        </tr>
-        <tr>
-          <th i18n:translate="label_email">E-Mail</th>
-          <td><a href="" tal:attributes="href string: mailto:${email}" tal:content="email"/></td>
-        </tr>
-        <tr tal:condition="studentid">
-          <th i18n:translate="label_student_id">Student ID</th>
-          <td tal:content="studentid"/>
-        </tr>
-        <tr tal:condition="major">
-          <th i18n:translate="label_major">Major</th>
-          <td tal:content="major"/>
-        </tr>
-          </tbody>
-        </table>
-        <div class="visualClear"/>
-      </dd>
-    </dl>
-    <p/>
+        <img src="ec_userinfo.png"/>
+        <dl class="collapsible inline collapsedOnLoad">
+          <dt class="collapsibleHeader"
+              i18n:translate="label_student_details">Student details</dt>
+          <dd class="collapsibleContent">
+            <div class="card"
+                tal:define="
+                  mtool               context/portal_membership;
+                  getHomeUrl          nocall:mtool/getHomeUrl;
+                  getPersonalPortrait nocall:mtool/getPersonalPortrait;
+                  home python:        getHomeUrl(userName, verifyPermission=1);
+                  portrait            python:getPersonalPortrait(userName);">
+              <a href="#" tal:attributes="href home">
+            <img src="#" alt=""
+              tal:replace="structure python: portrait.tag(width=75, height=100, border=0)"/>
+              </a>
+            </div>
+    
+            <table class="vertical listing">
+              <tbody tal:define="
+                  portal_properties context/portal_properties;
+                  perstitle python:ecab_utils.getUserPropertyById(userName, portal_properties.ecab_properties.personal_title_attr);
+                  fullname  python:ecab_utils.getFullNameById(userName);
+                  email     python:ecab_utils.getUserPropertyById(userName, 'email');
+                  studentid python:ecab_utils.getUserPropertyById(userName, portal_properties.ecab_properties.student_id_attr);
+                  major     python:ecab_utils.getUserPropertyById(userName, portal_properties.ecab_properties.major_attr);">
+                <tr>
+                  <th i18n:translate="label_name">Name</th>
+                  <td tal:content="fullname"/>
+                </tr>
+                <tr tal:condition="perstitle">
+                  <th i18n:translate="label_personal_title">Title</th>
+                  <td tal:content="perstitle"/>
+                </tr>
+                <tr>
+                  <th i18n:translate="label_email">E-Mail</th>
+                  <td><a href="" tal:attributes="href string: mailto:${email}" tal:content="email"/></td>
+                </tr>
+                <tr tal:condition="studentid">
+                  <th i18n:translate="label_student_id">Student ID</th>
+                  <td tal:content="studentid"/>
+                </tr>
+                <tr tal:condition="major">
+                  <th i18n:translate="label_major">Major</th>
+                  <td tal:content="major"/>
+                </tr>
+              </tbody>
+            </table>
+            <div class="visualClear"/>
+          </dd>
+        </dl>
+        <p/>
       </div>
     </metal:define>
 

@@ -57,12 +57,11 @@ def fixTools(context):
     if isNotECAssignmentBoxProfile(context): return 
     
     site = context.getSite()
-    tool_ids=['ecab_utils']
+    tool_id = 'ecab_utils'
     
-    for tool_id in tool_ids:
-        if hasattr(site, tool_id):
-            tool=site[tool_id]
-            tool.initializeArchetype()
+    if hasattr(site, tool_id):
+        tool = site[tool_id]
+        tool.initializeArchetype()
 
 
 def updateRoleMappings(context):

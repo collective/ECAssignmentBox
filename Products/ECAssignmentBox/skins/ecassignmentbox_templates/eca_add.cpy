@@ -42,7 +42,8 @@ if not file:
 # get current date and time
 now = DateTime()
 # get current user's id
-user_id = REQUEST.get('AUTHENTICATED_USER', 'unknown')
+#user_id = REQUEST.get('AUTHENTICATED_USER', 'unknown')
+user_id = context.portal_membership.getAuthenticatedMember().getId() 
 # generate unique Id for this submission
 id = str(user_id) + '.' + now.strftime('%Y%m%d') + '.' + now.strftime('%H%M%S')
 

@@ -27,35 +27,17 @@
       <style type="text/css" media="screen" tal:content="string: @import url($portal_url/ecabstyles.css);" />
     </metal:block>
     <div metal:fill-slot="main"
-         tal:define="errors options/state/getErrors;
+         tal:define="template_id  template/getId;
+                     context/@@plone_context_state/object_url;
+                     errors       options/state/getErrors;
                      review_state wf_state;
-
-                     all_paths python:request.get('paths', []);
-
-                     all_objects python:here.getObjectsFromPathList(all_paths, batch=True);
-
-                     paths python:['/'.join(o.getPhysicalPath())
-                           for o in all_objects if here.ecab_utils.testAssignmentBoxType(o)];
-
-                     batch python:here.getObjectsFromPathList(paths, batch=True);
-
-                     came_from python:request.get('HTTP_REFERER', here.absolute_url()).split('?')[0];
-                     dummy python:request.set('orig_template', came_from);
-                     ">
-    <!-- 
-    <div metal:fill-slot="main"
-         tal:define="errors options/state/getErrors;
-                     review_state wf_state;
-
-                     paths python:request.get('paths', ['/'.join(here.getPhysicalPath())]);
-
-                     batch python:here.getObjectsFromPathList(paths, batch=True);
-
-                     folders_in_publishing python:[o.getId for o in batch if o.isPrincipiaFolderish];
-                     came_from python:request.get('HTTP_REFERER', here.absolute_url()).split('?')[0];
-                     dummy python:request.set('orig_template', came_from);
-                     ">
-    -->
+                     all_paths    python:request.get('paths', []);
+                     all_objects  python:here.getObjectsFromPathList(all_paths, batch=True);
+                     paths        python:['/'.join(o.getPhysicalPath()) for o in all_objects if here.ecab_utils.testAssignmentBoxType(o)];
+                     batch        python:here.getObjectsFromPathList(paths, batch=True);
+                     came_from    python:request.get('HTTP_REFERER', here.absolute_url()).split('?')[0];
+                     dummy        python:request.set('orig_template', came_from);"
+    >
 
       <metal:block tal:condition="python: paths and not batch"
                    tal:replace="python:here.redirectToReferrer('The item(s) you selected are no longer available.')" />
@@ -247,7 +229,7 @@
 
       <div tal:condition="not: request/paths|nothing">
 
-        <div metal:use-macro="here/document_byline/macros/byline">
+        <div tal:replace="structure provider:plone.belowcontenttitle">
             Get the byline - contains details about author and modification date.
         </div>
 

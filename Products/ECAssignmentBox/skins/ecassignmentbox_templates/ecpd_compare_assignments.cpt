@@ -44,7 +44,7 @@ function popup(name,einstellungen) {{
 			all_objs 	python: here.objectValues();
 			objects 	python: [o for o in all_objs if here.ecab_utils.testAssignmentBoxType(o)];">
 
-    <div metal:use-macro="here/document_actions/macros/document_actions" />
+    <div tal:replace="structure provider:plone.documentactions" />
 		
 	<metal:use use-macro="here/all_assignments_macros/macros/all_assignments_heading" />
 

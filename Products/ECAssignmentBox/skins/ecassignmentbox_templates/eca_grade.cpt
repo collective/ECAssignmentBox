@@ -13,8 +13,10 @@
 
     <metal:main fill-slot="main">
       <tal:main-macro metal:define-macro="main"
-          tal:define="errors         options/state/getErrors | nothing;
-                      Iterator       python:modules['Products.Archetypes'].IndexIterator;
+          tal:define="template_id    template/getId;
+                      wtool          context/portal_workflow;
+                      putils         context/plone_utils;
+                      errors         options/state/getErrors | nothing;
                       readFieldNames here/getGradeModeReadFieldNames;
                       editFieldNames here/getGradeModeEditFieldNames;">
   
@@ -45,29 +47,24 @@
           <!-- submit button -->
           <div class="formControls" i18n:domain="plone">
             <input class="context"
-                tabindex=""
                 type="submit"
                 name="form.button.Submit"
                 value="Save"
                 i18n:domain="plone"
-                i18n:attributes="value"
-                tal:attributes="tabindex tabindex/next;"/>
+                i18n:attributes="value" />
 
             <input class="standalone"
-                tabindex=""
                 type="submit"
                 name="form.button.Cancel"
                 i18n:domain="plone"
                 value="Cancel"
-                i18n:attributes="value"
-                tal:attributes="tabindex tabindex/next;"/>
+                i18n:attributes="value" />
           </div>
 
           <input type="hidden" name="form.submitted" value="1" />
-          <!--<input type="hidden" name="title" value="" tal:attributes="value here/title_or_id" />-->
         </form>
 
-        <div metal:use-macro="here/document_byline/macros/byline" />
+        <div tal:replace="structure provider:plone.belowcontenttitle" />
 
       </tal:main-macro>
     </metal:main>
