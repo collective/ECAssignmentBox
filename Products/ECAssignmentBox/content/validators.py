@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# $Id: __init__.py 1281 2009-09-24 15:03:08Z amelung $
+# $Id$
 #
 # Copyright (c) 2006-2011 Otto-von-Guericke-UniversitŠt Magdeburg
 #
