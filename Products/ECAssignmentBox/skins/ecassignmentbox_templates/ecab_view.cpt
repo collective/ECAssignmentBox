@@ -30,7 +30,7 @@
                       canRetry      python: here.canRetry();
 		              tries_left    python: here.getMaxTries() - here.getTries();
 		              reference     python: here.getReference();
-                      needRegistration python: (hasattr(here, 'associatedGroup') and here.getAssociatedGroup()) or False;
+                      needRegistration python: (hasattr(here, 'associatedGroup') and (here.getAssociatedGroup() != ''));
                       canParticipate python: (needRegistration and here.isParticipant(user_id)) or (not needRegistration);">
                       
         <!-- debug -->

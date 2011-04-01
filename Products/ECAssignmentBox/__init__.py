@@ -1,13 +1,12 @@
 # -*- coding: utf-8 -*-
 # $Id$
 #
-# Copyright (c) 2006-2009 Otto-von-Guericke University Magdeburg
+# Copyright (c) 2006-2011 Otto-von-Guericke-UniversitŠt Magdeburg
 #
 # This file is part of ECAssignmentBox.
 #
 __author__ = """Mario Amelung <mario.amelung@gmx.de>"""
 __docformat__ = 'plaintext'
-__version__   = '$Revision: 1.2 $'
 
 # There are three ways to inject custom code here:
 #
@@ -20,23 +19,17 @@ __version__   = '$Revision: 1.2 $'
 import sys
 import os
 import logging
-#log = logging.getLogger('ECAssignmentBox')
-#log.debug('Installing Product')
-
-#import os.path
-#from Globals import package_home
 
 from zope.i18nmessageid import MessageFactory
 
 #import Products.CMFPlone.interfaces
-from Products.CMFPlone.utils import ToolInit
 from Products.Archetypes import listTypes
 from Products.Archetypes.atapi import process_types
 from Products.Archetypes.utils import capitalize
 from Products.CMFCore import DirectoryView
 from Products.CMFCore import permissions as cmfpermissions
 from Products.CMFCore import utils as cmfutils
-
+from Products.CMFPlone.utils import ToolInit
 
 from Products.ECAssignmentBox import config 
 

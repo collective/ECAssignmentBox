@@ -20,6 +20,7 @@
         <div tal:replace="structure provider:plone.documentactions" />
 
         <div tal:define="global has_items python: 0;
+                  putils            context/plone_utils;
                   ecab_utils        nocall:context/ecab_utils;
                   template_id       template/getId;
                   permission        python:modules['AccessControl'].getSecurityManager().checkPermission;

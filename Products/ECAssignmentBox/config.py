@@ -1,13 +1,12 @@
 # -*- coding: utf-8 -*-
 # $Id$
 #
-# Copyright (c) 2006-2009 Otto-von-Guericke University Magdeburg
+# Copyright (c) 2006-2011 Otto-von-Guericke-UniversitŠt Magdeburg
 #
 # This file is part of ECAssignmentBox.
 #
 __author__ = """Mario Amelung <mario.amelung@gmx.de>"""
 __docformat__ = 'plaintext'
-__version__   = '$Revision: 1.2 $'
 
 # Product configuration.
 #
@@ -17,11 +16,8 @@ __version__   = '$Revision: 1.2 $'
 # If you wish to perform custom configuration, you may put a file
 # AppConfig.py in your product's root directory. The items in there
 # will be included (by importing) in this file if found.
-
-try: # New CMF 
-    from Products.CMFCore import permissions
-except: # Old CMF 
-    from Products.CMFCore import CMFCorePermissions as permissions
+from Products.CMFCore import permissions
+from Products.ATContentTypes.configuration.config import zconf
 
 
 PROJECTNAME = "ECAssignmentBox"

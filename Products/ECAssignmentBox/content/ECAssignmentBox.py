@@ -1,13 +1,12 @@
 # -*- coding: utf-8 -*-
 # $Id$
 #
-# Copyright (c) 2006-2011 Otto-von-Guericke University Magdeburg
+# Copyright (c) 2006-2011 Otto-von-Guericke-UniversitŠt Magdeburg
 #
 # This file is part of ECAssignmentBox.
 #
 __author__ = """Mario Amelung <mario.amelung@gmx.de>"""
 __docformat__ = 'plaintext'
-__version__   = '$Revision: 1.2 $'
 
 import interfaces
 
@@ -43,6 +42,7 @@ from Products.CMFCore.utils import getToolByName
 #from Products.ATReferenceBrowserWidget.ATReferenceBrowserWidget import ReferenceBrowserWidget
 from archetypes.referencebrowserwidget.widget import ReferenceBrowserWidget
 
+from Products.ECAssignmentBox.content import validators 
 from Products.ECAssignmentBox import config
 #from Products.ECAssignmentBox import LOG
 
@@ -137,7 +137,7 @@ ECAssignmentBox_schema = ATFolderSchema.copy() + Schema((
         searchable = False,
         required = True,
         default = 0,
-        validators = ('isInt', 'isPositive'),
+        validators = ('isInt', validators.POSITIVE_NUMBER_VALIDATOR_NAME),
         widget = IntegerWidget(
             label = "Maximum number of attempts",
             label_msgid = "label_max_tries",

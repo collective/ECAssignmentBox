@@ -1,13 +1,12 @@
 # -*- coding: utf-8 -*-
 # $Id$
 #
-# Copyright (c) 2006-2009 Otto-von-Guericke University Magdeburg
+# Copyright (c) 2006-2011 Otto-von-Guericke-UniversitŠt Magdeburg
 #
 # This file is part of ECAssignmentBox.
 #
 __author__ = """Mario Amelung <mario.amelung@gmx.de>"""
 __docformat__ = 'plaintext'
-__version__   = '$Revision: 1.2 $'
 
 import interfaces
 
@@ -25,13 +24,10 @@ from Products.CMFCore.utils import getToolByName
 from Products.ATContentTypes.content.folder import ATFolder
 from Products.ATContentTypes.content.folder import ATFolderSchema
 
+from Products.ECAssignmentBox.content import validators
 from Products.ECAssignmentBox import config
+from Products.ECAssignmentBox import LOG
 
-
-import logging
-log = logging.getLogger('ECAssignmentBox')
-
-##/code-section module-header
 
 schema = Schema((
 
@@ -70,7 +66,7 @@ schema = Schema((
         searchable = False,
         required = True,
         default = 0,
-        #validators = ('isInt', 'isPositive'),
+        validators = ('isInt', validators.POSITIVE_NUMBER_VALIDATOR_NAME),
         widget = IntegerWidget(
             label = "Projected Number of Assignments",
             label_msgid = "label_projected_assignments",
@@ -149,7 +145,7 @@ class ECFolder(ATFolder):
 
         wf_states = self.getWfStates()
         
-        #log.debug('wf_states: %s' % wf_states)
+        #LOG.debug('wf_states: %s' % wf_states)
         
         n_states = len(wf_states)
     
@@ -158,13 +154,13 @@ class ECFolder(ATFolder):
             reviewState = brain.review_state
             
             if key and reviewState: 
-                #log.debug('key: %s' % key)
-                #log.debug('reviewState: %s' % reviewState)
+                #LOG.debug('key: %s' % key)
+                #LOG.debug('reviewState: %s' % reviewState)
                 
                 if not result.has_key(key):
                     result[key] = [0 for i in range(n_states)]
                     
-                log.debug('result: %s' % result)
+                LOG.debug('result: %s' % result)
                 
                 result[key][wf_states.index(brain.review_state)] += 1
 
@@ -242,7 +238,7 @@ class ECFolder(ATFolder):
             
             grades = item.getGradesByStudent()
             
-            #log.debug('xxx: %s: %s' % (item.title, grades, ))
+            #LOG.debug('xxx: %s: %s' % (item.title, grades, ))
 
             # No grades were assigned--no problem.
             if grades == {}:
@@ -324,7 +320,7 @@ class ECFolder(ATFolder):
         if (ecab_utils != None):
             return ecab_utils.getWfStates(config.ECA_WORKFLOW_ID)
         else:
-            log.warn("Could not get tool by name: '%s'" % 'ecab_utils')
+            LOG.warn("Could not get tool by name: '%s'" % 'ecab_utils')
             return ()
 
 

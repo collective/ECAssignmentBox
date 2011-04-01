@@ -84,7 +84,7 @@ The icons used in ECAssignmentBox are from the `Silk icon set`_ by
 Mark James.  They are licensed under a `Creative Commons Attribution 
 2.5 License`_.
 
-ECAssignmentBox was ported to Plone 3 by `Eudemonia Solutions AG`_ 
+ECAssignmentBox was ported to Plone 3 and 4 by `Eudemonia Solutions AG`_ 
 with support from `Katrin Krieger`_ and the Otto-von-Guericke 
 University of Magdeburg.
 
