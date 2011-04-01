@@ -16,7 +16,7 @@ Prerequisites
 =============
 
 To use ECAssignmentBox you need a current Plone installation, 
-specifically Plone 3.x.  Check `plone.org`_ for Plone's 
+specifically Plone 4.x.  Check `plone.org`_ for Plone's 
 prerequisites.
 
 .. _plone.org: http://plone.org/products/plone

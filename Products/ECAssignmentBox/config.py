@@ -37,12 +37,15 @@ ECA_WORKFLOW_ID = 'ec_assignment_workflow'
 
 # supported mime types for textfields
 #EC_MIME_TYPES = ('text/x-web-intelligent',)
-EC_MIME_TYPES = ('text/plain', 'text/structured', 'text/x-rst', 'text/x-web-intelligent', 'text/html', )
+#EC_MIME_TYPES = ('text/plain', 'text/structured', 'text/x-rst', 'text/x-web-intelligent', 'text/html', )
+EC_MIME_TYPES = zconf.ATDocument.allowed_content_types
+
 ECA_MIME_TYPES = ('text/plain', 'text/structured', 'text/x-rst', 'text/x-web-intelligent', )
 
 # default mime type for textfields
 #EC_DEFAULT_MIME_TYPE = 'text/x-web-intelligent'
-EC_DEFAULT_MIME_TYPE = 'text/plain'
+#EC_DEFAULT_MIME_TYPE = 'text/plain'
+EC_DEFAULT_MIME_TYPE = zconf.ATDocument.default_content_type
 
 # default output format of textfields
 #EC_DEFAULT_FORMAT = 'text/x-web-intelligent'

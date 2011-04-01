@@ -43,12 +43,14 @@ def setupHideToolsFromNavigation(context):
                 current.append(toolname)
                 kwargs = {'idsNotToList': current}
                 navtreeProperties.manage_changeProperties(**kwargs)
-
+        
+        """
         for item in current:
             try:
                 portal[item].unindexObject()
             except:
                 log.warn('Could not unindex object: %s' % item)
+        """
 
 
 def fixTools(context):
