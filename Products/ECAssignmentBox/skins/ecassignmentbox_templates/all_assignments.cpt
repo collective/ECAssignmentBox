@@ -15,15 +15,8 @@
     </metal:block>
 
     <metal:main fill-slot="main">
-      <tal:main-macro metal:define-macro="main"
-          condition="python:hasattr(here, 'countContainedBoxes')">
+      <tal:main-macro metal:define-macro="main">
       
-        <!--  debug 
-        <div tal:content="python: 'showSuperseded:%s' % resFlt['show_superseded']" />
-        <div tal:content="python: 'mkUrl:%s' % mkUrl({})" />
-        <div tal:content="string: resFlt:$resFlt" />
-        -->
-
         <div tal:replace="structure provider:plone.documentactions" />
     
         <div tal:define="global has_items python:0;
@@ -42,15 +35,25 @@
                   mkUrl        python:lambda d : '%s/%s?%s' % (here.absolute_url(), template.getId(), ecab_utils.urlencode(dict(resFlt2.items() + d.items())));"
         >
 
+          <!--  debug 
+          <div tal:content="python: 'showSuperseded:%s' % resFlt['show_superseded']" />
+          <div tal:content="python: 'mkUrl:%s' % mkUrl({})" />
+          <div tal:content="string: resFlt:$resFlt" />
+          -->
+
           <metal:use use-macro="here/all_assignments_macros/macros/all_assignments_heading" />
           
           <metal:use use-macro="here/base_macros/macros/up_one_level" />
           
+          <!--
           <p tal:condition="python: not ecab_utils.testAssignmentBoxType(here)">
+          -->
+          <p tal:define="n_boxes here/aq_explicit/countContainedBoxes|nothing"
+             tal:condition="n_boxes">
             <b i18n:translate="label_n_boxes">
               Published assignment boxes inside this folder:
             </b>
-            <span tal:omit-tag="" tal:content="python:here.countContainedBoxes()"/>
+            <span tal:omit-tag="" tal:content="n_boxes" />
           </p>
 
           <metal:use use-macro="here/base_macros/macros/user_details" />
@@ -128,27 +131,16 @@
 
               <div class="field">
 
-                <tal:block define="transitions python: ecab_utils.getWfTransitions()"
-                          repeat="transition transitions">
-                  <input class="noborder"
-                         id=""
-                         type="radio"
-                         name="workflow_action"
-                         title=""
-                         value=""
-                         i18n:attributes="title"
-                         i18n:domain="plone"
-                         tal:attributes="value transition/id;
-                                         id    transition/id;
-                                         title transition/name;" />
-                  <label for=""
-                         i18n:translate=""
-                         i18n:domain="plone"
-                         tal:attributes="for transition/id;"
-                         tal:content="transition/name"
-                         >Transition Name</label>
-                         <br />
-                </tal:block>
+                <select size="1" name="workflow_action">
+                  <tal:block define="transitions python: ecab_utils.getWfTransitions()"
+                            repeat="transition transitions">
+                    <option value=""
+                           i18n:attributes="title"
+                           i18n:domain="plone"
+                           tal:attributes="value transition/id"
+                           tal:content="transition/name" />
+                  </tal:block>
+                </select>
   
               </div>
             </div>

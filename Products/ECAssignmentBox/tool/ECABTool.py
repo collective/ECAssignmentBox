@@ -82,12 +82,14 @@ class ECABTool(UniqueObject, BaseContent, BrowserDefaultMixin):
         wtool = self.portal_workflow
         return wtool.getWorkflowById(wfName).states.keys()
 
-    #security.declarePrivate('getWfStatesDisplayList')
+    #security.declarePublic('getWfStatesDisplayList')
     def getWfStatesDisplayList(self, wfName=config.ECA_WORKFLOW_ID):
         """
         @return a DisplayList containing all state keys and state titles in 
                 assignment's workflow
         """
+        #LOG.info('xxx: getWfStatesDisplayList')
+        
         dl = DisplayList(())
 
         wtool = self.portal_workflow

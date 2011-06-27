@@ -1,0 +1,37 @@
+<configure
+    xmlns="http://namespaces.zope.org/browser"
+    xmlns:zope="http://namespaces.zope.org/zope"
+    xmlns:zcml="http://namespaces.zope.org/zcml">
+
+  <!-- 
+  <include package=".viewlets" />
+  -->
+
+  <!-- kss -->
+
+  <resource
+      file="ecab.kss"
+      name="ecab.kss"
+      />
+
+  <!-- 
+  <zope:subscriber handler=".ecab_kss.ecab_workflow_changed"/>
+   -->
+
+  <page
+      for="*"
+      class=".ecab_kss.WorkflowGadget"
+      attribute="ecabChangeWorkflowState"
+      name="ecabChangeWorkflowState"
+      permission="zope2.View"
+      />
+
+  <page
+      name="ecab_workflow_change"
+      class=".state.WorkflowChangeView"
+      for="*"
+      permission="zope2.View"
+      template="viewlets/templates/workflow_change.pt"
+      />
+
+</configure>

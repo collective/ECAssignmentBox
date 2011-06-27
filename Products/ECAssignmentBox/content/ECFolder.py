@@ -50,7 +50,7 @@ schema = Schema((
     LinesField(
         'completedStates',
         searchable = False,
-        vocabulary = 'getWfStatesDisplayList',
+        vocabulary = 'getCompletedStatesVocab',
         multiValued = True,
         widget = MultiSelectionWidget(
             label = "Completed States",
@@ -94,22 +94,13 @@ class ECFolder(ATFolder):
     schema = ECFolder_schema
 
     # Methods
-    #security.declarePrivate('getWfStatesDisplayList')
-    def getWfStatesDisplayList(self):
+    security.declarePrivate('getCompletedStatesVocab')
+    def getCompletedStatesVocab(self):
         """
-        @deprecated use getWfStatesDisplayList in ecab_utils directly
+        HINT: used as vocabulary for completedStates only (s. a.)
         """
-#        try:
-#            utils = getToolByName(self, 'ecab_utils')
-#            return utils.getWfStatesDisplayList(ECA_WORKFLOW_ID)
-#        except AttributeError:
-#            return DisplayList(())
         ecab_utils = getToolByName(self, 'ecab_utils', None)
-        
-        if (ecab_utils != None):
-            return ecab_utils.getWfStatesDisplayList(config.ECA_WORKFLOW_ID)
-        else:
-            return DisplayList(())
+        return ecab_utils.getWfStatesDisplayList(config.ECA_WORKFLOW_ID)
 
     
     security.declarePublic('summarize')
@@ -347,6 +338,9 @@ class ECFolder(ATFolder):
         @param published 
         @return an integer
         """
+        
+        #LOG.info('xxx: %s' % self.aq_explicit)
+        
         brains = []
         
         # get the portal's catalog

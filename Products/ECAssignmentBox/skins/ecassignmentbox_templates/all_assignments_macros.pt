@@ -273,7 +273,14 @@
               </tal:repeat>
             </td>
 
+            <!-- info -->
             <td>
+              <!-- TODO: change state using KSS
+              <div class="actionWorkflowChange"
+                tal:define="wf_change nocall:assignment/@@ecab_workflow_change;"
+                tal:content="structure python:wf_change()" />
+              -->
+               
               <div tal:content="assignment_date" />
 
               <div>              
@@ -292,8 +299,10 @@
               </div>
 
               <div tal:condition="not: assignment_state_title">&nbsp;</div>
+               
             </td>
             
+            <!-- assignment text -->
             <td>
               <div tal:define="
                   fieldName string:file;
@@ -301,9 +310,9 @@
                   accessor  python:field.getAccessor(assignment);
                   unit      accessor;">
 
-                <tal:view define="mode string:view;
-                          use_label python:False;
-                          object    python:accessor();"
+                <tal:view define="mode      string:view;
+                                  use_label python:False;
+                                  object    python:accessor();"
                     condition="object | object/get_data | object/data | nothing" >
 
                   <pre tal:define="cnt unit/get_data;"
@@ -311,13 +320,13 @@
                       tal:content="cnt">
                   </pre>
 
-                  <tal:block define="
-                          size unit/get_size | python:unit and len(unit) or 0;
-                          filename unit/filename | nothing"
+                  <tal:block 
+                      define="size unit/get_size | python:unit and len(unit) or 0;
+                              filename unit/filename | nothing"
                       condition="python:size &gt; 0">
-<!-- 
+                      <!-- 
                           icon unit/getBestIcon | nothing;
- -->          
+                      -->          
                     <a href="" tal:attributes="href string:${assignment_url}/at_download/$fieldName">
                       <img tal:condition="assignment_icon" src=""
                            tal:attributes="src string:${assignment_icon}"/>
@@ -402,7 +411,7 @@
             <metal:use use-macro="here/all_assignments_macros/macros/all_assignments_thead" />
                                   
             <!--  add table contents -->
-            <tal:block define="wtool here/portal_workflow;
+            <tal:block define="wtool            here/portal_workflow;
                                global has_items python: 1;"
             >
               <metal:use use-macro="here/all_assignments_macros/macros/all_assignments_tbody" />

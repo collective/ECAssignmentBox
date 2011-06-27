@@ -15,170 +15,182 @@
     </metal:block>
 
     <metal:main fill-slot="main">
-      <tal:main-macro metal:define-macro="main"
-          condition="python:hasattr(here, 'countContainedBoxes')">
-        <div tal:replace="structure provider:plone.documentactions" />
+      <tal:main-macro metal:define-macro="main">
 
-        <div tal:define="global has_items python: 0;
-                  putils            context/plone_utils;
-                  ecab_utils        nocall:context/ecab_utils;
-                  template_id       template/getId;
-                  permission        python:modules['AccessControl'].getSecurityManager().checkPermission;
-                  isOwner           python:user.has_role(['Owner', 'Reviewer', 'Manager'], context);
-                  isGrader          python:here.portal_membership.checkPermission('eduComponents: Grade Assignments', context);
-                  n_boxes           python:here.meta_type == 'ECFolder' and here.countContainedBoxes(False);
-                  n_boxes_published python:here.meta_type == 'ECFolder' and here.countContainedBoxes(True);
-                  assignmentStates  here/countContainedAssignments;
-                  totalAssignments  python:assignmentStates[0];
-                  superseededStats  here/getSuperseededStats;
-                  dateStats         here/getSubmissionDateStats;"
+        <tal:replace
+            define="template_id      template/getId;
+                    assignmentStates here/countContainedAssignments|nothing;"
         >
-
+  
+          <div tal:replace="structure provider:plone.documentactions" />
           <metal:use use-macro="here/all_assignments_macros/macros/all_assignments_heading" />
-        
           <metal:use use-macro="here/base_macros/macros/up_one_level" />
 
-          <div>
-            <h4 i18n:translate="label_totals">Totals</h4>
-
-            <div class="formHelp" i18n:translate="help_totals">
-              Shows totals for several values.
-            </div>
-            
-            <!-- debug -->
-            <!-- 
-            <div tal:content="python: assignmentStates[1]" />
-            <div tal:content="python: assignmentStates[2]" />
-            <div tal:content="python: assignmentStates[3]" />
-             -->
-  
-            <ul tal:condition="python: totalAssignments > 0">
-              <li tal:condition="n_boxes">
-                <span tal:omit-tag="" i18n:translate="label_n_boxes_not_pub">Assignment boxes inside this folder:</span>
-                <span tal:replace="n_boxes"/>
-                (<span tal:omit-tag="" i18n:domain="plone" i18n:translate="published">published</span>:
-                <span tal:replace="n_boxes_published"/>)
-              </li>
-              <li>
-                <span tal:omit-tag="" i18n:translate="label_total_superseeded">Superseded submissions:</span>
-                <span tal:replace="python: totalAssignments - assignmentStates[1]"/>
-              </li>
-              <li>
-                <span tal:omit-tag="" i18n:translate="label_total_assignments_without">Submissions in all other states:</span>
-                <span tal:replace="python: assignmentStates[1]"/>
-              </li>
-              <li tal:condition="python: assignmentStates[1] - (assignmentStates[2] + assignmentStates[3]) != 0">
-                <span tal:omit-tag="" i18n:translate="label_total_assignments_not_final">Submissions not in final states:</span>
-                <span tal:replace="python: assignmentStates[1] - (assignmentStates[2] + assignmentStates[3])"/>
-              </li>
-            </ul>
-
-            <span tal:condition="python: totalAssignments == 0" i18n:translate="warn_no_submissions">
-              There are no submissions
-            </span>
-            
-            <br />
-
-          </div>
-
-          <div>  
-            <h4 i18n:translate="label_final_states">Submissions in final states</h4>
-
-            <div class="formHelp" i18n:translate="help_final_states">
-              Shows the number of submissions in the states defined as 
-              completed and the number of rejected submissions.
-            </div>
-            
-            <p tal:condition="python: assignmentStates[2] > 0">
-                <tal:nothing define="statesDL here/getWfStatesDisplayList;"
-                    repeat="state python: here.completedStates">
-                        <span
-                            tal:content="python: statesDL.getValue(state, default=state)"
-                            tal:attributes="class python: 'state-' + putils.normalizeString(state)"
-                            i18n:domain="plone"
-                            i18n:translate=""
-                        /><span tal:condition="not:repeat/state/end" tal:replace="string:,"/></tal:nothing>:
-  
-                <span tal:replace="python: assignmentStates[2]" />
-                <span class="documentByLine" tal:content="python: '(%s%%)' % ecab_utils.localizeNumber('%.1f', float(100*assignmentStates[2]) / assignmentStates[1])" />
+          <tal:replace condition="python:assignmentStates <> None">
+      
+            <div tal:define="global has_items python: 0;
+                      putils            context/plone_utils;
+                      ecab_utils        nocall:context/ecab_utils;
+                      p_boxes           here/aq_explicit/countContainedBoxes|nothing;
+                      all_boxes         python:(p_boxes <> None) and here.countContainedBoxes(False);
+                      states            here/completedStates|nothing;
+                      totalAssignments  python:assignmentStates and assignmentStates[0];
+                      superseededStats  here/getSuperseededStats|nothing;
+                      dateStats         here/getSubmissionDateStats|nothing;"
+            >
+      
+              <div tal:condition="python: totalAssignments > 0">
+                <h4 i18n:translate="label_totals">Totals</h4>
+    
+                <div class="formHelp" i18n:translate="help_totals">
+                  Shows totals for several values.
+                </div>
+                
+                <!-- debug -->
+                <!-- 
+                      permission        python:modules['AccessControl'].getSecurityManager().checkPermission;
+                      isOwner           python:user.has_role(['Owner', 'Reviewer', 'Manager'], context);
+                      isGrader          python:here.portal_membership.checkPermission('eduComponents: Grade Assignments', context);
+                <div tal:content="python: assignmentStates[1]" />
+                <div tal:content="python: assignmentStates[2]" />
+                <div tal:content="python: assignmentStates[3]" />
+                 -->
+      
+                <ul>
+                  <li tal:condition="all_boxes">
+                    <span tal:omit-tag="" i18n:translate="label_n_boxes_not_pub">Assignment boxes inside this folder:</span>
+                    <span tal:replace="all_boxes"/>
+                    (<span tal:omit-tag="" i18n:domain="plone" i18n:translate="published">published</span>:
+                    <span tal:replace="p_boxes" />)
+                  </li>
+                  <li>
+                    <span tal:omit-tag="" i18n:translate="label_total_superseeded">Superseded submissions:</span>
+                    <span tal:replace="python: totalAssignments - assignmentStates[1]"/>
+                  </li>
+                  <li>
+                    <span tal:omit-tag="" i18n:translate="label_total_assignments_without">Submissions in all other states:</span>
+                    <span tal:replace="python: assignmentStates[1]"/>
+                  </li>
+                  <li tal:condition="python: assignmentStates[1] - (assignmentStates[2] + assignmentStates[3]) != 0">
+                    <span tal:omit-tag="" i18n:translate="label_total_assignments_not_final">Submissions not in final states:</span>
+                    <span tal:replace="python: assignmentStates[1] - (assignmentStates[2] + assignmentStates[3])"/>
+                  </li>
+                </ul>
+    
+                <span tal:condition="python: totalAssignments == 0" i18n:translate="warn_no_submissions">
+                  There are no submissions
+                </span>
+                
                 <br />
-                <span class="state-rejected" i18n:translate="Rejected">Rejected</span>:
-  
-                <span tal:replace="python: assignmentStates[3]" />
-                <span class="documentByLine" tal:content="python: '(%s%%)' % ecab_utils.localizeNumber('%.1f', float(100*assignmentStates[3]) / assignmentStates[1])" />
-            </p>
-            <!-- alternative view if there are no assignments -->
-            <p tal:condition="python: assignmentStates[2] == 0">
-                <span tal:omit-tag="" i18n:translate="warn_no_final_submissions">There are no submissions in final states</span>
-            </p>
-            <br />
-          </div>
-
-          <div tal:condition="python: (here.meta_type != 'ECFolder')">
-            <h4 i18n:translate="label_superseded_stats">Number of attempts</h4>
-              <div class="formHelp" i18n:translate="help_superseded_stats">
-                This table shows the number of attempts users needed for this
-                assignment.
+    
               </div>
-  
-            <table class="listing" tal:condition="python: superseededStats[superseededStats[0]:]">
-              <thead>
-                <tr>
-                  <th i18n:translate="label_attempts">Attempts</th>
-                  <th i18n:translate="label_students">Students (%)</th>
-                </tr>
-              </thead>
-  
-              <tbody style="text-align: right">
-                <tal:block repeat="elem python: superseededStats[superseededStats[0]:]">
-                  <tr tal:define="oddrow repeat/elem/odd;"
-                      tal:attributes="class python: test(oddrow, 'odd', 'even')">
-                    <td tal:content="python: str(elem[0])"> 1
-                    </td>
-                    <td tal:content="python: str(elem[1]) +
-                        ' (' + str(ecab_utils.localizeNumber('%.1f', float(100 * elem[1]) / superseededStats[3])) + '%)'">
-                        1 (3%)
-                    </td>
-                  </tr>
-                </tal:block>
-              </tbody>
-            </table>
-  
-            <p tal:condition="python: not superseededStats[superseededStats[0]:]">
-                <span tal:omit-tag="" i18n:translate="warn_no_submissions">There are no submissions</span>
-            </p>
-            <br />
-          </div>
-  
-          <div>
-            <h4 i18n:translate="label_date_stats">Submissions per day</h4>
-            <div class="formHelp" i18n:translate="help_date_stats">
-              This table shows the number of submissions per day.
+    
+              <div tal:condition="python:states and assignmentStates">
+                <h4 i18n:translate="label_final_states">Submissions in final states</h4>
+    
+                <div class="formHelp" i18n:translate="help_final_states">
+                  Shows the number of submissions in the states defined as 
+                  completed and the number of rejected submissions.
+                </div>
+                
+                <p tal:condition="python:assignmentStates[2] > 0">
+                    <tal:repeat 
+                        define="statesDL python:ecab_utils.getWfStatesDisplayList();"
+                        repeat="state states">
+                          <span
+                              tal:content="python: statesDL.getValue(state, default=state)"
+                              tal:attributes="class python: 'state-' + putils.normalizeString(state)"
+                              i18n:domain="plone"
+                              i18n:translate=""
+                          /><span tal:condition="not:repeat/state/end" tal:replace="string:,"/>
+                    </tal:repeat>:
+      
+                    <span tal:replace="python:assignmentStates[2]" />
+                    <span class="documentByLine" tal:content="python: '(%s%%)' % ecab_utils.localizeNumber('%.1f', float(100*assignmentStates[2]) / assignmentStates[1])" />
+                    <br />
+                    <span class="state-rejected" i18n:translate="Rejected">Rejected</span>:
+      
+                    <span tal:replace="python: assignmentStates[3]" />
+                    <span class="documentByLine" tal:content="python: '(%s%%)' % ecab_utils.localizeNumber('%.1f', float(100*assignmentStates[3]) / assignmentStates[1])" />
+                </p>
+                <!-- alternative view if there are no assignments -->
+                <p tal:condition="python:assignmentStates[2] == 0">
+                    <span tal:omit-tag="" i18n:translate="warn_no_final_submissions">There are no submissions in final states</span>
+                </p>
+                <br />
+              </div>
+    
+              <!--
+              <div tal:condition="python: (here.meta_type != 'ECFolder')">
+              -->
+              <div tal:condition="superseededStats">
+                <h4 i18n:translate="label_superseded_stats">Number of attempts</h4>
+                  <div class="formHelp" i18n:translate="help_superseded_stats">
+                    This table shows the number of attempts users needed for this
+                    assignment.
+                  </div>
+      
+                <table class="listing" tal:condition="python: superseededStats[superseededStats[0]:]">
+                  <thead>
+                    <tr>
+                      <th i18n:translate="label_attempts">Attempts</th>
+                      <th i18n:translate="label_students">Students (%)</th>
+                    </tr>
+                  </thead>
+      
+                  <tbody style="text-align: right">
+                    <tal:block repeat="elem python: superseededStats[superseededStats[0]:]">
+                      <tr tal:define="oddrow repeat/elem/odd;"
+                          tal:attributes="class python: test(oddrow, 'odd', 'even')">
+                        <td tal:content="python: str(elem[0])"> 1
+                        </td>
+                        <td tal:content="python: str(elem[1]) +
+                            ' (' + str(ecab_utils.localizeNumber('%.1f', float(100 * elem[1]) / superseededStats[3])) + '%)'">
+                            1 (3%)
+                        </td>
+                      </tr>
+                    </tal:block>
+                  </tbody>
+                </table>
+      
+                <p tal:condition="python: not superseededStats[superseededStats[0]:]">
+                    <span tal:omit-tag="" i18n:translate="warn_no_submissions">There are no submissions</span>
+                </p>
+                <br />
+              </div>
+      
+              <div tal:condition="dateStats">
+                <h4 i18n:translate="label_date_stats">Submissions per day</h4>
+                <div class="formHelp" i18n:translate="help_date_stats">
+                  This table shows the number of submissions per day.
+                </div>
+                <table class="listing">
+                  <thead>
+                    <tr>
+                      <th i18n:translate="label_date">Date</th>
+                      <th i18n:translate="label_submissions">Submissions</th>
+                    </tr>
+                  </thead>
+                  <tbody style="text-align: right">
+                    <tal:block tal:repeat="elem python: dateStats">
+                      <tr tal:define="oddrow repeat/elem/odd;"
+                          tal:attributes="class python: test(oddrow, 'odd', 'even')">
+                        <td tal:content="python: here.toLocalizedTime(elem[0], False)"> 2007/01/23 </td>
+                        <td tal:content="python: elem[1]"> 1 </td>
+                      </tr>
+                    </tal:block>
+                  </tbody>
+                </table>
+                
+                <p tal:condition="python: not dateStats">
+                  <span tal:omit-tag="" i18n:translate="warn_no_submissions">There are no submissions</span>
+                </p>
+              </div>
+              
             </div>
-            <table class="listing" tal:condition="python: dateStats">
-              <thead>
-                <tr>
-                  <th i18n:translate="label_date">Date</th>
-                  <th i18n:translate="label_submissions">Submissions</th>
-                </tr>
-              </thead>
-              <tbody style="text-align: right">
-                <tal:block tal:repeat="elem python: dateStats">
-                  <tr tal:define="oddrow repeat/elem/odd;"
-                      tal:attributes="class python: test(oddrow, 'odd', 'even')">
-                    <td tal:content="python: here.toLocalizedTime(elem[0], False)"> 2007/01/23 </td>
-                    <td tal:content="python: elem[1]"> 1 </td>
-                  </tr>
-                </tal:block>
-              </tbody>
-            </table>
-            
-            <p tal:condition="python: not dateStats">
-              <span tal:omit-tag="" i18n:translate="warn_no_submissions">There are no submissions</span>
-            </p>
-          </div>
-          
-        </div>
+          </tal:replace>
+        </tal:replace>
+
       </tal:main-macro>
     </metal:main>
 

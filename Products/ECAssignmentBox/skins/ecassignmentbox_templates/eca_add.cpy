@@ -59,11 +59,9 @@ else:
     filename = '%s.txt' % (id,)
 
 # set file
-# FIXME: If file is instance of FileUpload, filename will be ignored. 
-#        See Archetypes/Field.py in FileField._process_input.
+# HINT: If file is instance of FileUpload, filename will be ignored. 
+#       See Archetypes/Field.py in FileField._process_input.
 assignment.setFile(file, filename=filename)
-
-#assignment.setId(filename)
     
 # evaluate this submission (actually implemented in ECAAB)
 result = assignment.evaluate(context)
@@ -82,12 +80,8 @@ if result:
     else:
         msg = result
     
-target_action = '%s/%s' % (assignment.getId(), assignment.getTypeInfo().getActionInfo(['object/view'])['url'])
-
-##return state.set(portal_status_message = msg)
-#RESPONSE.redirect('%s/%s?portal_status_message=%s' % 
-#            (context.absolute_url(), target_action, msg,))
+#target_action = '%s/%s' % (assignment.getId(), assignment.getTypeInfo().getActionInfo(['object/view'])['url'])
 
 context.plone_utils.addPortalMessage(msg)
-RESPONSE.redirect('%s/%s' % (context.absolute_url(), target_action,))
+RESPONSE.redirect('%s/%s' % (context.absolute_url(), assignment.getId()))
 

@@ -1,10 +1,15 @@
 History
 =======
 
-# Changes in release 1.5 (2011-04-01)
+# Changes in release 1.5 (2011-06-30)
 
 - Added compatibility for Plone 4. Plone 3.x support has been dropped.
   Plone 3 users should use ECAssignmentBox 1.4.x.
+
+
+# Changes in release 1.4.3 (2011-04-29)
+
+- Minor improvements.
 
 
 # Changes in release 1.4.2 (2009-09-30)

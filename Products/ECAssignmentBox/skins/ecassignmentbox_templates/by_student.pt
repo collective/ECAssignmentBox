@@ -15,215 +15,224 @@
     </metal:block>
 
     <metal:main fill-slot="main">
-      <tal:main-macro metal:define-macro="main"
-          condition="python:hasattr(here, 'summarizeGrades')">
+      <tal:main-macro metal:define-macro="main">
 
-      <div
-          tal:define="template_id     template/getId;
-                  normalizeString nocall:context/@@plone/normalizeString;
-                  ecab_utils      nocall:context/ecab_utils;
-                  n_boxes         here/countContainedBoxes | string:---;
-                  states          python:ecab_utils.getWfStatesDisplayList();
-                  grades          python:here.summarizeGrades();"
-      >
-      
-        <!-- debug -->
-        <!-- 
-        <div tal:content="python: '?%s' % ecab_utils.urlencode({})" />
-        <div tal:content="python: '?%s' % ecab_utils.urlencode({'state':'accepted', 'user_id':userName, })" />
-        -->
+        <tal:replace
+            define="template_id template/getId;
+                    n_boxes     here/aq_explicit/countContainedBoxes|nothing;"
+        >
+  
+          <div tal:replace="structure provider:plone.documentactions" />
+          <metal:use use-macro="here/all_assignments_macros/macros/all_assignments_heading" />
+          <metal:use use-macro="here/base_macros/macros/up_one_level" />
 
-        <div tal:replace="structure provider:plone.documentactions" />
+          <tal:replace condition="python:n_boxes <> None">
     
-        <metal:use use-macro="here/all_assignments_macros/macros/all_assignments_heading" />
-          
-        <metal:use use-macro="here/base_macros/macros/up_one_level" />
-
-
-        <p>
-          <b i18n:translate="label_n_boxes">Published assignment boxes inside this folder:</b>
-          <span tal:omit-tag="" tal:content="n_boxes"/>
-          <br/>
+            <div tal:define="normalizeString nocall:context/@@plone/normalizeString;
+                             ecab_utils      nocall:context/ecab_utils;
+                             statesDL        ecab_utils/getWfStatesDisplayList;
+                             
+                             grades          here/summarizeGrades|nothing;
+                             states          here/aq_explicit/completedStates|nothing;"
+            >
+            
+              <!-- debug -->
+              <!-- 
+              <div tal:content="python: '?%s' % ecab_utils.urlencode({})" />
+              <div tal:content="python: '?%s' % ecab_utils.urlencode({'state':'accepted', 'user_id':userName, })" />
+              -->
+      
+              <div>
+                <p tal:condition="n_boxes">
+                  <b i18n:translate="label_n_boxes">
+                    Published assignment boxes inside this folder:
+                  </b>
+                  <span tal:omit-tag="" tal:content="n_boxes" />
+                </p>
+      
+                <p tal:condition="states">
+                  <span tal:omit-tag="">
+                    <span tal:omit-tag="" tal:condition="here/projectedAssignments">
+                      <b i18n:translate="label_projected_assignments">Projected Number of Assignments:</b>
+                      <span tal:omit-tag="" tal:replace="here/projectedAssignments"/>
+                      <br/>
+                    </span>
+            
+                    <b i18n:translate="label_completed_states">Completed States:</b>
+            
+                    <tal:repeat repeat="state states">
+                      <span
+                        tal:content="python:statesDL.getValue(state, default=state)"
+                        tal:attributes="class python: 'state-' + normalizeString(state)"
+                        i18n:domain="plone"
+                        i18n:translate=""
+                      /><span tal:condition="not:repeat/state/end" tal:replace="string:," />
+                    </tal:repeat>
+                  </span>
+                </p>
+              </div>
     
-          <span tal:omit-tag="" tal:condition="here/completedStates">
-            <span tal:omit-tag="" tal:condition="here/projectedAssignments">
-              <b i18n:translate="label_projected_assignments">Projected Number of Assignments:</b>
-              <span tal:omit-tag="" tal:replace="here/projectedAssignments"/>
-              <br/>
-            </span>
+              <div>  
+                <table class="listing">
+                  <thead>
+                    <tr>
+                      <th i18n:translate="label_user">User</th>
+                      <th tal:condition="grades" i18n:translate="label_average_grade">Avg. Grade</th>
+            
+                      <th i18n:translate="label_completed">Completed</th>
+                      <th i18n:translate="label_completed_curr">%&nbsp;Curr.</th>
+                      <th tal:condition="here/projectedAssignments"
+                          i18n:translate="label_completed_proj">%&nbsp;Proj.</th>
     
-            <b i18n:translate="label_completed_states">Completed States:</b>
+                      <tal:repeat
+                       
+                          repeat="state python: statesDL.keys()">
+                      <th tal:attributes="class python: 'state-' + normalizeString(state)">
+                        <!-- 
+                        <span tal:content="python: states.getValue(state, default=state)"
+                          tal:omit-tag=""
+                          i18n:domain="plone"
+                          i18n:translate=""/> (%)
+                        -->
+                        <span tal:content="python: statesDL.getValue(state, default=state)"
+                          tal:omit-tag=""
+                          i18n:domain="plone"
+                          i18n:translate=""/>
+                      </th>
+                      </tal:repeat>
+                    </tr>
+                  </thead>
+        
+                  <tbody style="text-align: right">
+                    <tal:block 
+                          tal:define="summary   python:here.summarize();
+                                      items     python:here.rework(summary);
+                                      completed python:here.summarizeCompletedAssignments(summary);"
+                          tal:repeat="student items">
+                      
+                      <tr tal:define="oddrow repeat/student/odd;"
+                          tal:attributes="class python: test(oddrow, 'odd', 'even')">
+                        <td style="text-align: left">
+                          <a tal:content="python: student[1]"
+                             tal:attributes="href python:'all_assignments?%s' % ecab_utils.urlencode({'user_id' : student[0]});"/>
+                        </td>
+                        <tal:if condition="grades">
+                          <td tal:condition="python: grades.get(student[0], [])"
+                              tal:content="python: ecab_utils.localizeNumber('%d', ecab_utils.calculateMean(grades.get(student[0], [])))">
+                              3
+                          </td>
+                          <td tal:condition="python: not grades.get(student[0], [])">&mdash;</td>
+                        </tal:if>
+                        <tal:block tal:condition="states">
+                          <tal:block tal:define="c python: completed[student[0]]">
+                            <td>
+                              <!-- number of assignments in state grade -->
+                              <b tal:content="c"/>
+                            </td>
+                            <td>
+                              <span tal:condition="python: n_boxes != 0" tal:replace="python:
+                                  ecab_utils.localizeNumber('%.1f', round(float(c)/n_boxes * 100, 2))"/>
+        
+                              <span tal:condition="python: n_boxes == 0" tal:replace="string:---"/>
+                            </td>
+                            <td tal:condition="here/projectedAssignments">
+                              <b tal:content="python:
+                                  ecab_utils.localizeNumber('%.1f', round(float(c)/here.projectedAssignments * 100, 2))"/>
+                            </td>
+                          </tal:block>
+                        </tal:block>
+                        <!-- number of assignments in typical assignment's states -->
+                        <tal:block tal:repeat="state python: student[2]">
+                          <td>
+                            <span tal:replace="state" />
+                            <!-- 
+                            (<span tal:replace="python:
+                                ecab_utils.localizeNumber('%d', round(float(state)/n_boxes * 100, 2))"/>)
+                            -->
+        
+                            <!-- 
+                              add link to all_assignments 
+                              e.g., aufgabenblatt-1/all_assignments?state=accepted&user_id=amelung
+                            -->
+                            <!-- 
+                            <a tal:content="state"
+                               tal:attributes="href python:
+                              here.getActionInfo('object/all_assignments')['url'] + '?%s' % ecab_utils.urlencode({'user_id':student[0], 'state':states,});"/>
+                            -->
+                          </td>
+                        </tal:block>
+                      </tr>
+                    </tal:block>
+                  </tbody>
+                </table>
+        
+                <div class="formControls visualNoPrint">
+                  <!-- Export Button -->
+                  <form name="exportStatistics" 
+                      action="#" 
+                      method="post"
+                      tal:attributes="action context/@@plone_context_state/object_url">
+        
+                    <input class="context"
+                        type="submit"
+                        name="exportStatistics:method"
+                        value="Export"
+                        i18n:attributes="value"/>
+                  </form>
+                </div>
+              </div>
+      
+              <br />
     
-            <tal:nothing define="statesDL here/getWfStatesDisplayList;"
-              repeat="state python: here.completedStates">
-              
-              <span
-                tal:content="python: statesDL.getValue(state, default=state)"
-                tal:attributes="class python: 'state-' + normalizeString(state)"
-                i18n:domain="plone"
-                i18n:translate=""
-                /><span tal:condition="not:repeat/state/end"
-                tal:replace="string:,"/>
-            </tal:nothing>
-          </span>
-        </p>
-
-        <table class="listing">
-          <thead>
-            <tr>
-              <th i18n:translate="label_user">User</th>
-              <th tal:condition="grades" i18n:translate="label_average_grade">Avg. Grade</th>
-    
-              <tal:block tal:condition="here/completedStates">
-                  <th i18n:translate="label_completed">Completed</th>
-                  <th i18n:translate="label_completed_curr">%&nbsp;Curr.</th>
-                  <th tal:condition="here/projectedAssignments"
-                      i18n:translate="label_completed_proj">%&nbsp;Proj.</th>
-              </tal:block>
-    
-              <tal:block tal:repeat="state python: states.keys()">
-                <th tal:attributes="class python: 'state-' + normalizeString(state)">
-                <!-- 
-                  <span tal:content="python: states.getValue(state, default=state)"
-                    tal:omit-tag=""
-                    i18n:domain="plone"
-                    i18n:translate=""/> (%)
-                -->
-                  <span tal:content="python: states.getValue(state, default=state)"
-                    tal:omit-tag=""
-                    i18n:domain="plone"
-                    i18n:translate=""/>
-                 </th>
-              </tal:block>
-            </tr>
-          </thead>
-
-          <tbody style="text-align: right"
-              tal:define="
-              summary    python: here.summarize();
-              items      python: here.rework(summary);
-              completed  python: here.summarizeCompletedAssignments(summary);">
-            <tal:block tal:repeat="student items">
-              <tr tal:define="oddrow repeat/student/odd;"
-                  tal:attributes="class python: test(oddrow, 'odd', 'even')">
-                <td style="text-align: left">
-                  <a tal:content="python: student[1]"
-                     tal:attributes="href python:
-                    here.getActionInfo('object/all_assignments')['url'] + '?%s' % ecab_utils.urlencode({'user_id' : student[0]});"/>
-                </td>
-                <tal:if condition="grades">
-                  <td tal:condition="python: grades.get(student[0], [])"
-                      tal:content="python: ecab_utils.localizeNumber('%d',
-                          ecab_utils.calculateMean(grades.get(student[0], [])))">
-                      3
-                  </td>
-                  <td tal:condition="python: not grades.get(student[0], [])">&mdash;</td>
-                </tal:if>
-                <tal:block tal:condition="here/completedStates">
-                  <tal:block tal:define="c python: completed[student[0]]">
-                    <td>
-                      <!-- number of assignments in state grade -->
-                      <b tal:content="c"/>
-                    </td>
-                    <td>
-                      <span tal:condition="python: n_boxes != 0" tal:replace="python:
-                          ecab_utils.localizeNumber('%.1f', round(float(c)/n_boxes * 100, 2))"/>
-
-                      <span tal:condition="python: n_boxes == 0" tal:replace="string:---"/>
-                    </td>
-                    <td tal:condition="here/projectedAssignments">
-                      <b tal:content="python:
-                          ecab_utils.localizeNumber('%.1f', round(float(c)/here.projectedAssignments * 100, 2))"/>
-                    </td>
-                  </tal:block>
-                </tal:block>
-                <!-- number of assignments in typical assignment's states -->
-                <tal:block tal:repeat="state python: student[2]">
-                  <td>
-                    <span tal:replace="state" />
-                    <!-- 
-                    (<span tal:replace="python:
-                        ecab_utils.localizeNumber('%d', round(float(state)/n_boxes * 100, 2))"/>)
-                    -->
-
-                    <!-- 
-                      add link to all_assignments 
-                      e.g., aufgabenblatt-1/all_assignments?state=accepted&user_id=amelung
-                    -->
-                    <!-- 
-                    <a tal:content="state"
-                       tal:attributes="href python:
-                      here.getActionInfo('object/all_assignments')['url'] + '?%s' % ecab_utils.urlencode({'user_id':student[0], 'state':states,});"/>
-                    -->
-                  </td>
-                </tal:block>
-              </tr>
-            </tal:block>
-          </tbody>
-        </table>
-
-        <div class="formControls visualNoPrint">
-          <!-- Export Button -->
-          <form name="exportStatistics" 
-              action="#" 
-              method="post"
-              tal:attributes="action context/@@plone_context_state/object_url">
-
-            <input class="context"
-                type="submit"
-                name="exportStatistics:method"
-                value="Export"
-                i18n:attributes="value"/>
-          </form>
-          <br />
-        </div>
-
-        <div tal:condition="grades"
-             tal:define="raw python: sum(grades.values(), [])">
-          <tal:comment replace="nothing">
-                The expression
-      
-                sum(grades.values(), [])
-      
-                is a clever way to flatten a list.  If "grades" looks like
-      
-                {'freddy': [3.0, 3.0], 'dina': [2.0, 2.0, 2.0]}
-      
-                then "grades.values()" returns:
-      
-                [[3.0, 3.0][2.0, 2.0, 2.0]]
-      
-                and "sum(grades.values(), [])" returns:
-      
-                [3.0, 3.0, 2.0, 2.0, 2.0]
+              <div tal:condition="grades">
+                <tal:comment replace="nothing">
+                      The expression
+            
+                      sum(grades.values(), [])
+            
+                      is a clever way to flatten a list.  If "grades" looks like
+            
+                      {'freddy': [3.0, 3.0], 'dina': [2.0, 2.0, 2.0]}
+            
+                      then "grades.values()" returns:
+            
+                      [[3.0, 3.0][2.0, 2.0, 2.0]]
+            
+                      and "sum(grades.values(), [])" returns:
+            
+                      [3.0, 3.0, 2.0, 2.0, 2.0]
+                      
+                      cf. http://groups.google.de/group/comp.lang.python/browse_thread/thread/383aab2c3467eb59/7acec64c9790a1ea?lnk=st
+                </tal:comment>
                 
-                cf. http://groups.google.de/group/comp.lang.python/browse_thread/thread/383aab2c3467eb59/7acec64c9790a1ea?lnk=st
-          </tal:comment>
-    
-          <p i18n:translate="help_overall_average_grade">
-            The following numbers are based on 
-            <span i18n:name="count" tal:replace="python: len(raw)" />
-            submissions.
-          </p>
-          <p>
-            <b>
-              <span tal:omit-tag="" i18n:translate="label_overall_average_grade">
-                Overall average grade</span>:
-            </b>
-            <span tal:replace="python: ecab_utils.localizeNumber('%.2f', ecab_utils.calculateMean(raw))">
-              2.50
-            </span>
-
-            <br/>
-      
-            <b><span i18n:translate="label_overall_median_grade">Overall median grade</span>:</b>
-            <span tal:replace="python: ecab_utils.localizeNumber('%.2f', ecab_utils.calculateMedian(raw))">
-              3.00
-            </span>
-          </p>
-        </div>
-
-      </div>
+                <tal:block define="raw python: sum(grades.values(), [])">
+                  <p i18n:translate="help_overall_average_grade">
+                    The following numbers are based on 
+                    <span i18n:name="count" tal:replace="python: len(raw)" />
+                    submissions.
+                  </p>
+                  <p>
+                    <b>
+                      <span tal:omit-tag="" i18n:translate="label_overall_average_grade">
+                        Overall average grade</span>:
+                    </b>
+                    <span tal:replace="python: ecab_utils.localizeNumber('%.2f', ecab_utils.calculateMean(raw))">
+                      2.50
+                    </span>
+        
+                    <br/>
+              
+                    <b><span i18n:translate="label_overall_median_grade">Overall median grade</span>:</b>
+                    <span tal:replace="python: ecab_utils.localizeNumber('%.2f', ecab_utils.calculateMedian(raw))">
+                      3.00
+                    </span>
+                  </p>
+                </tal:block>
+              </div>
+            </div>
+          </tal:replace>
+        </tal:replace>
+        
       </tal:main-macro>
     </metal:main>
   </body>

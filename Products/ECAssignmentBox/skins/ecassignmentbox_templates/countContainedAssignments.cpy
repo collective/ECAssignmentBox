@@ -1,4 +1,4 @@
-## Script (Python) "countContainedBoxes"
+## Script (Python) "countContainedAssignments"
 ##bind container=container
 ##bind context=context
 ##bind namespace=
@@ -14,6 +14,12 @@ I18N_DOMAIN = 'eduComponents'
 
 REQUEST  = container.REQUEST
 RESPONSE = REQUEST.RESPONSE
+
+context=context.aq_explicit
+
+# do nothing if context is an assignment itself
+if hasattr(context, 'isAssignmentType') and context.isAssignmentType:
+    return None
 
 # set state names for rejected assignments
 rejectedStates = ('rejected', )

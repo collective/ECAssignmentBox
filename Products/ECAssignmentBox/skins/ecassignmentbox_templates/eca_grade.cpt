@@ -31,7 +31,7 @@
           </tal:field>
         </tal:fields>
     
-        <!-- print a form with all editable fields -->
+        <!-- print a form with all editable fields, and buttons -->
         <form name="edit_form"
             method="post"
             enctype="multipart/form-data"
@@ -44,6 +44,72 @@
             <metal:use use-macro="python:here.widget(fieldName, mode='edit', use_label=1)" />
           </tal:fields>
 
+
+          <!-- modifiy workflow state -->
+          <!-- 
+          <div class="field">
+            <label i18n:translate="label_change_status">Change State</label>
+            <div class="formHelp"
+                 i18n:translate="help_change_status_action">
+              Select the transition to be used for modifying the items state.
+            </div>
+
+            <div tal:define="review_state context/@@plone_context_state/workflow_state;
+                             error_workflow_action errors/workflow_action|nothing;
+                             objs request/paths|nothing;
+                             target python:test(objs, objs, context);"
+                 tal:attributes="class python:test(error_workflow_action, 'field error', 'field')">
+  
+              <div tal:condition="error_workflow_action">
+                <tal:block content="error_workflow_action">Error</tal:block>
+                <br />
+              </div>
+
+              <span tal:replace="nothing">
+                For usability we will want to signify what state we are
+                currently in. DCWorkflow only returns what transitions are
+                available. But we want to visually represent what *state* we
+                are currently in along with possible transitions.
+              </span>
+
+              <input class="noborder"
+                     id="workflow_action"
+                     type="radio"
+                     name="workflow_action"
+                     title=""
+                     value=""
+                     tal:attributes="value review_state;
+                                     title review_state;
+                                     checked python:test(request.get('workflow_action', review_state)==review_state,1,0);" />
+              <label for="workflow_action"
+                     i18n:translate="label_no_change">No change</label>
+              <br />
+
+              <tal:block define="transitions python:context.portal_workflow.getTransitionsFor(target, context)"
+                         repeat="transition transitions">
+                  <input class="noborder"
+                         id=""
+                         type="radio"
+                         name="workflow_action"
+                         title=""
+                         value=""
+                         i18n:attributes="title"
+                         tal:attributes="value transition/id;
+                                         id    transition/id;
+                                         title transition/name;
+                                         checked python:test(transition.get('id') == request.get('workflow_action', ''), 'checked', None)" />
+                  <label for=""
+                         i18n:translate=""
+                         tal:attributes="for transition/id;"
+                         tal:content="transition/name"
+                         >Transition Name</label>
+                         <br />
+              </tal:block>
+  
+            </div>
+          </div>
+          -->
+          
           <!-- submit button -->
           <div class="formControls" i18n:domain="plone">
             <input class="context"
