@@ -29,7 +29,7 @@ from Products.ATContentTypes.lib.historyaware import HistoryAwareMixin
 
 # The following two imports are for getAsPlainText()
 #from Products.ATContentTypes.content.base import translateMimetypeAlias
-from Products.PortalTransforms.utils import TransformException
+#from Products.PortalTransforms.utils import TransformException
 
 from Products.ECAssignmentBox import config
 from Products.ECAssignmentBox import LOG
@@ -75,9 +75,9 @@ ECAssignmentSchema = ECAssignmentSchema + Schema((
 
     TextField(
         'remarks',
-        allowable_content_types = config.ECA_MIME_TYPES, 
-        default_content_type = config.EC_DEFAULT_MIME_TYPE, 
-        default_output_type = config.EC_DEFAULT_FORMAT,
+        allowable_content_types = config.ALLOWED_CONTENT_TYPES, 
+        default_content_type = config.DEFAULT_CONTENT_TYPE, 
+        default_output_type = config.DEFAULT_OUTPUT_TYPE,
         widget=RichWidget(
         #widget = TextAreaWidget(
             label = "Remarks",
@@ -93,9 +93,9 @@ ECAssignmentSchema = ECAssignmentSchema + Schema((
     TextField(
         'feedback',
         searchable = True,
-        allowable_content_types = config.ECA_MIME_TYPES, 
-        default_content_type = config.EC_DEFAULT_MIME_TYPE, 
-        default_output_type = config.EC_DEFAULT_FORMAT,
+        allowable_content_types = config.ALLOWED_CONTENT_TYPES, 
+        default_content_type = config.DEFAULT_CONTENT_TYPE, 
+        default_output_type = config.DEFAULT_OUTPUT_TYPE,
         widget=RichWidget(
         #widget = TextAreaWidget(
             label = "Feedback",

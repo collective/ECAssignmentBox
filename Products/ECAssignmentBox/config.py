@@ -17,8 +17,7 @@ __docformat__ = 'plaintext'
 # AppConfig.py in your product's root directory. The items in there
 # will be included (by importing) in this file if found.
 from Products.CMFCore import permissions
-from Products.ATContentTypes.configuration.config import zconf
-
+from Products.ATContentTypes.config import zconf
 
 PROJECTNAME = "ECAssignmentBox"
 # i18n 
@@ -36,21 +35,19 @@ PRODUCT_DEPENDENCIES = []
 ECA_WORKFLOW_ID = 'ec_assignment_workflow'
 
 # supported mime types for textfields
-#EC_MIME_TYPES = ('text/x-web-intelligent',)
 #EC_MIME_TYPES = ('text/plain', 'text/structured', 'text/x-rst', 'text/x-web-intelligent', 'text/html', )
-EC_MIME_TYPES = zconf.ATDocument.allowed_content_types
-
-ECA_MIME_TYPES = ('text/plain', 'text/structured', 'text/x-rst', 'text/x-web-intelligent', )
+ALLOWED_CONTENT_TYPES = zconf.ATDocument.allowed_content_types
 
 # default mime type for textfields
-#EC_DEFAULT_MIME_TYPE = 'text/x-web-intelligent'
 #EC_DEFAULT_MIME_TYPE = 'text/plain'
-EC_DEFAULT_MIME_TYPE = zconf.ATDocument.default_content_type
+DEFAULT_CONTENT_TYPE = zconf.ATDocument.default_content_type
 
 # default output format of textfields
-#EC_DEFAULT_FORMAT = 'text/x-web-intelligent'
-#EC_DEFAULT_FORMAT = 'text/html'
-EC_DEFAULT_FORMAT = 'text/x-html-safe'
+DEFAULT_OUTPUT_TYPE = 'text/x-html-safe'
+#DEFAULT_OUTPUT_TYPE = zconf.ATDocument.default_content_type
+
+ALLOW_DOCUMENT_UPLOAD = zconf.ATDocument.allow_document_upload
+
 
 # extra permissions
 GradeAssignments = 'eduComponents: Grade Assignments'

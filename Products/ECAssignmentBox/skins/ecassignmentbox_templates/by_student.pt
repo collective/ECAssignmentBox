@@ -50,7 +50,7 @@
                   <span tal:omit-tag="" tal:content="n_boxes" />
                 </p>
       
-                <p tal:condition="states">
+                <p tal:condition="python:states is not None">
                   <span tal:omit-tag="">
                     <span tal:omit-tag="" tal:condition="here/projectedAssignments">
                       <b i18n:translate="label_projected_assignments">Projected Number of Assignments:</b>
@@ -110,12 +110,21 @@
                                       completed python:here.summarizeCompletedAssignments(summary);"
                           tal:repeat="student items">
                       
+                      <!-- debug
+                      <div tal:content="student" />
+                      <div tal:content="states" />
+                      <div tal:content="grades" />
+                      <div tal:content="completed" />
+                       -->
+                      
                       <tr tal:define="oddrow repeat/student/odd;"
                           tal:attributes="class python: test(oddrow, 'odd', 'even')">
+                        <!-- User -->
                         <td style="text-align: left">
                           <a tal:content="python: student[1]"
                              tal:attributes="href python:'all_assignments?%s' % ecab_utils.urlencode({'user_id' : student[0]});"/>
                         </td>
+                        <!--  Avg. Grade -->
                         <tal:if condition="grades">
                           <td tal:condition="python: grades.get(student[0], [])"
                               tal:content="python: ecab_utils.localizeNumber('%d', ecab_utils.calculateMean(grades.get(student[0], [])))">
@@ -123,7 +132,8 @@
                           </td>
                           <td tal:condition="python: not grades.get(student[0], [])">&mdash;</td>
                         </tal:if>
-                        <tal:block tal:condition="states">
+                        <!-- Completed -->
+                        <tal:block tal:condition="completed">
                           <tal:block tal:define="c python: completed[student[0]]">
                             <td>
                               <!-- number of assignments in state grade -->
@@ -133,13 +143,22 @@
                               <span tal:condition="python: n_boxes != 0" tal:replace="python:
                                   ecab_utils.localizeNumber('%.1f', round(float(c)/n_boxes * 100, 2))"/>
         
-                              <span tal:condition="python: n_boxes == 0" tal:replace="string:---"/>
+                              <span tal:condition="python: n_boxes == 0" tal:replace="string:&mdash;"/>
                             </td>
                             <td tal:condition="here/projectedAssignments">
                               <b tal:content="python:
                                   ecab_utils.localizeNumber('%.1f', round(float(c)/here.projectedAssignments * 100, 2))"/>
                             </td>
                           </tal:block>
+                        </tal:block>
+                        <tal:block tal:condition="not:completed">
+                          <td>
+                            <b>&mdash;</b>
+                          </td>
+                          <td>&mdash;</td>
+                          <td tal:condition="here/projectedAssignments">
+                            <b>&mdash;</b>
+                          </td>
                         </tal:block>
                         <!-- number of assignments in typical assignment's states -->
                         <tal:block tal:repeat="state python: student[2]">

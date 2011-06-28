@@ -336,7 +336,7 @@ if __name__ == '__main__':
 
     stringList = [A, B, nurzuA]
     idList = ["student01", "student02", "student03"]
-    from PlagDetector.PlagChecker import PlagChecker
+    from Products.ECAssignmentBox.PlagDetector.PlagChecker import PlagChecker
     checker = PlagChecker()
     resultList = checker.compareList(stringList, idList, 3)
     for r in resultList:
@@ -352,7 +352,7 @@ if __name__ == '__main__':
 
     stringList = [A, B, s5, s6, s7, nonplag, minimal]
     idList = ["student01", "student02", "student03", "student04", "student05", "student06", "student07"]
-    from PlagDetector.PlagChecker import PlagChecker
+    from Products.ECAssignmentBox.PlagDetector.PlagChecker import PlagChecker
     checker = PlagChecker()
     resultList = checker.compareList(stringList, idList, 3)
     for r in resultList:
@@ -368,7 +368,7 @@ if __name__ == '__main__':
     stringList = [A, B, s5, s6, s7, nonplag, minimal, A, B, s5, s6, s7, nonplag, minimal]
     idList = ["student01", "student02", "student03", "student04", "student05", "student06", "student07",
               "student08", "student09", "student10", "student11", "student12", "student13", "student14"]
-    from PlagDetector.PlagChecker import PlagChecker
+    from Products.ECAssignmentBox.PlagDetector.PlagChecker import PlagChecker
     checker = PlagChecker()
     resultList = checker.compareList(stringList, idList, 3)
 #===============================================================================

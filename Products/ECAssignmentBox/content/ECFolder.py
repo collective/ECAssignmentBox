@@ -33,9 +33,9 @@ schema = Schema((
 
     TextField(
         'directions',
-        allowable_content_types = config.EC_MIME_TYPES, 
-        default_content_type = config.EC_DEFAULT_MIME_TYPE, 
-        default_output_type = config.EC_DEFAULT_FORMAT,
+        allowable_content_types = config.ALLOWED_CONTENT_TYPES, 
+        default_content_type = config.DEFAULT_CONTENT_TYPE, 
+        default_output_type = config.DEFAULT_OUTPUT_TYPE,
         widget = RichWidget(
             label = 'Directions',
             label_msgid = 'label_directions',

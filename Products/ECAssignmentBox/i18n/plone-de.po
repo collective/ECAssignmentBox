@@ -60,8 +60,8 @@ msgstr "Bietet die Möglichkeit, Aufgaben zu gruppieren"
 
 #: ECFolder.py
 # Original: "ECFolder"
-msgid "ECFolder"
-msgstr "EC-Ordner"
+msgid "Assignment Folder"
+msgstr "Aufgabenordner"
 
 
 #: ECFolder.py

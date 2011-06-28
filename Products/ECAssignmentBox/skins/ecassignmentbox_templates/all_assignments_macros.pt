@@ -368,12 +368,16 @@
     -->
     <metal:define define-macro="list_all_assignments">
   
-      <!--  debug 
-      <div tal:content="nocall:item" />
-      -->
+      <tal:define define="isAssignmentBoxType python:ecab_utils.testAssignmentBoxType(item)">
                     
+        <!--  debug 
+        <div tal:content="nocall:item" />
+        <div tal:content="item/Title" />
+        <div tal:content="python:repr(isAssignmentBoxType)" />
+        -->
+      
       <!-- is current item an assignment box (e.g., ECAB or ECAAB)? -->
-      <tal:if condition="python:ecab_utils.testAssignmentBoxType(item)">
+      <tal:if condition="isAssignmentBoxType">
   
         <tal:define define="
                 path   python: (hasattr(item, 'getPath') and item.getPath()) or '/'.join(item.getPhysicalPath());
@@ -396,7 +400,7 @@
           grades              item/getNumericGrades | nothing;
           -->
   
-          <!--  debug
+          <!-- debug 
           <div tal:content="string:path:$path" />
           <div tal:content="string:brains:$brains" />
           -->
@@ -443,14 +447,15 @@
         </tal:define>
       </tal:if>
   
-      <!--  
-      <div tal:content="item/@@plone/isStructuralFolder" />
-      <div tal:content="item/is_folderish" />
+      <!-- debug 
+      <div tal:content="item/@@plone/isStructuralFolder|nothing" />
+      <div tal:content="item/is_folderish|nothing" />
       -->
       
       <!-- process all other published items inside this item -->
-      <tal:if define="is_folderish item/@@plone/isStructuralFolder | nothing;"
-          condition="python: not ecab_utils.testAssignmentBoxType(item) and is_folderish">
+      <tal:if define="isStructuralFolder item/@@plone/isStructuralFolder|nothing;
+                      is_folderish       item/is_folderish|nothing;"
+          condition="python: not isAssignmentBoxType and (isStructuralFolder or is_folderish)">
   
         <div tal:define="
               path   python: (hasattr(item, 'getPath') and item.getPath()) or '/'.join(item.getPhysicalPath());
@@ -485,10 +490,10 @@
             <metal:recurse tal:define="item  nocall:brain;
                                        level python:level + 1;"
             >
-              <!--  debug
+              <!-- debug 
               <div tal:content="string:level:$level" />
               <div tal:content="string:maxRecursionDepth:$maxRecursionDepth" />
-              -->
+               -->
   
               <!-- process next item -->     
               <div class="visualIconPadding" tal:condition="python: level &lt; maxRecursionDepth">
@@ -502,6 +507,7 @@
   
         <hr tal:condition="python: level &gt; 1" />
       </tal:if>
+      </tal:define>
 
     </metal:define>
     <!-- end list macro -->

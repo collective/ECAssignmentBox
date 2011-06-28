@@ -9,9 +9,10 @@ __author__ = """Mario Amelung <mario.amelung@gmx.de>"""
 __docformat__ = 'plaintext'
 
 #import sys
+#import traceback
 import cgi
 import urllib
-#import interfaces
+
 from string import join, split
 from socket import getfqdn, gethostname
 from urlparse import urlsplit, urlunsplit
@@ -19,22 +20,17 @@ from urlparse import urlsplit, urlunsplit
 from email.MIMEText import MIMEText
 from email.Header import Header
 
-#from Globals import InitializeClass
 from zope.interface import implements
 from ZODB.POSException import ConflictError
 from Products.CMFCore.utils import getToolByName
 
 from AccessControl import ClassSecurityInfo
-from Products.Archetypes.atapi import Schema, BaseSchema, BaseContent, \
-    DisplayList, registerType 
-from Products.Archetypes.utils import shasattr
-#import sys
-#import traceback
+from Products.Archetypes.atapi import Schema, BaseSchema, BaseContent, DisplayList, registerType 
+#from Products.Archetypes.utils import shasattr
 
 from Products.CMFDynamicViewFTI.browserdefault import BrowserDefaultMixin
 from Products.CMFCore.utils import UniqueObject
 from Products.DCWorkflow.Transitions import TRIGGER_USER_ACTION
-
 
 #from zLOG import LOG, INFO, ERROR
 from Products.ECAssignmentBox.tool.Statistics import Statistics
@@ -246,10 +242,21 @@ class ECABTool(UniqueObject, BaseContent, BrowserDefaultMixin):
         
         #LOG.debug('Here we are in ECABTool#testAssignmentBoxType: %s' % item)
         
-        if (item and shasattr(item, 'isAssignmentBoxType')):
-            return item.isAssignmentBoxType
+        result = None
+        
+        if (item and hasattr(item, 'isAssignmentBoxType')):
+            result = item.isAssignmentBoxType
+            
+            # dirty hack
+            if repr(result) == 'Missing.Value': 
+                result = False
+
         else:
-            return False
+            result = False
+        
+        #LOG.info('result: %s' % repr(result))
+        
+        return result
 
     #security.declarePublic('isGrader')
     def isGrader(self, item, id=None):

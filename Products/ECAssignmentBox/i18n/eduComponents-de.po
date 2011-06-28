@@ -900,7 +900,7 @@ msgstr "Zeigt die Gesamtanzahl ausgewählter Werte."
 #: ./skins/ECAssignmentBox/analysis.cpt
 # Original: "Assignment boxes inside this folder:"
 msgid "label_n_boxes_not_pub"
-msgstr "Aufgaben in diesem Ordners:"
+msgstr "Aufgaben in diesem Ordner:"
 
 #: ./skins/ECAssignmentBox/analysis.cpt
 # Original: "Superseded submissions:"
@@ -926,3 +926,8 @@ msgstr "Einreichungstext anzeigen"
 # Original: "Hide submission text"
 msgid "Hide submission text"
 msgstr "Einreichungstext ausblenden"
+
+#: ./skins/ECAssignmentBox/all_assignments.cpy
+# Original: "Select new state for all selected items."
+msgid "help_change_status"
+msgstr "Wählen Sie den neuen Status für alle markierten Einreichungen."

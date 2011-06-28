@@ -3,7 +3,7 @@
 
 __author__ = "Chad J. Schroeder"
 
-__revision__ = "$Id$"
+__revision__ = "$Id:Statistics.py 1290 2009-09-27 18:23:09Z amelung $"
 __version__ = "0.1"
 
 __all__ = [ "StatisticsException", "Statistics" ]

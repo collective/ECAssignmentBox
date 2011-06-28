@@ -8,8 +8,9 @@
 __author__ = """Mario Amelung <mario.amelung@gmx.de>"""
 __docformat__ = 'plaintext'
 
-from Products.Archetypes.atapi import TextField, TextFieldException
-from Products.Archetypes.atapi import guess_content_type
+from Products.Archetypes.atapi import TextField
+from Products.Archetypes.exceptions import TextFieldException
+from zope.contenttype import guess_content_type
 from AccessControl import ClassSecurityInfo
 #from Products.Archetypes.utils import mapply
 #from Products.Archetypes.Field import encode, decode, CHUNK
