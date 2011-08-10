@@ -1,10 +1,13 @@
 History
 =======
 
-# Changes in release 1.5 (2011-06-30)
+# Changes in release 1.5 (2011-07-25)
 
 - Added compatibility for Plone 4. Plone 3.x support has been dropped.
   Plone 3 users should use ECAssignmentBox 1.4.x.
+
+- Fixed issue: Plone's default view methods (folder_summary_view, 
+  folder_tabular_view, and folder_listing) does not work for ECFolder.
 
 
 # Changes in release 1.4.3 (2011-04-29)
