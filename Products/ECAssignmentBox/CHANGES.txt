@@ -3,11 +3,8 @@ History
 
 # Changes in release 1.5 (2011-07-25)
 
-- Added compatibility for Plone 4. Plone 3.x support has been dropped.
+- Added compatibility for Plone 4.  Plone 3.x support has been dropped.
   Plone 3 users should use ECAssignmentBox 1.4.x.
-
-- Fixed issue: Plone's default view methods (folder_summary_view, 
-  folder_tabular_view, and folder_listing) does not work for ECFolder.
 
 
 # Changes in release 1.4.3 (2011-04-29)
@@ -21,15 +18,15 @@ History
   tarball distribution is still available at plone.org.
 
 - It's now possible to modify the submission period and other settings 
-  for more than one assignment box at a time by using the 'set 
-  assignment box options' action on ECFolder's content tab.
+  for more than one assignment box at a time by using the ``set 
+  assignment box options`` action on ECFolder's content tab.
 
 - Fixed issue: Assignments in state superseded can not be accessed by
   the owner.
 
 - Fixed issue: ECAssignmentBox int argument error.  After a students 
-  submission is graded and state changed to Graded an 'TypeError: 
-  int argument required' appears on the statistics tab.
+  submission is graded and state changed to Graded an ``TypeError: 
+  int argument required`` appears on the statistics tab.
 
 
 # Changes in release 1.4 (2009-02-04)
@@ -40,13 +37,13 @@ History
 
 # Changes in release 1.3 (2007-06-27)
 
-- ECFolders and assignment boxes now have an "analysis" tab which 
+- ECFolders and assignment boxes now have an *analysis* tab which 
   provides more information about contained assignments, e.g., number
   of attempts users needed for an assignment or number of submissions 
   per day.
 
-- The "assignments (full)" view (shows the full text of all assignments
-  on one page) is now integrated in the "assignments" tab.
+- The *assignments (full)* view (shows the full text of all assignments
+  on one page) is now integrated in the *assignments* tab.
 
 - New content type ECAssignmentTask, which can be used to build a
   repository of assignments; ECAssignmentTask objects can be
@@ -59,15 +56,15 @@ History
 
 # Changes in release 1.2 (2007-02-28)
 
-- Added field "Maximum number of attempts" to ECAssignmentBox to
+- Added field ``Maximum number of attempts`` to ECAssignmentBox to
   restrict the number of resubmissions.
 
 - Implemented issue #118: For box owners and managers it is now
   possible make submissions even if the assignment box is in state
-  'public draft' or 'private', and to make any number of
+  ``public draft`` or ``private``, and to make any number of
   resubmissions.
 
-- In the "assignments" view:
+- In the *assignments* view:
 
   - If there is more than one assignment box inside an ECFolder one
     will see a table for each box.  Clicking the check box in one of
@@ -79,10 +76,10 @@ History
   - Added clickable workflow states (assignments can now be filtered
     by workflow state).
 
-  - Added delete button and polished the "change state" controls.
+  - Added delete button and polished the ``change state`` controls.
 
-- As addition to the "assignments" view, owners and managers can use
-  the "assignments (full)" tab to see the full text of all assignments
+- As addition to the *assignments* view, owners and managers can use
+  the *assignments (full)* tab to see the full text of all assignments
   on one page.
 
 - If the parent of an assignment box is an ECFolder and this ECFolder
@@ -92,7 +89,7 @@ History
 - Fixed issue #119: Uploads can now be any size.
 
 - Fixed issue #120: Students do not see shared assignments of other
-  users in the "statistics" view.
+  users in the *statistics* view.
 
 - Performance improvements: We are now using portal_catalog where
   possible.

@@ -2,7 +2,7 @@
 title = Extended statistics on all assignments inside a folder or box
 
 [security]
-View = 0:Authenticated
+View = 0:Manager,Owner,Editor,Contributor
 
 [validators]
 validators=
