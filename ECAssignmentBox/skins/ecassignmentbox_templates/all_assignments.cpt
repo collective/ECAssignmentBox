@@ -1,0 +1,200 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
+                      "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" 
+      xml:lang="en" lang="en"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+      metal:use-macro="here/main_template/macros/master"
+      i18n:domain="eduComponents">
+
+  <body>
+    <metal:block fill-slot="css_slot">
+      <style type="text/css" media="screen" tal:content="string: @import url($portal_url/ecabstyles.css);" />
+    </metal:block>
+
+    <metal:main fill-slot="main">
+      <tal:main-macro metal:define-macro="main">
+      
+        <div tal:replace="structure provider:plone.documentactions" />
+    
+        <div tal:define="global has_items python:0;
+                  template_id  template/getId;
+                  ecab_utils   nocall:context/ecab_utils;
+                  permission   python:modules['AccessControl'].getSecurityManager().checkPermission;
+                  isOwner      python:user.has_role(['Owner', 'Reviewer', 'Manager'], context);
+                  isGrader     python:here.portal_membership.checkPermission('eduComponents: Grade Assignments', context);
+                  resFlt       python:{'user_id':request.get('user_id', None), 
+                                       'state':request.get('state', None), 
+                                       'show_superseded':request.get('show_superseded', None),
+                                       'show_full_text':request.get('show_full_text', None), };
+                  resFlt2      python:dict([(k,v) for k,v in resFlt.items() if v is not None]);
+                  userName     python:resFlt['user_id'];
+                  statesToShow python:ecab_utils.getStatesToShow(resFlt['show_superseded'], resFlt['state']);
+                  mkUrl        python:lambda d : '%s/%s?%s' % (here.absolute_url(), template_id, ecab_utils.urlencode(dict(resFlt2.items() + d.items())));
+                  n_boxes      here/aq_explicit/countContainedBoxes|nothing;"
+        >
+
+          <!--  debug 
+          <div tal:content="python: 'showSuperseded:%s' % resFlt['show_superseded']" />
+          <div tal:content="python: 'mkUrl:%s' % mkUrl({})" />
+          <div tal:content="string: resFlt:$resFlt" />
+          -->
+
+          <metal:use use-macro="here/all_assignments_macros/macros/all_assignments_heading" />
+          
+          <metal:use use-macro="here/base_macros/macros/up_one_level" />
+          
+          <!--
+          <p tal:condition="python: not ecab_utils.testAssignmentBoxType(here)">
+          -->
+          <p tal:condition="n_boxes">
+            <b i18n:translate="label_n_boxes">
+              Published assignment boxes inside this folder:
+            </b>
+            <span tal:omit-tag="" tal:content="n_boxes" />
+          </p>
+
+          <metal:use use-macro="here/base_macros/macros/user_details" />
+          
+          <form action=""
+                method="post"
+                name="all_assignments_form"
+                tal:attributes="action python: mkUrl({});">
+    
+            <div class="formControls visualNoPrint">
+
+              <input class="standalone"
+                     type="submit"
+                     name="form.button.ToggleFullText"
+                     value="Show submission text"
+                     i18n:attributes="value"
+                     tal:condition="python: not resFlt['show_full_text']"
+              />
+
+              <input class="standalone"
+                     type="submit"
+                     name="form.button.ToggleFullText"
+                     value="Hide submission text"
+                     i18n:attributes="value"
+                     tal:condition="python: resFlt['show_full_text']"
+              />
+
+              <input class="standalone"
+                     type="submit"
+                     name="form.button.ToggleSuperseded"
+                     value="Show superseded"
+                     i18n:attributes="value"
+                     tal:condition="python: not resFlt['show_superseded']"
+              />
+  
+              <input class="standalone"
+                     type="submit"
+                     name="form.button.ToggleSuperseded"
+                     value="Hide superseded"
+                     i18n:attributes="value"
+                     tal:condition="python: resFlt['show_superseded']"
+              />
+            </div>
+  
+            <!-- start showing folder title and items -->
+            <tal:contain define="
+                    item              nocall:here; 
+                    level             python:1;
+                    maxRecursionDepth python:42;"
+            >
+            
+              <!--  debug 
+              <div tal:content="string:states:$statesToShow" />
+              <div tal:content="string:userId:$userName" />
+              -->
+                          
+              <!-- start searching all child folders -->
+              <div metal:use-macro="here/all_assignments_macros/macros/list_all_assignments" />
+
+            </tal:contain> 
+            
+            <div class="field visualNoPrint" tal:condition="python: isOwner and has_items">
+              <label i18n:domain="plone" i18n:translate="label_change_status">Change State</label>
+              <div class="formHelp"
+                   i18n:translate="help_change_status">
+                Select new state for all selected items.
+              </div>
+              
+              <!-- debug -->
+              <!-- 
+              <div tal:content="python:wtool.getTransitionsFor(here, here)" />
+              <div tal:content="python:ecab_utils.getWfTransitions()" />
+              -->
+
+              <div class="field">
+
+                <select size="1" name="workflow_action">
+                  <tal:block define="transitions python: ecab_utils.getWfTransitions()"
+                            repeat="transition transitions">
+                    <option value=""
+                           i18n:attributes="title"
+                           i18n:domain="plone"
+                           i18n:translate=""
+                           tal:attributes="value transition/id"
+                           tal:content="transition/name" />
+                  </tal:block>
+                </select>
+  
+              </div>
+            </div>
+            
+            <div class="formControls visualNoPrint" tal:condition="python: isOwner and has_items">
+  
+              <input class="context"
+                     type="submit"
+                     name="form.button.Change"
+                     value="Change State"
+                     i18n:domain="plone"
+                     i18n:attributes="value"
+              />
+  
+              <!-- experimental -->
+              <!--  
+              <input class="standalone"
+                     type="submit"
+                     name="form.button.Cut"
+                     value="Cut"
+                     i18n:domain="plone"
+                     i18n:attributes="value"
+              />
+              -->
+
+              <input class="standalone"
+                     type="submit"
+                     name="form.button.Delete"
+                     value="Delete"
+                     i18n:domain="plone"
+                     i18n:attributes="value"
+              />
+
+            </div>
+
+            <div class="formControls visualNoPrint">
+              <input type="hidden" name="form.submitted" value="1" />
+            </div>
+
+          </form>
+
+        </div>
+      </tal:main-macro>
+    </metal:main>
+
+  </body>
+</html>
+<!-- Keep this comment at the end of the file
+Local variables:
+mode:xml
+sgml-local-catalogs:("/usr/local/lib/sgml/XHTML11.cat")
+sgml-validate-command:"xmllint \\-\\-valid \\-\\-noout %s %s"
+sgml-indent-step:2
+sgml-indent-data:t
+fill-column:79
+End:
+-->

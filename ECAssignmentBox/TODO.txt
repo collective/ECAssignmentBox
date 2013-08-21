@@ -1,0 +1,11 @@
+# TODOs for release 1.6
+
+- Email notification on workflow transition 'grade' and notification
+  for box creators is still untested.  
+
+- Migration of 'ECAssignmentBox' content from Plone 2.x has not been 
+  tested extensively.
+
+- 'ECAssignmentTask' has not been integrated.
+
+- The more experimental 'PlagDetector' has not been integrated.
