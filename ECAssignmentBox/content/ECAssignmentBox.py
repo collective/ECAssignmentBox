@@ -3,6 +3,8 @@
 #
 # Copyright (c) 2006-2011 Otto-von-Guericke-UniversitŠt Magdeburg
 #
+# extended 2013 by tsabsch <t.sabsch@arcor.de>
+#
 # This file is part of ECAssignmentBox.
 #
 __author__ = """Mario Amelung <mario.amelung@gmx.de>"""
@@ -95,13 +97,30 @@ ECAssignmentBox_schema = ATFolderSchema.copy() + Schema((
         widget = TextAreaWidget(
             label = 'Answer template',
             label_msgid = 'label_answer_template',
-            description = 'You can provide a template for the students\' answers',
+            description = 'You can provide a template for the students\' answer',
             description_msgid = 'help_answer_template',
             i18n_domain = config.I18N_DOMAIN,
             rows = 12,
             #format = 0,
         ),
     ),
+    
+    TextField(
+        'supportAnswerTemplate',
+        searchable = True,
+        allowable_content_types = ('text/plain',), #('text/x-web-intelligent',), 
+        default_content_type = 'text/plain', 
+        default_output_type = 'text/plain',
+        widget = TextAreaWidget(
+            #visible = isMultipleUpload,
+            label = 'Answer template for addition',
+            label_msgid = 'label_support_answer_template',
+            description = 'You can provide a template for the students\' answer',
+            description_msgid = 'help_answer_template',
+            i18n_domain = config.I18N_DOMAIN,
+            rows = 12,
+        ),
+    ),        
 
     DateTimeField(
         'submission_period_start',
@@ -158,17 +177,16 @@ ECAssignmentBox_schema = ATFolderSchema.copy() + Schema((
         ),
     ),
 
-	# test by Tim Sabsch
-	BooleanField('acceptMultipleUpload',
-		default=False,
-		widget=BooleanWidget(
-			label="Enable multiple file upload",
-			description="If selected, the content of text area and uploaded file will be saved as two different objects.",
-			label_msgid='label_acceptMultipleUpload',
-			description_msgid='help_acceptMultipleUpload',
-			i18n_domain=config.I18N_DOMAIN,
-		),
-	),
+    BooleanField('acceptMultipleUpload',
+        default=False,
+        widget=BooleanWidget(
+            label="Enable multiple file upload",
+            description="If selected, a second file field will be unlocked and the students have to submit two files.",
+            label_msgid='label_acceptMultipleUpload',
+            description_msgid='help_acceptMultipleUpload',
+            i18n_domain=config.I18N_DOMAIN,
+        ),
+    ),
 
    BooleanField('sendNotificationEmail',
         default=False,
@@ -439,7 +457,6 @@ class ECAssignmentBox(ATFolder):
                                         putils.getOwnerName(self), 'email'))
 
         return addresses
-
 
 
 registerType(ECAssignmentBox, config.PROJECTNAME)

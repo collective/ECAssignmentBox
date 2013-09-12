@@ -4,7 +4,7 @@
 ##bind namespace=
 ##bind script=script
 ##bind subpath=traverse_subpath
-##parameters=answer='', file='', msg=''
+##parameters=answer='', file='', supportAnswer='', supportFile='', msg=''
 ##title=Create a file for an assignment submission.
 ##
 from DateTime import DateTime
@@ -23,7 +23,6 @@ target_action = context.getTypeInfo().getActionInfo(['object/view'])['url']
 # remember the context type
 contextType = context.meta_type
 
-#test by Tim Sabsch
 # get current date and time
 now = DateTime()
 # get current user's id
@@ -38,54 +37,52 @@ assignment = getattr(context, id)
 # get information about multiple upload
 isMultipleUpload = assignment.aq_parent.getAcceptMultipleUpload()
 
-if isMultipleUpload:
-    if (len(answer) == 0) or (not file):
+if not file:
+    # no file uploaded, lets try to read the text field (answer)
+    if len(answer) != 0:
+        file = StringIO(answer)
+    else:
         # neither file nor answer available
         msg = context.translate(\
-            msgid   = 'file_read_error_multiUpload',
+            msgid   = 'file_read_error',
             domain  = I18N_DOMAIN,
-            default = 'Not enough files found.')
-    
+            default = 'Neither answer nor uploaded file found.')        
         #return state.set(status = 'failure', portal_status_message = msg)
         context.plone_utils.addPortalMessage(msg)
         return state.set(status = 'failure')
-    else:
-        textanswer = StringIO(answer)
     
-    # constrcuct file names
-    uploadfilename = '%s_%s' % (id, file.filename)
-    textanswername = '%s.txt' % (id,)
-    
-    #set files
-    assignment.setFile(textanswer, filename = textanswername)
-    assignment.setUploadedFile(file, filename = uploadfilename)    
+# construct filename
+if hasattr(file, 'filename'):
+    filename = '%s_%s' % (id, file.filename)
 else:
-    if not file:
-        # no file uploaded, lets try to read the text field (answer)
-        if len(answer) != 0:
-            file = StringIO(answer)
+    # TODO: get MIME-type and add extension
+    filename = '%s.txt' % (id,)
+    
+# set file
+# HINT: If file is instance of FileUpload, filename will be ignored. 
+#       See Archetypes/Field.py in FileField._process_input.
+assignment.setFile(file, filename=filename)
+
+# save answer of supporting file, if necessary
+if isMultipleUpload:
+    if not supportFile:
+        if len(supportAnswer) != 0:
+            supportFile = StringIO(supportAnswer)
         else:
-            # neither file nor answer available
             msg = context.translate(\
                 msgid   = 'file_read_error',
                 domain  = I18N_DOMAIN,
-                default = 'Neither answer nor uploaded file found.')
+                default = 'neither answer nor uploaded file found.')
             
-            #return state.set(status = 'failure', portal_status_message = msg)
             context.plone_utils.addPortalMessage(msg)
-            return state.set(status = 'failure')
-
-    # construct filename
-    if hasattr(file, 'filename'):
-        filename = '%s_%s' % (id, file.filename)
+            return state.set(status = 'failure')            
+        
+    if hasattr(supportFile, 'filename'):
+        filename = '%s_%s' % (id, supportFile.filename)
     else:
-        # TODO: get MIME-type and add extension
         filename = '%s.txt' % (id,)
-
-    # set file
-    # HINT: If file is instance of FileUpload, filename will be ignored. 
-    #       See Archetypes/Field.py in FileField._process_input.
-    assignment.setFile(file, filename=filename)
+        
+    assignment.setSupportFile(supportFile, filename=filename)
 
 # evaluate this submission (actually implemented in ECAAB)
 result = assignment.evaluate(context)

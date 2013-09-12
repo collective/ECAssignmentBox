@@ -32,7 +32,7 @@
 		              reference     python: here.getReference();
                       needRegistration python: (hasattr(here, 'associatedGroup') and (here.getAssociatedGroup() != ''));
                       canParticipate python: (needRegistration and here.isParticipant(user_id)) or (not needRegistration);
-		      isMultiUpload python: here.getAcceptMultipleUpload()">
+		      isMultipleUpload python: here.getAcceptMultipleUpload()">
                       
         <!-- debug -->
         <!--
@@ -125,13 +125,6 @@
             <metal:field use-macro="python:here.widget('assignment_text', mode='view')" />
         </div>
       
-        <a href="" 
-          tal:attributes="href string:${here/absolute_url}/downloadAnswerTemplate"
-          i18n:translate="label_download_answer_template"
-		  tal:condition="reference/getAnswerTemplate | here/getAnswerTemplate">
-          Download answer template
-        </a>
-      
         <!-- <hr class="visualNoPrint" /> -->
   
         <!-- input field and upload field -->
@@ -144,55 +137,100 @@
                            and isEffective and canSupersed and canRetry and 
                            isPublished)">
   
-          <!-- text field -->
-          <div class="field visualNoPrint">
-            <label for="answer" i18n:translate="label_submit_answer">Answer</label>
-            <div class="formHelp" i18n:translate="help_submit_answer">
-              Enter your answer for this assignment
-            </div>
-            <textarea cols="30"
-              rows="15"
-              wrap="off"
-              name="answer"
-              tal:attributes="wrap python:('off', 'on')[here.getWrapAnswer()]"
-              tal:content="reference/getAnswerTemplate | here/getAnswerTemplate | nothing"></textarea>
-          </div>
+	  <!-- first submission-->
+	    <!-- text field -->          
+	    <div class="field visualNoPrint">
+	      <label for="answer" i18n:translate="label_submit_answer">Answer</label>
+	      <div class="formHelp" i18n:translate="help_submit_answer">
+	        Enter your answer for this assignment
+	      </div>
+	      <textarea cols="30"
+	        rows="15"
+	        wrap="off"
+	        name="answer"
+	        tal:attributes="wrap python:('off', 'on')[here.getWrapAnswer()]"
+	        tal:content="reference/getAnswerTemplate | here/getAnswerTemplate | nothing">
+	      </textarea>
+	    </div>
+	    
+	    <!-- download button for answer template -->	  
+	    <div class="field visualNoPrint">	    
+	      <a href="" 
+	        tal:attributes="href string:${here/absolute_url}/downloadAnswerTemplate"
+	        i18n:translate="label_download_answer_template"
+	      	  tal:condition="reference/getAnswerTemplate | here/getAnswerTemplate">
+	      Download answer template
+	      </a>
+	    </div>	    
+	    
+	    <!-- upload file button -->
+	    <div class="field visualNoPrint">
+	      <label for="file" i18n:translate="upload_file_label">File</label>
+	      <div class="formHelp" 
+	    	i18n:translate="help_upload_file">
+	        or upload a file (existing content will be replaced).
+	      </div>
+	      <input type="file"
+	        name="file"
+	        size="25" />
+	    </div>
+	    
+	  
+	  <div tal:condition="python: isMultipleUpload">
+	    <!-- text field -->
+	    <div class="field visualNoPrint">
+	      <label for="answer" i18n:translate="label_submit_supportFile">Addition</label>
+	      <div class="formHelp" i18n:translate="help_submit_supportFile">
+	        Enter an addition for this assignment.
+	      </div>
+	      <textarea cols="30"
+	        rows="15"
+	        wrap="off"
+	        name="supportAnswer"
+	        tal:attributes="wrap python:('off', 'on')[here.getWrapAnswer()]"
+	        tal:content="reference/getSupportAnswerTemplate | here/getSupportAnswerTemplate | nothing">
+	      </textarea>
+	    </div>
+	  
+	    <!-- download button for answer template -->	  
+	    <div class="field visualNoPrint">	    
+	      <a href="" 
+	      tal:attributes="href string:${here/absolute_url}/downloadAnswerTemplate"
+	      i18n:translate="label_download_answer_template"
+	    	  tal:condition="reference/getSupportAnswerTemplate | here/getSupportAnswerTemplate">
+	      Download answer template
+	      </a>
+	    </div>
   
-	 <!-- test by Tim Sabsch -->
-         <!-- upload file button -->
-         <div class="field visualNoPrint">
-           <label for="file" i18n:translate="upload_file_label">File</label>
-           <div class="formHelp" 
-		tal:condition="python: not isMultiUpload"
-		i18n:translate="help_upload_file">
-             or upload a file (existing content will be replaced).
-           </div>
-	   <div class="formHelp"
-		tal:condition="python: isMultiUpload"
-		i18n:translate="alternative_help_upload_file">
-	     and upload a file (will be saved in an extra file).
-	   </div>
-           <input type="file"
-             name="file"
-             size="25" />
-         </div>
-  
-         <!-- submit button -->
-         <div class="formControls visualNoPrint">
-           <input class="context"
-               type="submit"
-               name="form.button.Submit"
-               value="Submit"
-               i18n:domain="plone"
-               i18n:attributes="value" />
-  
-           <input class="standalone"
-               type="submit"
-               name="form.button.Cancel"
-               i18n:domain="plone"
-               value="Cancel"
-               i18n:attributes="value" />
-          </div>
+	    <!-- upload file button -->
+	    <div class="field visualNoPrint">
+	     <label for="file" i18n:translate="upload_file_label">File</label>
+	     <div class="formHelp" 
+	  	i18n:translate="help_upload_file">
+	       or upload a file (existing content will be replaced).
+	     </div>
+	     <input type="file"
+	       name="supportFile"
+	       size="25" />
+	    </div>
+	  </div>
+    
+	  <!-- submit button -->
+	  <div class="formControls visualNoPrint">
+	    <input class="context"
+	        type="submit"
+	        name="form.button.Submit"
+	        value="Submit"
+	        i18n:domain="plone"
+	        i18n:attributes="value" />
+    
+	    <input class="standalone"
+	        type="submit"
+	        name="form.button.Cancel"
+	        i18n:domain="plone"
+	        value="Cancel"
+	        i18n:attributes="value" />
+	  </div>
   
           <!-- hidden fields -->
           <!-- 

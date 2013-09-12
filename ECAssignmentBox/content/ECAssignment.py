@@ -3,6 +3,8 @@
 #
 # Copyright (c) 2006-2011 Otto-von-Guericke-UniversitŠt Magdeburg
 #
+# extended 2013 by tsabsch <t.sabsch@arcor.de>
+#
 # This file is part of ECAssignmentBox.
 #
 __author__ = """Mario Amelung <mario.amelung@gmx.de>"""
@@ -73,17 +75,16 @@ ECAssignmentSchema = ECAssignmentSchema + Schema((
         ),
     ),
 
-# test by Tim Sabsch
     FileField(
-	'uploadedFile',
+	'supportFile',
 	searchable = True,
 	widget = FileWidget(
-            label = "Submission from upload",
-            label_msgid = "label_uploadedFile",
-            description = "The submission for this assignment--uploaded",
-            description_msgid = "help_uploadedFile",
+            label = "Addition",
+            label_msgid = "label_supportFile",
+            description = "The optional addition for this assignment",
+            description_msgid = "help_supportFile",
             i18n_domain = config.I18N_DOMAIN,
-            macro = 'answer_widget_upload',
+            macro = 'answer_widget_support',
         ),
     ),
 
@@ -331,7 +332,7 @@ class ECAssignment(BaseContent, HistoryAwareMixin):
         else:
             return self.Creator()
 
-    #security.declarePublic('get_data') # test by Tim Sabsch
+    #security.declarePublic('get_data')
     def get_data(self, name = 'file'):
         """
         XXX:  EXPERIMENTAL
@@ -536,7 +537,7 @@ class ECAssignment(BaseContent, HistoryAwareMixin):
 
         return names
 
-    # test by Tim Sabsch
+
     security.declarePublic('getViewModeReadFieldNames')
     def getViewModeReadFieldNames(self):
         """
@@ -548,10 +549,11 @@ class ECAssignment(BaseContent, HistoryAwareMixin):
 	box = self.aq_parent
 	
 	if box.getAcceptMultipleUpload() :
-	    return ['file', 'uploadedFile', 'remarks', 'feedback', 'mark']
+	    return ['file', 'supportFile', 'remarks', 'feedback', 'mark']
 	else:
 	    return ['file', 'remarks', 'feedback', 'mark']
-    # test by Tim Sabsch
+
+
     security.declarePublic('getGradeModeReadFieldNames')
     def getGradeModeReadFieldNames(self):
         """
@@ -562,7 +564,7 @@ class ECAssignment(BaseContent, HistoryAwareMixin):
         """
 	box = self.aq_parent
 	if box.getAcceptMultipleUpload():
-	    return ['file', 'uploadedFile']
+	    return ['file', 'supportFile']
 	else:
 	    return ['file']
 
