@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<object name="portal_properties" meta_type="Plone Properties Tool">
+ <object name="ecab_properties" meta_type="Plone Property Sheet">
+  <property name="title">Assignment Box properties</property>
+  <property name="student_id_attr" type="string">student_id</property>
+  <property name="major_attr" type="string">major</property>
+  <property name="personal_title_attr" type="string">personal_title</property>
+ </object>
+ <object name="site_properties" meta_type="Plone Property Sheet">
+  <property name="use_folder_tabs" type="lines">
+   <element value="ECAssignmentBox"/>
+   <element value="ECFolder"/>
+   <element value="ECAssignmentTask"/>
+   <element value="ECLecture"/>
+  </property>
+  <property name="typesLinkToFolderContentsInFC" type="lines">
+   <element value="ECAssignmentBox"/>
+   <element value="ECFolder"/>
+   <element value="ECAssignmentTask"/>
+   <element value="ECLecture"/>
+  </property>
+ </object>
+</object>

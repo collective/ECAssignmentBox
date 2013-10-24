@@ -1,0 +1,19 @@
+<configure xmlns="http://namespaces.zope.org/zope" 
+           xmlns:browser="http://namespaces.zope.org/browser" 
+           xmlns:five="http://namespaces.zope.org/five"> 
+  
+  <include file="profiles.zcml" />
+
+  <include package=".browser" />
+
+  <!-- declare permissions for this product -->
+  <include file="permissions.zcml" />
+  
+  <!-- local roles managed in the @@sharing view -->
+  <utility name="ECAssignment Grader"
+      factory=".sharing.ECAssignmentGraderRole" />
+
+  <utility name="ECAssignment Viewer"
+      factory=".sharing.ECAssignmentViewerRole" />
+
+</configure>

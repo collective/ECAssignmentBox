@@ -1,0 +1,8 @@
+/* Workflow changes of assignments inside all_assignments view (or anywhere else they are shown) */
+div.actionWorkflowChange dd.actionMenuContent a:click {
+    evt-click-preventdefault: True;
+    evt-click-allowbubbling: True;
+    action-server: ecabChangeWorkflowState;
+    ecabChangeWorkflowState-uid: kssAttr('uid');
+    ecabChangeWorkflowState-url: nodeAttr(href);
+}
