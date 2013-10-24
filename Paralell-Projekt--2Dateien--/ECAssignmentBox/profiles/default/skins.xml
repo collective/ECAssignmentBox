@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+
+<object name="portal_skins" meta_type="Plone Skins Tool"
+  allow_any="False" cookie_persistence="False" request_varname="plone_skin">
+
+  <object name="ecassignmentbox_images" meta_type="Filesystem Directory View"
+    directory="ECAssignmentBox/skins/ecassignmentbox_images" />
+
+  <object name="ecassignmentbox_styles" meta_type="Filesystem Directory View"
+    directory="ECAssignmentBox/skins/ecassignmentbox_styles" />
+
+  <object name="ecassignmentbox_templates" meta_type="Filesystem Directory View"
+    directory="ECAssignmentBox/skins/ecassignmentbox_templates" />
+
+  <skin-path name="*">
+    <layer insert-after="custom" name="ecassignmentbox_images" />
+    <layer insert-after="custom" name="ecassignmentbox_styles" />
+    <layer insert-after="custom" name="ecassignmentbox_templates" />
+  </skin-path>
+
+</object>

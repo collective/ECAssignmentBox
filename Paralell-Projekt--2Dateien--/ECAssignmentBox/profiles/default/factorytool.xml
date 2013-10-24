@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<object name="portal_factory" meta_type="Plone Factory Tool">
+ <factorytypes>
+  <type portal_type="ECFolder"/>
+  <type portal_type="ECAssignmentBox"/>
+  <type portal_type="ECAssignment"/>
+ </factorytypes>
+</object>

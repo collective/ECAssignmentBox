@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<object name="portal_catalog" meta_type="Plone Catalog Tool">
+ <index name="getRawAssignment_reference" meta_type="FieldIndex">
+  <indexed_attr value="getRawAssignment_reference"/>
+ </index>
+ <index name="getRawRelatedItems" meta_type="KeywordIndex">
+  <indexed_attr value="getRawRelatedItems"/>
+ </index>
+ <index name="isAssignmentBoxType" meta_type="FieldIndex">
+  <indexed_attr value="isAssignmentBoxType"/>
+ </index>
+ <index name="isAssignmentType" meta_type="FieldIndex">
+  <indexed_attr value="isAssignmentType"/>
+ </index>
+ <index name="review_state" meta_type="FieldIndex">
+  <indexed_attr value="review_state"/>
+ </index>
+ <column value="getRawAssignment_reference"/>
+ <column value="isAssignmentBoxType"/>
+ <column value="isAssignmentType"/>
+</object>
