@@ -1,8 +1,0 @@
-[validators]
-validators=
-
-[actions]
-action.failure=traverse_to:string:ecpd_compare_assignments
-action.success=traverse_to:string:ecpd_view_relations
-
-

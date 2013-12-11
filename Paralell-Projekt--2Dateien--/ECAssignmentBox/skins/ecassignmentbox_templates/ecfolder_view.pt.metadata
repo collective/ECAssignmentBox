@@ -1,5 +1,0 @@
-[default]
-title = View ECFolder Content
-
-[security]
-View = 0:Authenticated
