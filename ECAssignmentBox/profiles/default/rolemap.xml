@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<rolemap>
+  <roles>
+    <role name="ECAssignment Grader"/>
+	<role name="ECAssignment Viewer"/>
+  </roles>
+  <permissions>
+    <permission name="eduComponents: Grade Assignments"
+                acquire="True">
+      <role name="ECAssignment Grader"/>
+      <role name="Manager"/>
+    </permission>
+    <permission name="eduComponents: View Assignments"
+                acquire="True">
+      <role name="ECAssignment Viewer"/>
+      <role name="Manager"/>
+    </permission>
+  </permissions>
+</rolemap>

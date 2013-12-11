@@ -1,0 +1,65 @@
+Upgrade 1.5.1 --> 1.6
+=====================
+
+# author: Tim Sabsch t.sabsch@arcor.de
+# date  : 18.11.2013
+
+# created files:
+
+- ../content/ListField.py
+	* new archetype field, which can save an unlimited number of files
+
+- ../content/ListWidget.py
+	* new archetype widget, which can display an unlimited number of files
+
+- ../skins/ecassignmentbox_templates/add_submission_box.js
+	* javascript file, which handles creating and deleting new submission boxes
+	  (text area + upload field)
+
+- ../skins/ecassignmentbox_templates/at_download.js
+	* adjusted script, which prepares the download of a file stored in a ListField instance
+ 
+- ../skins/ecassignmentbox_templates/list_widget.pt
+	* page template, which displays a ListField instance
+
+# deleted files:
+
+- ../skins/ecassignmentbox_templates/answer_widget.pt
+	* replaced by list_widget.pt
+
+# modified files:
+
+- ../config.py
+	* added MAX_PROCESSABLE
+	
+- ../content/ECAssignmentBox.py
+	* created getMaxFiles() to get maximum number of submittable files
+
+- ../content/ECAssignment.py
+	* replaced FileField 'file' by ListField 'submission'
+	* deleted setField()
+	* modified get_data() for multiple file support
+	* deleted getAsPlainText()
+	* adjusted getViewModeReadFieldNames()
+	* adjusted getGradeModeReadFieldNames()
+	
+- ../i18n/eduComponents-de.po
+	* created a few new translations, deleted a few old translations
+	
+- ../profiles/default/jsregistry.xml
+	* registered 'add_submission_box.js'
+
+- ../skins/ecassignmentbox_templates/all_assignments_macros.pt
+	* adjusted assignment text
+
+- ../skins/ecassignmentbox_templates/base_macros.pt
+	* added macro 'submissionBox', which contains a textarea and an file input field
+	
+- ../skins/ecassignmentbox_templates/eca_add.cpy
+	* modified script for multiple file support
+
+- ../skins/ecassignmentbox_templates/ecab_view.cpt
+	* added <head> tag to reference javascript file
+	* defined 'maxFiles'
+	* transfered text field + upload file button to base_macros.cpt
+	* added button, which will call javascript function to add submission box
