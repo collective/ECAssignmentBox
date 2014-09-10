@@ -40,6 +40,7 @@ setup(name='Products.ECAssignmentBox',
       zip_safe=False,
       install_requires=[
           'setuptools',
+          'plone.app.kss',
           # -*- Extra requirements: -*-
       ],
       entry_points="""

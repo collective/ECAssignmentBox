@@ -247,9 +247,9 @@
             </thead>
 
             <metal:block tal:condition="batch|not:standalone|nothing">
-            <tbody tal:define="arrowUp nocall:portal/arrowUp.gif;
+            <tbody tal:define="arrowUp nocall:portal/arrowUp.png;
                                arrowUp python:arrowUp.tag(alt='Move Up');
-                               arrowDown nocall:portal/arrowDown.gif;
+                               arrowDown nocall:portal/arrowDown.png;
                                arrowDown python:arrowDown.tag(alt='Move Down');
                                normalizeString nocall:context/@@plone/normalizeString;
                                wtool context/portal_workflow;

@@ -1,6 +1,19 @@
 History
 =======
 
+# Changes in release 2.0dev (unreleased)
+
+- added plone.app.kss as a dependency
+  [pigeonflight]
+
+- bumped version to 2.0dev
+  [pigeonflight]
+
+- added Manifest file so that packages build properly; 
+  updated ecabsettings.py 
+  to import hooks properly for Plone 4
+  [pigeonflight]
+
 # Changes in release 1.5.1 (unreleased)
 
 - Added Spanish translation.
